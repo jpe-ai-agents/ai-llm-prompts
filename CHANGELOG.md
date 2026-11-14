@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.114.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.114.1...v1.114.2) (2026-11-14)
+
+
+### Bug Fixes
+
+* **dify:** start an http-request iteration from an iteration-start node ([#498](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/498)) ([5a996a9](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/5a996a995963a3e8420652bfcf2fba6fb4d9a958))
+
 ## [1.114.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.114.0...v1.114.1) (2026-11-14)
 
 
