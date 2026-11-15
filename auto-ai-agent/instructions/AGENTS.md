@@ -79,8 +79,8 @@ most headroom against its pace for the period (ZCode 5-hour and weekly, Codex we
 2. **ZCode or Codex Luna**, equal first choices split by sensitivity:
    - **ZCode** (latest GLM Flash, `zcode-job` sandbox): obvious, definitely non-sensitive work in public repos.
      Coding and coding-adjacent work only — code, tests, GitHub automation and workflows, code reviews; open-internet
-     research needs a separate untrusted, internet-open container. The output is a ready PR; leak-scan it before merge;
-     never auto-merge it.
+     research needs a separate untrusted, internet-open container. The output is a ready, leak-scanned PR. It
+     takes the full lane, never tiny or land-first, and the platform merges it. Executors never add `human:review`.
    - **Codex Luna**: anything even remotely sensitive, or any private repo. `xhigh` default, `max` as needed, while
      `codex-quota` exits 0. Never Terra.
 3. **Other subscriptions where they fit**, for example OpenCode Go (`zcode-job --tool opencode`); public work only.
