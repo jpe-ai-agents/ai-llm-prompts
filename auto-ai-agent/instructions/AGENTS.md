@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-11T02:34:00Z"
+timestamp: "2026-11-15T03:40:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -47,8 +47,8 @@ editing, capture new knowledge after a change.
 ## Where things get written (routing law, no exceptions)
 
 Once questions are resolved and the plan approved, execute end to end in one shot, routed per this table.
-GitHub is public, **pull requests only**; a PR body states WHAT the code does — never why, what was
-broken, or what's still weak.
+GitHub is public, **pull requests only**; a PR body fills the template — objective, approach, changes,
+verification, related PRs as full URLs, trace line — never what was broken, an incident, or what's still weak.
 
 | Content | Destination |
 | --- | --- |

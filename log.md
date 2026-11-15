@@ -2,6 +2,9 @@
 
 ## 2026-11-15
 
+* **Feature (rules)**: A pull request body fills the template (objective, approach, changes, verification, related pull
+  requests as full URLs, trace line) in `AGENTS.md`, `public-disclosure.md` and `projects-brief.md`; incident, weakness
+  and topology detail stay out.
 * **Feature (automation)**: The policy rubric sources gain a code rubric with four checks (`correctness`, `regression`,
   `missing_test`, `native_first`), rendered to `automation/ai-workflows-code-review.prompt.yml` from the shared template.
 
