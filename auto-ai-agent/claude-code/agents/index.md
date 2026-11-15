@@ -6,4 +6,4 @@ per spawn; executor definitions stay model-neutral.
 ## Prompts
 
 * [executor](executor.md) - Model-neutral executor for delegated scoping, bulk reads, triage, review, shipping and implementation.
-* [pr-shepherd](pr-shepherd.md) - Drives named pull requests to merged and promotes a git-flow repo afterward.
+* [pr-shepherd](pr-shepherd.md) - Clears merge conflicts and CHANGES verdicts on named pull requests.
