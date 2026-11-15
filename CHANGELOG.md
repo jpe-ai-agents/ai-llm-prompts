@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.117.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.116.0...v1.117.0) (2026-11-15)
+
+
+### Features
+
+* **pepper:** hourly single-item AI news prompt with reply-steered preferences ([#504](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/504)) ([6de7bcc](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/6de7bcc45a852b18cd0526398fc697757692358d))
+
 ## [1.116.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.115.0...v1.116.0) (2026-11-15)
 
 
