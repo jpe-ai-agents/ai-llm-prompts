@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.116.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.115.0...v1.116.0) (2026-11-15)
+
+
+### Features
+
+* **rules:** a pull request body fills the template with objective and approach ([#502](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/502)) ([e82cd04](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/e82cd0474241c34d51cd43f3c5b1440750b9c3f8))
+
 ## [1.115.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.114.2...v1.115.0) (2026-11-15)
 
 
