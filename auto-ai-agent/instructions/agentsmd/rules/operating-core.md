@@ -35,9 +35,9 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
   supporting | contradicting | confidence | cheapest falsifying test | next action. A check that silently
   skips an unreachable target can report success while covering nothing changed — confirm the thing you care
   about appears in the check's own output; absence is untested, not passed.
-- **A PR you open is yours until it is merged and, on a git-flow repo, promoted.** Every comment, review body
+- **A PR you open is yours until it is merged.** Every comment, review body
   (including Request changes with no thread), review-bot finding and coverage gap is review feedback: fix it or
-  answer it with evidence, then keep the PR moving (conflicts, `BEHIND`, failed or never-reported checks).
+  answer it with evidence, then keep the PR moving (conflicts, a CHANGES verdict, failed or never-reported checks).
 - **Check system state with monitoring first; follow the `monitoring-first` skill before direct shell probes.**
 - **Environment output.** Never print, dump, or pipe the environment (`env`, `printenv`, `set`, `export -p`)
   or the output of a command that injects credentials into its environment; filtering does not make that
