@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-15
+
+* **Feature (automation)**: The policy rubric sources gain a code rubric with four checks (`correctness`, `regression`,
+  `missing_test`, `native_first`), rendered to `automation/ai-workflows-code-review.prompt.yml` from the shared template.
+
 ## 2026-11-13
 
 * **Fix (rules)**: The `model-delegation.md` Parallelism rule gates a fan-out of 8 or more heavy workers on a measured

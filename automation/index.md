@@ -20,6 +20,7 @@ in GitHub Actions on a GitHub App token — so it and the one fragment it includ
 * [Security Review](ai-workflows-security-review.prompt.yml) - Structured pull-request security review.
 * [Semantic Review](ai-workflows-semantic-review.prompt.yml) - Structured pull-request semantic review.
 * [Leak Review](ai-workflows-leak-review.prompt.yml) - Structured public-disclosure review.
+* [Code Review](ai-workflows-code-review.prompt.yml) - Structured pull-request code review.
 * [Docs Drift](ai-workflows-docs-drift.prompt.yml) - Documentation drift analysis.
 * [Repository Hygiene](ai-workflows-repo-hygiene.prompt.yml) - Repository hygiene analysis.
 * [Thread Triage](ai-workflows-thread-triage.prompt.yml) - Pull-request review-thread triage.
