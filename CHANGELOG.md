@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.115.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.114.2...v1.115.0) (2026-11-15)
+
+
+### Features
+
+* **automation:** add the code review rubric prompt ([#500](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/500)) ([c8499e9](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c8499e913625f2fe6356e2c4211d9e0e3e3f986c))
+
 ## [1.114.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.114.1...v1.114.2) (2026-11-14)
 
 
