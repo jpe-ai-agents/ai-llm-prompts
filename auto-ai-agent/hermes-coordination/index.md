@@ -19,6 +19,7 @@
 * [Hermes docs study](../hermes-docs-study.md) - Daily public documentation drift review with bounded follow-up cards.
 * [Hermes ai news](../hermes-ai-news.md) - Interest-guided news scouting with retrieved sources and deduplicated suggestions.
 * [Hermes ai news interests](../hermes-ai-news-interests.md) - Shared interest seed for the news scouting profile.
+* [Hermes ai news hourly](../hermes-ai-news-hourly.md) - Hourly single-item AI model news with a posted-items ledger and operator-steered preferences.
 * [Hermes daily innovation](../hermes-daily-innovation.md) - Evidence-based improvement proposals recorded in Kanban and the proposal log.
 * [Hermes app seeding](../hermes-app-seeding.md) - Bounded application setup with verified completion markers.
 * [Hermes pricing diff](../hermes-pricing-diff.md) - Weekly public model pricing changes against a saved baseline.
