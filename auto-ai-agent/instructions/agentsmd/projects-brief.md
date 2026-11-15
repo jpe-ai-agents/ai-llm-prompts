@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/projects-brief"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-04T10:00:00-04:00"
+timestamp: "2026-11-15T03:40:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -92,8 +92,9 @@ system, privileged rebuilds, and every infrastructure converge or apply. When a 
 
 ## What you write
 
-- A PR title, body, commit message, branch name or PR comment states **what** the code does. Never why, what broke,
-  or what is still weak.
+- A PR title, commit message, branch name or PR comment states **what** the code does. A PR body fills the template:
+  objective, approach, changes, verification, related PRs as full URLs, trace line. Never what broke or what is still
+  weak.
 - No hostnames, IP addresses, CIDRs, internal domains, private repository inventory, client names, incident detail,
   credential detail or secret names in any PR text, commit, branch name, project memory, routine or Library file.
 - Use plain words and short sentences, and name the actor in each sentence.

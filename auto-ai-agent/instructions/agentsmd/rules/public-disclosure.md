@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/public-dis
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-10-18T08:44:13-04:00"
+timestamp: "2026-11-15T03:40:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -25,10 +25,11 @@ A public, git-committed artifact (file content, commit messages, PR/issue titles
 search-indexed, archived, cross-referenced. A PR description on a public repo is committed text, not a private
 note to the reviewer.
 
-**State what, never why or unpublished specifics.** Committed text states what the code does now — never
-roadmap, rationale, or hardware/vendor names for a swappable backend. Use a capability-neutral name (a role,
-not a make/model) reached by a stable identifier. A tool evaluation the user explicitly asked for is fine —
-factual, about the tool, not the surrounding infra.
+**State what, never unpublished specifics.** Committed text states what the code does now — never roadmap or
+hardware/vendor names for a swappable backend. Rationale appears only as a pull request's objective and approach
+(what was chosen, what was considered), in public-safe terms: never an incident, weakness or topology detail.
+Use a capability-neutral name (a role, not a make/model) reached by a stable identifier. A tool evaluation the
+user explicitly asked for is fine — factual, about the tool, not the surrounding infra.
 
 **Minimum topology disclosure.** Never characterize a private system's topology — hosts, addresses, ports, data
 flows, what depends on what — nor gesture at one ("the internal data repo"). The bare product/tool name is fine
