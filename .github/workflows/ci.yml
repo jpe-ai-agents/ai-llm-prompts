@@ -3,10 +3,11 @@ name: CI Gate
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  merge_group:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -46,6 +47,10 @@ jobs:
       # emulate. Disabled per `_nix-validate.yml`'s own documented `all_systems`
       # escape valve for this exact case.
       all_systems: false
+      # Catalog text is instruction text: it is never low-risk and never tiny.
+      low_risk_paths: 'docs/**'
+      instruction_paths: 'AGENTS.md,**/AGENTS.md,**/prompts/**,**/skills/**,**/rules/**,agents/**,auto-ai-agent/**,automation/**,applications/**,developer-tools/**'
+      guarded_paths: '.github/**,**/*secret*,**/*credential*,**/*token*,**/vault/**,*.sops.*,.sops.yaml'
       filters: |
         markdown:
           - '**.md'
@@ -55,3 +60,5 @@ jobs:
           - '**.nix'
           - 'flake.lock'
           - 'agents/**'
+    secrets:
+      GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
