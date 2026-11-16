@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-07-18T16:40:00-04:00"
+timestamp: "2026-11-16T03:00:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -24,7 +24,30 @@ source_history:
 ---
 # CI Failure Auto-Fix
 
-You are fixing a CI failure. Context: ${REPO_CONTEXT}
+You are fixing a CI failure. The repository, its CI structure and the failure logs are at the end of this prompt.
+
+## Instructions
+
+1. Analyze the failure logs to identify the root cause.
+2. Fix the issue in the source files with your file-editing tools.
+3. Run the repository's formatter on the files you changed (for example `tofu fmt`, `ruff format`, `prettier --write`)
+   and keep its output.
+4. Read the repository's own CI definition (`.github/workflows/` and the CI structure below) and run every check it
+   runs for the files you changed, with the same commands. Finish only when each one exits 0. If a check cannot run
+   here, name it and say why in your final message. A check you did not run is never assumed to pass.
+5. A file size or token limit failure is fixed by moving, not by removing. The total content after the change equals
+   the content before; only its place changes:
+   - move whole blocks, resources, variables or document sections into a new file next to the old one;
+   - never delete a declaration, a test, a test case or a document section to get under the limit;
+   - after the move, every reference must still resolve, and no declaration may be left unused.
+6. Never delete or weaken a test to make a check pass.
+7. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
+
+Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
+
+## Repository
+
+${REPO_CONTEXT}
 
 ## CI Structure
 
@@ -35,15 +58,3 @@ ${CI_STRUCTURE}
 ```text
 ${FAILURE_LOGS}
 ```
-
-## Instructions
-
-1. Analyze the failure logs to identify the root cause
-2. Fix the issue in the source files using your file-editing tools (Edit, Write,
-   MultiEdit). Apply the change directly in the files. Avoid shell commands that
-   modify files (e.g. formatters): reproduce the intended result by editing the
-   files yourself.
-3. Do not run git or attempt to commit — your file edits are committed to the PR
-   branch automatically after you finish.
-
-Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
