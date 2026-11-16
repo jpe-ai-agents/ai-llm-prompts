@@ -6,6 +6,8 @@
   prompt shapes that keep the cache reusable, and where a request should go.
 * **Feature (hermes)**: `auto-ai-agent/hermes-tracker-report.md` adds a scheduled change-only tracker summary that
   remembers what it last said, stays silent when nothing changed, and answers people in the thread with read-only tools.
+* **Fix (hermes)**: `auto-ai-agent/hermes-direct-cron-footer.md` no longer names the delivery channel, so every job that
+  uses it gets the same footer text.
 
 ## 2026-11-15
 
