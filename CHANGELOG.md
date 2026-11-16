@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.119.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.119.0...v1.119.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **hermes:** keep the direct cron footer identical across jobs ([#511](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/511)) ([2ceac0c](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2ceac0c647438f4e7641cd88a5651a109cb53263))
+
 ## [1.119.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.118.0...v1.119.0) (2026-11-16)
 
 
