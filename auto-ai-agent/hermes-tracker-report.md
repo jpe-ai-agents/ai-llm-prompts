@@ -23,7 +23,7 @@ DECIDE WHAT IS NEW. An item belongs in this post only when something real change
 
 WRITE THE POST.
 - Group the lines under the objective, project or queue each item belongs to. One heading per group, no group without a line.
-- One item per line: a mark, the item's title in a few plain words, what changed, and the item's link. Marks: 🟢 done or on target, 🟡 behind or waiting, 🔴 failing, blocked or overdue.
+- One item per line: one status level marker, the item's title in a few plain words, what changed, and the item's link. Use the three status levels defined in the reporting rules that follow this text: the healthy level for done or on target, the degraded level for behind or waiting, the failing level for failing, blocked or overdue.
 - Whole numbers only. No tables. Short active sentences.
 - End with one count line: changed, opened, closed.
 - Start the post with the operator's tag only when a line needs the operator: an approval, a physical step, or a decision. Name that need in the first line, with its link. Every other post carries no tag.
