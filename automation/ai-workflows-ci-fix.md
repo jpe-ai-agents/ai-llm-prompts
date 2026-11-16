@@ -24,17 +24,7 @@ source_history:
 ---
 # CI Failure Auto-Fix
 
-You are fixing a CI failure. Context: ${REPO_CONTEXT}
-
-## CI Structure
-
-${CI_STRUCTURE}
-
-## Failure Logs
-
-```text
-${FAILURE_LOGS}
-```
+You are fixing a CI failure. The repository, its CI structure and the failure logs are at the end of this prompt.
 
 ## Instructions
 
@@ -42,7 +32,7 @@ ${FAILURE_LOGS}
 2. Fix the issue in the source files with your file-editing tools.
 3. Run the repository's formatter on the files you changed (for example `tofu fmt`, `ruff format`, `prettier --write`)
    and keep its output.
-4. Read the repository's own CI definition (`.github/workflows/` and the CI structure above) and run every check it
+4. Read the repository's own CI definition (`.github/workflows/` and the CI structure below) and run every check it
    runs for the files you changed, with the same commands. Finish only when each one exits 0. If a check cannot run
    here, name it and say why in your final message. A check you did not run is never assumed to pass.
 5. A file size or token limit failure is fixed by moving, not by removing. The total content after the change equals
@@ -54,3 +44,17 @@ ${FAILURE_LOGS}
 7. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
 Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
+
+## Repository
+
+${REPO_CONTEXT}
+
+## CI Structure
+
+${CI_STRUCTURE}
+
+## Failure Logs
+
+```text
+${FAILURE_LOGS}
+```
