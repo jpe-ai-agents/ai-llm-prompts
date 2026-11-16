@@ -14,6 +14,7 @@
 * [Hermes blocked parent triage digest](../hermes-blocked-parent-triage-digest.md) - Daily report of blocked parent cards and waiting children.
 * [Hermes router capacity digest](../hermes-router-capacity-digest.md) - Daily router capacity metrics and changes against a recalled baseline.
 * [Hermes github cache stats](../hermes-github-cache-stats.md) - Read-only repository cache usage and churn threshold report.
+* [Hermes tracker report](../hermes-tracker-report.md) - Scheduled change-only summary of one tracker for one channel.
 
 ## Hourly stats assembly order
 

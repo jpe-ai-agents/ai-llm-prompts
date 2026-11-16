@@ -5,6 +5,11 @@
 * **Feature (rules)**: Add the on-demand `local-llm-cache.md` rule: the prompt cache rate target for local models, the
   prompt shapes that keep the cache reusable, and where a request should go.
 
+## 2026-11-16
+
+* **Feature (hermes)**: `auto-ai-agent/hermes-tracker-report.md` adds a scheduled change-only tracker summary that
+  remembers what it last said, stays silent when nothing changed, and answers people in the thread with read-only tools.
+
 ## 2026-11-15
 
 * **Feature (rules)**: A pull request body fills the template (objective, approach, changes, verification, related pull
