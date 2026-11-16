@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.119.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.118.0...v1.119.0) (2026-11-16)
+
+
+### Features
+
+* **hermes:** add the tracker report prompt ([#506](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/506)) ([eb4f26a](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/eb4f26a8269d6ada88695e0e43400c88efebbea4))
+
+
+### Bug Fixes
+
+* **ci-fix:** verify with the repo's own checks and fix size rules by moving ([#507](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/507)) ([f40c8d6](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/f40c8d6a3bb8015bf555b7008eb059c2d587fa26))
+
 ## [1.118.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.117.0...v1.118.0) (2026-11-16)
 
 
