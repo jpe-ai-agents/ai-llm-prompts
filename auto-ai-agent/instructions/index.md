@@ -32,6 +32,7 @@ layout.
 * [Git flow](agentsmd/rules/on-demand/git-flow.md) - Shared agent instruction file.
 * [Incident management](agentsmd/rules/on-demand/incident-management.md) - Shared agent instruction file.
 * [Infrastructure conventions](agentsmd/rules/on-demand/infrastructure-conventions.md) - Shared agent instruction file.
+* [Local model prompt cache](agentsmd/rules/on-demand/local-llm-cache.md) - Shared agent instruction file.
 * [Read logs from the log platform, never from the host](agentsmd/rules/on-demand/log-platform.md) - Shared agent instruction file.
 * [Loop Cadence](agentsmd/rules/on-demand/loop-cadence.md) - Shared agent instruction file.
 * [Model delegation](agentsmd/rules/on-demand/model-delegation.md) - Shared agent instruction file.
