@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.118.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.117.0...v1.118.0) (2026-11-16)
+
+
+### Features
+
+* **rules:** add the local model prompt cache rule ([#508](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/508)) ([2432b1c](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2432b1c7530ecbc82aaedc7cf777cb88810eb192))
+
 ## [1.117.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.116.0...v1.117.0) (2026-11-15)
 
 
