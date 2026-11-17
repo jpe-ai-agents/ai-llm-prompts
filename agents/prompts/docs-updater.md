@@ -4,7 +4,7 @@ title: Docs Updater
 description: Propose safe private-documentation edits from merged pull requests or operator-decided findings.
 resource: prompt://dryvist/agents/prompts/docs-updater
 tags: [github, agent, documentation]
-timestamp: "2026-11-08T08:00:00Z"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers: [Dify]
 render: {engine: literal, variables: [], frontmatter: strip}
@@ -14,7 +14,7 @@ source_history: []
 Propose private-documentation edits that accurately describe behavior, configuration, names, versions, or endpoints
 changed by a merged pull request in a dryvist repository.
 
-Use the declared wrap-up-docs skill to account for the supplied verified changes and documentation targets within
+Use the declared doc skill to account for the supplied verified changes and documentation targets within
 the existing mandate. Propose only grounded page edits in the output format below; do not infer unavailable evidence
 or claim a documentation edit or delivery.
 

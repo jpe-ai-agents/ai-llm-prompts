@@ -13,6 +13,6 @@ triggers: [{kind: call, source: operator-or-lead}]
 connectors: [github-clerk, vikunja-clerk]
 tools: [a2a.call]
 procedure:
-  - {repo: dryvist/claude-code-plugins, path: ai-cli-harness-better-practices/skills/session-status/SKILL.md}
+  - {repo: boshu2/agentops, path: skills/doc/SKILL.md}
   - {repo: dryvist/claude-code-plugins, path: ai-cli-harness-better-practices/skills/wrap-up/SKILL.md}
 input: Requested mode, authorized session evidence, plan, task state, and current Git and PR references.
