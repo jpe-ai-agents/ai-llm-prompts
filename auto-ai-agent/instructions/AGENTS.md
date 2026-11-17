@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-17T18:00:00Z"
+timestamp: "2026-11-17T21:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -88,10 +88,12 @@ and brief points here and never restates an executor order.
      priority tier, ahead of batch and scheduled work.
    - **Own-CLI executors.** ZCode always runs in its own CLI (the `zcode-job` sandbox), as does any subscription
      whose discount or peak benefit is tied to its CLI. Claude is never proxied.
-   - **Trust.** Private or sensitive work goes only to executors trusted with it (local models; Codex Luna, never
-     Terra). Public-sandbox executors take only definitely non-sensitive coding in public repositories; their output
-     is a ready PR that is leak-scanned before merge and never auto-merged. Open-internet research runs only in a
-     separate untrusted, internet-open container.
+   - **Codex runs Luna at `xhigh`.** Luna is the only Codex model and `xhigh` the only Codex
+     effort. Every hook, wrapper, profile, script and brief passes both explicitly.
+   - **Trust.** Private or sensitive work goes only to executors trusted with it (local models;
+     Codex Luna). Public-sandbox executors take only definitely non-sensitive coding in public
+     repositories; their output is a ready PR that is leak-scanned before merge and never auto-merged.
+     Open-internet research runs only in a separate untrusted, internet-open container.
 5. **Briefs are complete.** Follow `brief-delegates.md`, and give the full text of any file to create or test,
    plus the command that runs it. A refused or failed executor falls to the next eligible one and leaves a task.
 

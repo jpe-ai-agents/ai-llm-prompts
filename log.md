@@ -41,6 +41,8 @@
 
 ## 2026-11-17
 
+* **Update (instructions)**: Codex runs Luna at `xhigh`, stated once in `AGENTS.md` 'Delegation routing';
+  `model-delegation.md` and the promptfoo Luna lane point to it.
 * **Feat (rules)**: One subagent method in the AGENTS.md delegation routing statement: a Claude session
   orchestrates and runs no Claude subagents (Haiku `xhigh` only as the hook's logged last rung); the delegation hook
   places every spawn and ranks executors from live quota, price and peak data with no favourite; tags beat its
