@@ -87,7 +87,7 @@ No Claude subagents of any tier and no forks. Haiku `xhigh` runs only as the hoo
 ## Skills
 
 Procedures ship as skills in the `ai-delegation` and `jpe-ai-delegation` plugins of the
-[`claude-code-plugins`](https://github.com/JacobPEvans-ai/claude-code-plugins) marketplace, not here:
+`claude-code-plugins` marketplace, not here:
 
 - `agentops:orchestrate`, run through the `premium-agent-orchestration` wrapper — dispatch, packet checks, judging and
   integration.
