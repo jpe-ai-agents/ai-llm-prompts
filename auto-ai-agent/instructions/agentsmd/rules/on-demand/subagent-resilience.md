@@ -114,5 +114,5 @@ run went serial at 00:30 and still delivered."
 
 At plan time, write the fan-out as: probe → bounded batches → per-agent
 liveness deadline → documented solo path. Cross-ref: `tool-use.md`
-(Delegation contract), the `premium-agent-orchestration` skill
-(claude-code-plugins) for tiering.
+(Delegation contract), the agentops `orchestrate` skill
+(`/agentops:orchestrate`) for dispatch, `model-delegation.md` for tiering.

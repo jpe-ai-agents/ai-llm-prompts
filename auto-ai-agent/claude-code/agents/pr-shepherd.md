@@ -20,7 +20,6 @@ source_history:
     path: "auto-ai-agent/claude-code/agents/executor.md"
     note: "Sibling executor definition; this agent follows its report and refusal rules."
 name: pr-shepherd
-model: haiku
 effort: xhigh
 ---
 
