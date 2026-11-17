@@ -39,6 +39,14 @@
   skips posts under three hours or when the time is unknown, and logs unknown
   times in the run summary.
 
+## 2026-11-17
+
+* **Feat (rules)**: One subagent method in the AGENTS.md delegation routing statement: a Claude session
+  orchestrates and runs no Claude subagents (Haiku `xhigh` only as the hook's logged last rung); the delegation hook
+  places every spawn and ranks executors from live quota, price and peak data with no favourite; tags beat its
+  classifier; ZCode and Claude run in their own CLIs, other router models through the harness. `model-delegation.md`,
+  `tool-use.md`, `claude-code.md` and `brief-delegates.md` follow it.
+
 ## 2026-11-11
 
 * **Update (auto-ai-agent)**: Move the shared scheduled-report contract into `hermes.md`; the daily status Kanban

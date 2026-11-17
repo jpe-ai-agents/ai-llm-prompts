@@ -7,7 +7,7 @@ tags:
   - "claude-code"
   - "delegation"
   - "briefing"
-timestamp: "2026-11-06T20:10:00Z"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers:
   - "dryvist/nix-ai"
@@ -29,6 +29,8 @@ parent owns that outcome. A vague brief is the parent's failure, never the deleg
 2. the exact scope (repo, absolute paths, branch or worktree), allowed paths, and what must not be touched;
 3. constraints, patterns to follow (`file:line`) and decisions already made, pasted rather than referred to;
 4. the success criterion: required checks, the expected result, and the narrowest additional proof justified by the change;
+   Give the complete text of any file the delegate creates or tests, plus the command that runs it; a test
+   described in prose costs a full job.
 5. the output contract: final message one line or schema, with the evidence states below; report file only for write-capable delegates;
 6. where to stop and report instead of guessing: missing authority, an unmet prerequisite, a gate, a refusal,
    ambiguous scope, or the named failure threshold (a second failure by default);
