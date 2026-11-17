@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.120.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.119.1...v1.120.0) (2026-11-17)
+
+
+### Features
+
+* **rules:** one subagent method in the delegation routing statement ([#516](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/516)) ([6d70fa5](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/6d70fa59c9f88839fce5035cd7eaeacf429afc4f))
+
 ## [1.119.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.119.0...v1.119.1) (2026-11-16)
 
 
