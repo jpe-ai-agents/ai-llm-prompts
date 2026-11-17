@@ -22,7 +22,7 @@ source_history:
 # Fleet utilization
 
 Applies when one lead session coordinates several long-lived worker sessions. Doctrine and terms: the
-`premium-agent-orchestration` skill in the `ai-delegation` plugin. A session is busy while a task or a background job
+agentops `orchestrate` skill (Claude Code: `/agentops:orchestrate`). A session is busy while a task or a background job
 of its own is running; otherwise it is idle.
 
 - **Roster.** The lead names the worker sessions and which one of them sweeps, and writes both at the top of

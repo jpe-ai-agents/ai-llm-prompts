@@ -60,6 +60,8 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
   never sets a major `release-as`, and never plans, dispatches or tags a major release, even on request.
   Ship compatible changes as minor or patch releases, with rename shims. If a change can't be made
   compatible, stop and ask the operator, who makes the major release.
+- **Planning.** In plan mode, or when asked to plan, scope or break down work, run the `plan` skill first
+  (Claude Code: `/agentops:plan`).
 - **Questions.** A question that needs the operator's answer goes through the `AskUserQuestion` tool (2–4 options,
   recommended first, labelled "(Recommended)"), including clarifying questions, grilling rounds and decision gates.
   Never leave an answer-dependent question only as reply text, and never end a turn silently blocked on a person;
