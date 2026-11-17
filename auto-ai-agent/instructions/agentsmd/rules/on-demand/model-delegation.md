@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-13T12:00:00Z"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -30,11 +30,13 @@ authorization differs from the 0.9.5 skill's inside-pane-only condition for that
 checks; do not fabricate `HERDR_ENV`. Do not infer a target, start a local server, or silently change execution
 location when the selected target is unavailable; report the failure.
 
-If Herdr is not configured or available, state that and use the harness Agent tool as the fallback. Disclose
+If Herdr is not configured or available, state that and use the harness Agent tool as the fallback; the delegation
+hook places that spawn. Disclose
 the fallback location; if it is not already authorized, ask before launching work there. Apply the same routing,
 content eligibility, credential, read-only, and approval rules on either path; Herdr does not grant new authority.
 Session start reports `codex-quota`. The routing order is in [AGENTS.md](../../../AGENTS.md), under "Delegation
-routing"; this file covers CLI procedure only. Codex is eligible only while `codex-quota` exits 0.
+routing"; this file covers CLI procedure only. Codex is eligible only while `codex-quota` exits 0; Luna runs at `xhigh`
+by default and `max` as needed, never Terra.
 The agent hook denies `codex exec` from a tool shell unless stdin comes from a prompt file.
 
 When a runtime must call the Codex CLI directly (sandbox entrypoints or the router itself), pass the prompt as `-`
@@ -85,16 +87,18 @@ seconds apart:
 One worker, install or build never waits. When holding, state the reading and retry in 5 minutes. Batch small related
 tasks into one brief.
 
-## Fable is a main-session planning model only
+## Claude models are main-session only
 
-No Fable subagents.
+No Claude subagents of any tier and no forks. Haiku `xhigh` runs only as the hook's logged last rung
+([AGENTS.md](../../../AGENTS.md), "Delegation routing").
 
 ## Skills
 
 Procedures ship as skills in the `ai-delegation` and `jpe-ai-delegation` plugins of the
-[`claude-code-plugins`](https://github.com/JacobPEvans/claude-code-plugins) marketplace, not here:
+`claude-code-plugins` marketplace, not here:
 
-- `delegate-to-ai` — classify the task, keep sensitive content from third parties, verify the exact result.
+- `agentops:orchestrate`, run through the `premium-agent-orchestration` wrapper — dispatch, packet checks, judging and
+  integration.
 - `delegation-ladder` (`jpe-ai-delegation`) — routing eligibility and trusted draft-PR verification.
 - `local-subagents` — when a handoff is worth it, the live model menu, and where to place the call.
 - `openrouter-models` — the spend budget, the free-tier logging caveat, and requesting a model the router lacks.

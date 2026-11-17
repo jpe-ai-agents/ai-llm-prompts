@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-15T03:40:00Z"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -68,26 +68,33 @@ skills, agents, hooks).
 
 **Delegation routing (binding, the only routing statement).** The lead never does delegable work itself: it plans,
 judges results, and merges, fanning every independent task out to subagents in parallel and keeping long-lived workers busy
-([fleet-utilization.md](agentsmd/rules/on-demand/fleet-utilization.md)). Route each task to the first
-rung that qualifies; among qualifiers, look up each quota at decision time and send it to the subscription with the
-most headroom against its pace for the period (ZCode 5-hour and weekly, Codex weekly, OpenCode Go monthly).
+([fleet-utilization.md](agentsmd/rules/on-demand/fleet-utilization.md)). Every other skill, rule, agent definition
+and brief points here and never restates an executor order.
 
-1. **Router local default or medium capability**, the first step for small, quick, checkable tasks — summarize,
-   extract, classify, reformat, a first pass over a file or log — before any subscription; escalate only after a
-   checked failure. A failed local call is never just abandoned: a subagent finds what went wrong and what to
-   improve, and at least one medium leg accepts the local model's native maximum context.
-2. **ZCode or Codex Luna**, equal first choices split by sensitivity:
-   - **ZCode** (latest GLM Flash, `zcode-job` sandbox): obvious, definitely non-sensitive work in public repos.
-     Coding and coding-adjacent work only — code, tests, GitHub automation and workflows, code reviews; open-internet
-     research needs a separate untrusted, internet-open container. The output is a ready PR; leak-scan it before merge;
-     never auto-merge it.
-   - **Codex Luna**: anything even remotely sensitive, or any private repo. `xhigh` default, `max` as needed, while
-     `codex-quota` exits 0. Never Terra.
-3. **Other subscriptions where they fit**, for example OpenCode Go (`zcode-job --tool opencode`); public work only.
-4. **Haiku `xhigh`**, the explicit last resort: only after rungs 1 to 3 are exhausted or do not qualify, and still
-   before the lead does the work itself.
+1. **A Claude session orchestrates; it never runs Claude subagents.** It plans, decides, gates, integrates, and
+   reviews. No Sonnet, Opus or Fable subagent and no fork. The only Claude route is Haiku `xhigh`, which the hook
+   places as the logged last rung after every other eligible executor has failed.
+2. **The delegation hook places every spawn.** No session, skill, rule, agent pin or brief picks an executor by
+   name. Tags beat the hook's classifier: `[class: text]` sends self-contained text work, with every input in the
+   prompt, to a local model; `[task: code] [repo: owner/repository]` marks coding work in that repository.
+3. **The hook ranks dynamically.** Among the executors a task is eligible for, it picks the one with the most
+   headroom against its pace, from live quota, price and peak data. No executor is a favourite in code or text;
+   when the best subscription changes, nothing is edited and no person acts. Local models come first for small,
+   checkable work. A failed local call is never just abandoned: a subagent finds what went wrong and what to improve.
+4. **Executor kinds.**
+   - **Router models through the harness.** Tool-using work runs in the headless Claude Code CLI (no Anthropic
+     account) driving a router model: a local model, or a non-Claude subscription the router exposes through a CLI
+     proxy where that provider's own terms allow it. Spawns from an interactive session run at the interactive
+     priority tier, ahead of batch and scheduled work.
+   - **Own-CLI executors.** ZCode always runs in its own CLI (the `zcode-job` sandbox), as does any subscription
+     whose discount or peak benefit is tied to its CLI. Claude is never proxied.
+   - **Trust.** Private or sensitive work goes only to executors trusted with it (local models; Codex Luna, never
+     Terra). Public-sandbox executors take only definitely non-sensitive coding in public repositories; their output
+     is a ready PR that is leak-scanned before merge and never auto-merged. Open-internet research runs only in a
+     separate untrusted, internet-open container.
+5. **Briefs are complete.** Follow `brief-delegates.md`, and give the full text of any file to create or test,
+   plus the command that runs it. A refused or failed executor falls to the next eligible one and leaves a task.
 
-Never Sonnet, Opus, or Fable subagents. Never send secrets, credentials, inventory, or incident content to any executor.
-Antigravity (`agy`, Gemini 3.8 Flash) is a second-opinion reviewer, not an executor. Use it on high-risk diffs in public or
-trusted repos; its call is in the `jpe-ai-delegation` plugin's `delegation-ladder` skill. The Codex CLI procedure is in
-[model-delegation.md](agentsmd/rules/on-demand/model-delegation.md). That plugin's skill and hook implement this order.
+Never send secrets, credentials, inventory, or incident content to any executor. Antigravity (`agy`) is a
+second-opinion reviewer, not an executor. The `jpe-ai-delegation` plugin's hook and `delegation-ladder` skill
+implement this statement; [model-delegation.md](agentsmd/rules/on-demand/model-delegation.md) holds the CLI procedure.

@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-10-24T08:56:24-04:00"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -60,7 +60,7 @@ For the environment-output prohibition, follow `operating-core.md`.
 
 ## Subagent type selection
 
-Route all delegated work per [model-delegation.md](model-delegation.md). Forks run on the lead's model; never fork from Fable.
+Route all delegated work per [model-delegation.md](model-delegation.md). Never fork: a fork is a Claude subagent on the lead's model.
 
 | `subagent_type` | Use when |
 | --- | --- |

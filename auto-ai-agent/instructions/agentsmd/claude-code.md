@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/claude-code"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-10-24T08:56:24-04:00"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -21,7 +21,7 @@ source_history:
 
 - **Lead rule.** Make small, known edits; review every diff. Delegate scoping >3 unread files, bulk reads, tracker triage, shipping, and implementation.
 - **Routing.** Follow [model-delegation.md](rules/on-demand/model-delegation.md).
-- Forks inherit your model; never fork from Fable.
+- Never fork: a fork is a Claude subagent on your own model. The delegation hook places every spawn.
 - Prefer parallel tool calls to `&&` chains; they avoid extra permission prompts.
 - After a PR needs manual verification CI cannot do (visual render, browser click, UI smoke), send a PushNotification
   immediately: PR URL plus the top check, 200 characters max. Put branch, worktree and repro steps
