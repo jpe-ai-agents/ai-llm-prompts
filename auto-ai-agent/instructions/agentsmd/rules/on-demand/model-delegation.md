@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-17T18:00:00Z"
+timestamp: "2026-11-17T21:00:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -35,8 +35,9 @@ hook places that spawn. Disclose
 the fallback location; if it is not already authorized, ask before launching work there. Apply the same routing,
 content eligibility, credential, read-only, and approval rules on either path; Herdr does not grant new authority.
 Session start reports `codex-quota`. The routing order is in [AGENTS.md](../../../AGENTS.md), under "Delegation
-routing"; this file covers CLI procedure only. Codex is eligible only while `codex-quota` exits 0; Luna runs at `xhigh`
-by default and `max` as needed, never Terra.
+routing"; this file covers CLI procedure only. Codex is eligible only while `codex-quota` exits 0. Codex runs Luna at
+`xhigh` (AGENTS.md, 'Delegation routing'); pass both explicitly:
+`codex exec -m <Luna model id> -c model_reasoning_effort="xhigh"`.
 The agent hook denies `codex exec` from a tool shell unless stdin comes from a prompt file.
 
 When a runtime must call the Codex CLI directly (sandbox entrypoints or the router itself), pass the prompt as `-`
@@ -56,7 +57,8 @@ only for the named blocker:
 
 ```sh
 ( export GH_TOKEN="$(<mint a 1 h token for one repo; print only the token>)" GITHUB_TOKEN="$GH_TOKEN"
-  codex exec -s workspace-write -C <worktree> --add-dir <path> \
+  codex exec -m <Luna model id> -c model_reasoning_effort="xhigh" \
+    -s workspace-write -C <worktree> --add-dir <path> \
     -c shell_environment_policy.ignore_default_excludes=true -o <out> - < <brief.md> )
 ```
 
