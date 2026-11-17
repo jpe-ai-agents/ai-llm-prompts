@@ -94,7 +94,8 @@ No Fable subagents.
 Procedures ship as skills in the `ai-delegation` and `jpe-ai-delegation` plugins of the
 [`claude-code-plugins`](https://github.com/JacobPEvans/claude-code-plugins) marketplace, not here:
 
-- `delegate-to-ai` — classify the task, keep sensitive content from third parties, verify the exact result.
+- agentops `orchestrate` (`/agentops:orchestrate`) — split the work into checked packets; the
+  `brief-delegates` rule says what each brief states.
 - `delegation-ladder` (`jpe-ai-delegation`) — routing eligibility and trusted draft-PR verification.
 - `local-subagents` — when a handoff is worth it, the live model menu, and where to place the call.
 - `openrouter-models` — the spend budget, the free-tier logging caveat, and requesting a model the router lacks.

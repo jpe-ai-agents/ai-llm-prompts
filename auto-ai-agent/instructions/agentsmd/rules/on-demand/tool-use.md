@@ -76,6 +76,6 @@ Route all delegated work per [model-delegation.md](model-delegation.md). Forks r
   checked with a compact diff or test result.
 - For risky architecture, broad prompt changes, security-sensitive changes, or
   plans that feel under-specified, request adversarial critique via
-  `/delegate-to-ai`; follow [model-delegation.md](model-delegation.md) for routing.
+  `/agentops:council`; follow [model-delegation.md](model-delegation.md) for routing.
 - Require every delegated result to include outcome, evidence, inspected or
   changed paths, risks, and the next recommended action.
