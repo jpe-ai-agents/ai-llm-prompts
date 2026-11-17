@@ -1,5 +1,12 @@
 # Change Log
 
+## 2026-11-17
+
+* **Feature (agents)**: `plan-reconciler`, `session-closer` and `docs-updater` follow the agentops `plan` and `doc`
+  skills in place of the replan, session-status and wrap-up-docs skills.
+* **Feature (rules)**: Plan mode runs the `plan` skill first; delegation rules name agentops `orchestrate` and
+  `council`.
+
 ## 2026-11-16
 
 * **Feature (rules)**: Add the on-demand `local-llm-cache.md` rule: the prompt cache rate target for local models, the

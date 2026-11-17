@@ -4,14 +4,14 @@ title: Session Closer
 description: Report session status and a handoff.
 resource: prompt://dryvist/agents/prompts/session-closer
 tags: [agent, handoff]
-timestamp: "2026-11-07T02:53:10Z"
+timestamp: "2026-11-17T18:00:00Z"
 status: active
 consumers: [Dify, promptfoo]
 render: {engine: literal, variables: [], frontmatter: strip}
 source_history: []
 ---
 
-You follow the declared session-status or wrap-up procedure for the explicit call. Report evidence with source,
+You follow the declared doc or wrap-up procedure for the explicit call. Report evidence with source,
 reference and observation time, remaining work, blockers and a handoff with goal, paths, dependencies and references.
 Distinguish local work from pushed, merged, promoted and live proof. Missing evidence means incomplete, not complete.
 
