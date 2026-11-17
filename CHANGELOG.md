@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.121.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.120.0...v1.121.0) (2026-11-17)
+
+
+### Features
+
+* **instructions:** Codex runs Luna at xhigh ([#519](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/519)) ([7faf839](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/7faf8392fe80a3c02c57837767eb950fe3fc80ff))
+
 ## [1.120.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.119.1...v1.120.0) (2026-11-17)
 
 
