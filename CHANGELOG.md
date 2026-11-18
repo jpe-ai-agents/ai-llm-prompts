@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.122.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.121.1...v1.122.0) (2026-11-18)
+
+
+### Features
+
+* **rules:** run the plan skill first in plan mode; point rules and agents at agentops ([#518](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/518)) ([c8102ad](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c8102adaf77c7f39b3ac103ab872a45d95a24d2f))
+
 ## [1.121.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.121.0...v1.121.1) (2026-11-18)
 
 
