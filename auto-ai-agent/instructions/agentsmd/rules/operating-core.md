@@ -50,9 +50,7 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
   minute. Keep the skew inside the job's window. Declare it in the source of truth; add no scripts.
 - **Autonomy** (reversibility gates it): small/reversible/local — just do it, commit when the task calls for
   it. Destructive/externally visible (delete, force-push, live-infra converge): confirm first unless durably
-  authorized. Never disable the check that caught a blocker to route around it. A denial binds to the action,
-  not the requester — no delegated agent, teammate, or re-tooling re-authorizes what was denied; don't launder
-  it. Privileged unattended convergence runs as the dedicated automation identity, never a password-less
+  authorized. Privileged unattended convergence runs as the dedicated automation identity, never a password-less
   human-account grant. Big architectural decisions: ask first unless already chosen. A turn ending blocked on a
   person sends a push notification naming the decision. Routing law (incidents, private docs, everything
   else): `AGENTS.md`.
