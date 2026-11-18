@@ -26,5 +26,5 @@ connectors: [github-clerk, vikunja-clerk]
 code_work: sandbox
 tools: [a2a.call, agent-sandbox.jobs]
 procedure:
-  - {repo: dryvist/claude-code-plugins, path: ai-cli-harness-better-practices/skills/replan/SKILL.md}
+  - {repo: boshu2/agentops, path: skills/plan/SKILL.md}
 input: Authorized plan path, worktree, decisions, and current artifact, test, PR, and task evidence.

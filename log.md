@@ -1,5 +1,19 @@
 # Change Log
 
+## 2026-11-17
+
+* **Feature (agents)**: `plan-reconciler`, `session-closer` and `docs-updater` follow the agentops `plan` and `doc`
+  skills in place of the replan, session-status and wrap-up-docs skills.
+* **Feature (rules)**: Plan mode runs the `plan` skill first; `tool-use.md` sends adversarial critique to agentops
+  `council`.
+* **Update (instructions)**: Codex runs Luna at `xhigh`, stated once in `AGENTS.md` 'Delegation routing';
+  `model-delegation.md` and the promptfoo Luna lane point to it.
+* **Feat (rules)**: One subagent method in the AGENTS.md delegation routing statement: a Claude session
+  orchestrates and runs no Claude subagents (Haiku `xhigh` only as the hook's logged last rung); the delegation hook
+  places every spawn and ranks executors from live quota, price and peak data with no favourite; tags beat its
+  classifier; ZCode and Claude run in their own CLIs, other router models through the harness. `model-delegation.md`,
+  `tool-use.md`, `claude-code.md` and `brief-delegates.md` follow it.
+
 ## 2026-11-16
 
 * **Feature (rules)**: Add the on-demand `local-llm-cache.md` rule: the prompt cache rate target for local models, the
@@ -38,16 +52,6 @@
   authority explicit; its digest prompt checks the latest channel digest time,
   skips posts under three hours or when the time is unknown, and logs unknown
   times in the run summary.
-
-## 2026-11-17
-
-* **Update (instructions)**: Codex runs Luna at `xhigh`, stated once in `AGENTS.md` 'Delegation routing';
-  `model-delegation.md` and the promptfoo Luna lane point to it.
-* **Feat (rules)**: One subagent method in the AGENTS.md delegation routing statement: a Claude session
-  orchestrates and runs no Claude subagents (Haiku `xhigh` only as the hook's logged last rung); the delegation hook
-  places every spawn and ranks executors from live quota, price and peak data with no favourite; tags beat its
-  classifier; ZCode and Claude run in their own CLIs, other router models through the harness. `model-delegation.md`,
-  `tool-use.md`, `claude-code.md` and `brief-delegates.md` follow it.
 
 ## 2026-11-11
 

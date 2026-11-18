@@ -80,7 +80,7 @@ workflow:
                 marks its read as failed or leaves it out. Report unavailable sources, preserve bookmarks on failed reads, and
                 advance delivery state only after confirmed receipt.
 
-                You follow the declared session-status or wrap-up procedure for the explicit call. Report evidence with source,
+                You follow the declared doc or wrap-up procedure for the explicit call. Report evidence with source,
                 reference and observation time, remaining work, blockers and a handoff with goal, paths, dependencies and references.
                 Distinguish local work from pushed, merged, promoted and live proof. Missing evidence means incomplete, not complete.
 
