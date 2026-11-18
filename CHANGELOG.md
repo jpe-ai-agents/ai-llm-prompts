@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.121.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.121.0...v1.121.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* **rules:** drop the denial-binding sentences from operating-core autonomy ([#513](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/513)) ([c4e43ef](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c4e43ef5a6e32d312e10a4c10b5757d3830c98b8))
+
 ## [1.121.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.120.0...v1.121.0) (2026-11-17)
 
 
