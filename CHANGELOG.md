@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.123.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.122.0...v1.123.0) (2026-11-19)
+
+
+### Features
+
+* **rules:** add documentation vault exemption and fix standalone brief-delegates link ([#523](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/523)) ([1a75f19](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/1a75f1945de408102d376fa9b1b5dc75410ba215))
+
 ## [1.122.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.121.1...v1.122.0) (2026-11-18)
 
 
