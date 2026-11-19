@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-04T20:09:30Z"
+timestamp: "2026-11-19T13:07:31Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -35,6 +35,9 @@ or `git remote show origin`).
 - Default branch `main` → trunk flow; keep the existing squash-to-main
   process and do **not** create a `develop` branch yourself.
 - Never infer adoption from the current local branch name.
+- **Documentation/backup vault exemption:** if the repository root `AGENTS.md` explicitly declares
+  documentation/backup-vault overrides (direct-to-default-branch commits, custom commit prefixes), defer to those
+  repo-local rules.
 
 ## The model
 

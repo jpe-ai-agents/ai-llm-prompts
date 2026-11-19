@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-17T21:00:00Z"
+timestamp: "2026-11-19T13:07:31Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -38,6 +38,10 @@ Git workflow: never edit on the default branch — start a worktree with `git to
 merge commit only. Otherwise trunk flow. Always **atomic commits**, one fix/feature/section per commit. Load
 the on-demand rule for the activity — `rule-tiers.md` is the index. Instruction-behavior changes are `feat:`/`fix:`,
 never `docs:`.
+
+Documentation/backup vault exemption: when a repository's root `AGENTS.md` explicitly declares it is a
+documentation/backup vault (direct-to-default-branch commits, custom commit prefix, dedicated task tracker), those
+repo-local overrides take precedence over global git-flow, worktree, and task-tracker defaults.
 
 Writing voice: prose a person will read follows `~/.agents/voice.md` when that file exists.
 

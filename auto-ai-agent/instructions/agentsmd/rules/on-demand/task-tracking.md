@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-10-23T21:03:46-04:00"
+timestamp: "2026-11-19T13:07:31Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -21,7 +21,8 @@ source_history:
 
 # Task tracking
 
-Task routing follows [AGENTS.md](../../../AGENTS.md): never a GitHub issue.
+Task routing follows [AGENTS.md](../../../AGENTS.md): never a GitHub issue. When a repository's root `AGENTS.md`
+explicitly declares a dedicated task-tracker override for a documentation/backup vault, defer to that override.
 
 That holds for issues that already exist, not only for new ones. A forge issue
 is never the tracker:
