@@ -7,7 +7,7 @@ tags:
   - "claude-code"
   - "delegation"
   - "briefing"
-timestamp: "2026-11-17T18:00:00Z"
+timestamp: "2026-11-19T13:07:31Z"
 status: active
 consumers:
   - "dryvist/nix-ai"
@@ -64,13 +64,12 @@ Require the final output to identify:
 - delivery status: local changes, commits, push, draft PR, deployment, or external acceptance, as applicable.
 
 Keep local validation, source generation, import, execution, and confirmed external receipt as separate evidence
-states. Claim only the states verified in the run. Apply the [agent and skill building standards][standards]
-for source attribution: A4, O1, O4, O5, O6, O7, D9, and F2.
+states. Claim only the states verified in the run. Apply the agent and skill building standards
+(`prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/agent-standards#e-coding-agent-briefs`) for
+source attribution: A4, O1, O4, O5, O6, O7, D9, and F2.
 
 ## Brief check
 
 Test: could a capable contractor with no access to this conversation finish from the brief alone? If not, rewrite
 it. Never write "as discussed", "the bug we found", "look into X" or "based on your findings, implement it": handing
 off understanding is not handing off work. Worked example: `prompt://dryvist/auto-ai-agent/model-delegation`.
-
-[standards]: ../../instructions/agentsmd/rules/on-demand/agent-standards.md#e-coding-agent-briefs

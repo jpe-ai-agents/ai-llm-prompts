@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-11-19
+
+* **Feature (rules)**: Add a documentation/backup-vault exemption to `AGENTS.md`, `git-flow.md`, and
+  `task-tracking.md` so repo-local root `AGENTS.md` overrides for direct commits, commit prefixes, and dedicated
+  task trackers take precedence over global defaults.
+* **Fix (rules)**: Replace the broken relative link in `auto-ai-agent/claude-code/rules/brief-delegates.md` with
+  the canonical `prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/agent-standards#e-coding-agent-briefs`
+  URI for standalone rule delivery.
+
 ## 2026-11-17
 
 * **Feature (agents)**: `plan-reconciler`, `session-closer` and `docs-updater` follow the agentops `plan` and `doc`
