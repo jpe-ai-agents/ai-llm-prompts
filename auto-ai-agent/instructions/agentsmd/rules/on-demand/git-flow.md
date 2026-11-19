@@ -35,9 +35,8 @@ or `git remote show origin`).
 - Default branch `main` → trunk flow; keep the existing squash-to-main
   process and do **not** create a `develop` branch yourself.
 - Never infer adoption from the current local branch name.
-- **Documentation/backup vault exemption:** if the repository root `AGENTS.md` explicitly declares
-  documentation/backup-vault overrides (direct-to-default-branch commits, custom commit prefixes), defer to those
-  repo-local rules.
+- **Documentation/backup vault exemption:** if root `AGENTS.md` explicitly declares documentation/backup-vault
+  overrides (direct commits, custom commit prefixes), defer to those repo-local rules.
 
 ## The model
 
@@ -54,12 +53,10 @@ Main Source Gate allows only `develop` or same-repo `hotfix/*` into
 `main` is never merged back into `develop`. Stabilization fixes land on `develop` through
 ordinary PRs.
 
-release-please keeps one release PR open against `develop` with the version bump, CHANGELOG and
-release notes; every release PR auto-merges when its checks pass. The PR that opened the work owns the
-release: confirm the release PR merged (merge it only if green and open), confirm `develop`'s head
-checks are green, then promote. Later commits take the next version. The push to
-`main` tags and releases that commit, already on `main`. Never merge to
-`main` without intending a release.
+release-please keeps one release PR open against `develop` (version bump, CHANGELOG, release notes) that
+auto-merges when checks pass. The PR that opened the work owns the release: confirm the release PR merged
+(or merge it if green), confirm `develop` head checks pass, then promote. Later commits take the next version.
+Pushing to `main` tags and releases that commit; never merge to `main` without intending a release.
 
 Promotion is a merge-commit PR from `develop` to `main`. While a promotion PR is open,
 nothing else merges into `develop` (the `release-freeze` status enforces it).
@@ -88,19 +85,14 @@ number is 25 or more, do not start a new PR: promote `develop` to `main` first (
 only promotion merge commits that `develop` lacks, so its side of the count is not a
 signal. This check applies to git-flow repos only; a trunk repo has no `develop`.
 
-1. Create or switch to a fresh worktree based on `origin/develop`. Place it at
-   the repo's top level as `.worktrees/<name>/` — beside the primary checkout,
-   never nested inside it. Pass `git worktree add` an **absolute** destination
-   path so the current directory cannot change where it lands, e.g.
+1. Create or switch to a fresh worktree on `origin/develop` at the repo's top-level
+   `.worktrees/<name>/` — beside the primary checkout, never inside it. Pass `git worktree add` an
+   **absolute** path so cwd cannot nest it (relative paths from `main/` nest as `main/.worktrees/<name>`,
+   and `git rev-parse --show-toplevel` returns `main/`'s root rather than the outer root;
+   `--git-common-dir` stays anchored across worktrees):
    `git worktree add "$(dirname "$(git rev-parse --git-common-dir)")/.worktrees/<name>" origin/develop`.
-   A relative `.worktrees/<name>` resolves against your cwd — from inside the
-   `main/` checkout it nests as `main/.worktrees/<name>`, which is wrong.
-   `git rev-parse --show-toplevel` does not fix this: run from inside `main/`
-   it returns `main/`'s own root, not the outer repo root — `--git-common-dir`
-   is the anchor that stays stable across every worktree.
-   Create `.worktrees/` if absent; keep it gitignored. The repo root checkout
-   always stays on the default branch (`develop`, or `main` on trunk repos) —
-   never check a feature branch out at the root.
+   Keep `.worktrees/` gitignored. Leave the repo root checkout on the default branch (`develop`, or
+   `main` on trunk repos); never check a feature branch out at the root.
 2. Start the feature branch there with `git town hack <name>`, or let the
    harness worktree create it. Git Town fetches first and bases the branch on
    the fresh tip of `git-town.main-branch` (`develop` here). Pass the full
@@ -117,13 +109,10 @@ signal. This check applies to git-flow repos only; a trunk repo has no `develop`
    merge commit into `develop` only when preserving multiple atomic commits
    matters: stacked work, coordinated multi-commit changes, and hotfix
    branches.
-5. Hotfix exception to PR targeting: a `hotfix/*` branch starts from `main`
-   and its PR targets `main` (merge commit, never squash); afterward open a
-   PR from the hotfix branch (not `main`) to `develop` and merge it with a
-   merge commit.
-6. **Every change to `develop` goes through a PR** — the org ruleset enforces
-   it, so a direct push is rejected (`GH013: Repository rule violations`).
-   Never plan a "quick direct commit" to `develop`; branch and open a PR.
+5. Hotfix exception: branch `hotfix/*` from `main` and merge its PR to `main` (merge commit, never squash),
+   then merge a PR from the hotfix branch (never `main`) to `develop` with a merge commit.
+6. **Every change to `develop` requires a PR** — direct pushes fail ruleset checks
+   (`GH013: Repository rule violations`). Always branch and open a PR.
 7. **Merging**: The org `pr-automerge` workflow arms non-draft PRs, never a
    `develop` to `main` promotion. Agents never arm auto-merge; a draft
    holds a PR.
