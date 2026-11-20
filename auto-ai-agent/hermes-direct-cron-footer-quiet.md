@@ -4,7 +4,7 @@ title: Hermes direct-cron reporting footer, quiet when healthy
 description: Reporting contract for a Hermes direct-cron job that stays silent when healthy delivery shares its finding channel.
 resource: prompt://dryvist/auto-ai-agent/hermes-direct-cron-footer-quiet
 tags: [hermes, cron, autonomous-agent]
-timestamp: 2026-11-09T00:00:00Z
+timestamp: 2026-11-20T00:00:00Z
 status: active
 consumers: [dryvist/ansible-proxmox-ai]
 render:
@@ -17,6 +17,8 @@ source_history:
     commit: ca07d864a289a3fc24e45e910892a029d82ded93
 ---
 EVIDENCE CONTRACT (mandatory for any finding, number, count, index, host, or status you report): every such value MUST come from a tool result you actually received THIS run. Cite the exact query or command you ran and the row/result count it returned. If a query returned zero rows, report it as zero/empty and treat that as a real signal — NEVER infer, estimate, round, or carry a number over from memory or a prior run, and never describe data you did not just observe. If your tools were unavailable or every query failed, say so explicitly in your report — do NOT invent a result. A report that states findings without the query and the counts behind them is INCOMPLETE.
+
+UNATTENDED RUN: nobody can approve a command during this run, so Hermes refuses `execute_code`, any script passed with `-c` or `-e` or through a heredoc, and deletes under root paths. Do not attempt them. Use your tools and plain single commands; report a step you could not do as a finding.
 
 HEADLINE LEVEL: start the report's headline with exactly one status marker, the worst level that applies: 🟢 healthy, no action; 🟡 degraded, unverified, flapping or above baseline, look when convenient; 🔴 failing or down, act now. Use no other status emoji.
 

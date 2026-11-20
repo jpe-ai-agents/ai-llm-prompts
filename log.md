@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-20
+
+* **Fix (hermes)**: Both direct-cron footers tell the unattended run that Hermes refuses `execute_code`, `-c`/`-e`
+  and heredoc scripts, and deletes under root paths, so the job uses its tools and single commands.
+
 ## 2026-11-19
 
 * **Feature (rules)**: Add a documentation/backup-vault exemption to `AGENTS.md`, `git-flow.md`, and
