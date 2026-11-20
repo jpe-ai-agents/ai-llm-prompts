@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.125.1...v1.126.0) (2026-11-20)
+
+
+### Features
+
+* **vikunja-triage:** group related tasks through a Dify knowledge dataset ([#532](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/532)) ([8ccdbdf](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/8ccdbdfb5ee13c5607fca8a6652dfe1a20e8ac84))
+
 ## [1.125.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.125.0...v1.125.1) (2026-11-20)
 
 
