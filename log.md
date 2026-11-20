@@ -2,6 +2,8 @@
 
 ## 2026-11-20
 
+* **Feature (automation)**: Add `ai-workflows-conflict-fix`, which re-applies a conflicted pull request's change
+  onto the current base, editing only the pull request's changed files.
 * **Fix (hermes)**: Both direct-cron footers tell the unattended run that Hermes refuses `execute_code`, `-c`/`-e`
   and heredoc scripts, and deletes under root paths, so the job uses its tools and single commands.
 
