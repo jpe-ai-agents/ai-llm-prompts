@@ -826,7 +826,11 @@ dify:
                             task_id=task.get('id',task.get('taskId'))
                             if task_id is None or not project: continue
                             i=len(refs); title=str(task.get('title','')); desc=str(task.get('description',''))
-                            refs.append({'task_index':i,'id':str(task_id),'project_id':project,'title':title,'description':desc,'created':task.get('created',''),'due_date':task.get('dueDate',task.get('due_date','')),'priority':task.get('priority'),'done':task.get('done',False),'labels':task.get('labels',[])})
+                            labels=task.get('labels',[]); labels=labels if isinstance(labels,list) else []
+                            related=task.get('related_tasks',{}); subtasks=related.get('subtask') if isinstance(related,dict) else None
+                            has_subtasks=isinstance(subtasks,list) and bool(subtasks)
+                            is_epic=title.startswith(('EPIC','Epic:')) or any(isinstance(label,dict) and str(label.get('title','')).casefold()=='epic' for label in labels)
+                            refs.append({'task_index':i,'id':str(task_id),'project_id':project,'title':title,'description':desc,'created':task.get('created',''),'due_date':task.get('dueDate',task.get('due_date','')),'priority':task.get('priority'),'done':task.get('done',False),'labels':task.get('labels',[]),'has_subtasks':has_subtasks,'is_epic':is_epic})
                             links=re.findall(r'https://[^\s<>"\']+',title+' '+desc)
                             url=''; state=None
                             for candidate in links:
@@ -835,7 +839,7 @@ dify:
                                 except Exception: failures.append('a GitHub link check failed'); found=None
                                 if not url:url=candidate
                                 if found:url,state=candidate,found; break
-                            visible.append({'task_index':i,'title':title,'description':desc,'created':task.get('created',''),'due_date':task.get('dueDate',task.get('due_date','')),'priority':task.get('priority'),'done':task.get('done',False),'labels':task.get('labels',[]),'linked_work':{'url':url,'state':state or 'unverified'} if url else None})
+                            visible.append({'task_index':i,'title':title,'description':desc,'created':task.get('created',''),'due_date':task.get('dueDate',task.get('due_date','')),'priority':task.get('priority'),'done':task.get('done',False),'labels':task.get('labels',[]),'has_subtasks':has_subtasks,'is_epic':is_epic,'linked_work':{'url':url,'state':state or 'unverified'} if url else None})
                     except Exception: failures.append('a task record could not be read')
                 return {'task_refs':json.dumps(refs),'model_tasks':json.dumps(redact({'timestamp':timestamp,'tasks':visible}),ensure_ascii=False),'fetch_error':'; '.join(sorted(set(failures)))}
           code_language: python3
@@ -954,7 +958,7 @@ dify:
                     left=by_id[pair['id']]; right=by_id[pair['other']]
                     ordered=sorted((left,right),key=lambda ref:(ref.get('task_index',0),str(ref.get('id',''))))
                     if pair['label']=='duplicate':
-                        if str(left.get('project_id')) in allowed and str(right.get('project_id')) in allowed and str(left.get('project_id')) not in rank_only and str(right.get('project_id')) not in rank_only:
+                        if not (left.get('has_subtasks') or left.get('is_epic') or right.get('has_subtasks') or right.get('is_epic')) and str(left.get('project_id')) in allowed and str(right.get('project_id')) in allowed and str(left.get('project_id')) not in rank_only and str(right.get('project_id')) not in rank_only:
                             actions.append({'kind':'close_duplicate','id':str(ordered[1]['id']),'of':str(ordered[0]['id']),'score':pair['score']})
                     elif pair['label']=='related':
                         actions.append({'kind':'relate','id':str(ordered[0]['id']),'other':str(ordered[1]['id']),'score':pair['score']})
@@ -963,6 +967,13 @@ dify:
                     key=(theme['id'],theme['theme'])
                     if key not in seen_themes: seen_themes.add(key); actions.append({'kind':'theme',**theme})
                 actions.sort(key=lambda action:(action['kind'],action['id'],action.get('other',action.get('of','')),action.get('theme','')))
+                bounded=[]; duplicate_count=0
+                for action in actions:
+                    if action['kind']=='close_duplicate':
+                        if duplicate_count>=5: continue
+                        duplicate_count+=1
+                    bounded.append(action)
+                actions=bounded
                 return {'pairs':pairs,'actions':actions,'error':'; '.join(sorted(set(errors))),'indexing_pending_batches':int(pending_count or 0)}
             def state_for(url,web_host,api_base,addr,role,secret,path,cache):
                 if url in cache: return cache[url]
@@ -1021,7 +1032,8 @@ dify:
                     for item in proposed if isinstance(proposed,list) else []:
                         if not isinstance(item,dict) or type(item.get('task_index')) is not int or item['task_index']!=ref['task_index']: continue
                         kind=item.get('kind')
-                        if kind=='rank' and project in allowed:
+                        protected=ref.get('has_subtasks') or ref.get('is_epic')
+                        if kind=='rank' and project in allowed and not protected:
                             fields={}
                             p=item.get('priority',ref.get('priority'))
                             if isinstance(p,(int,float)) and not isinstance(p,bool): fields['priority']=p
@@ -1029,6 +1041,7 @@ dify:
                             if isinstance(labels,list) and all(isinstance(x,str) for x in labels): fields['labels']=labels
                             if fields: add(ref,'__DIFY_TOOL_OPERATION_UPDATE__',**fields)
                         elif kind in ('comment','done') and project in allowed and project not in rank_only:
+                            if kind=='done' and protected: continue
                             urls=re.findall(r'https://[^\s<>"\']+',text)
                             for raw_url in urls:
                                 url=raw_url.rstrip('.,);]')

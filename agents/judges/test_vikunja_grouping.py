@@ -340,7 +340,7 @@ def test_grouping_guard_applies_project_tiers_incident_skip_and_shadow_separatio
     main = _namespace("guard")["main"]
     refs = [
         {"task_index": 0, "id": "1", "project_id": "10", "title": "First task", "description": ""},
-        {"task_index": 1, "id": "2", "project_id": "10", "title": "Duplicate task", "description": ""},
+        {"task_index": 1, "id": "2", "project_id": "10", "title": "Duplicate task", "description": "", "has_subtasks": True},
         {"task_index": 2, "id": "3", "project_id": "11", "title": "Read only task", "description": ""},
         {"task_index": 3, "id": "4", "project_id": "11", "title": "Related task", "description": ""},
         {"task_index": 4, "id": "5", "project_id": "12", "title": "Rank only task", "description": ""},
@@ -349,10 +349,12 @@ def test_grouping_guard_applies_project_tiers_incident_skip_and_shadow_separatio
         {"task_index": 7, "id": "8", "project_id": "13", "title": "Denied peer", "description": ""},
         {"task_index": 8, "id": "9", "project_id": "10", "title": "Security weakness", "description": ""},
         {"task_index": 9, "id": "10", "project_id": "10", "title": "Ordinary peer", "description": ""},
+        {"task_index": 10, "id": "11", "project_id": "10", "title": "Another ordinary peer", "description": ""},
     ]
     grouping_results = [
         {"id": "1", "theme": "Planning Work", "pairs": [
             {"id": "1", "other": "2", "score": 0.95, "label": "duplicate"},
+            {"id": "1", "other": "11", "score": 0.90, "label": "duplicate"},
             {"id": "1", "other": "10", "score": 0.72, "label": "related"},
         ]},
         {"id": "3", "theme": "Task Filtering", "pairs": [
@@ -391,7 +393,8 @@ def test_grouping_guard_applies_project_tiers_incident_skip_and_shadow_separatio
     )
 
     grouped = json.loads(result["grouping_json"])
-    assert {"kind": "close_duplicate", "id": "2", "of": "1", "score": 0.95} in grouped["actions"]
+    assert {"kind": "close_duplicate", "id": "11", "of": "1", "score": 0.90} in grouped["actions"]
+    assert not [action for action in grouped["actions"] if action.get("kind") == "close_duplicate" and action.get("id") == "2"]
     assert {"kind": "relate", "id": "3", "other": "4", "score": 0.81} in grouped["actions"]
     assert {"kind": "theme", "id": "3", "theme": "Task Filtering"} in grouped["actions"]
     assert not [action for action in grouped["actions"] if action.get("id") == "5" and action["kind"] == "close_duplicate"]
@@ -402,6 +405,48 @@ def test_grouping_guard_applies_project_tiers_incident_skip_and_shadow_separatio
     triage_actions = json.loads(result["actions_json"])
     assert all(action.get("operation") not in {"close_duplicate", "relate", "theme"} for action in triage_actions)
     assert result["dispatch"] is True
+
+
+def test_grouping_caps_advisory_close_duplicate_actions_at_five():
+    main = _namespace("guard")["main"]
+    refs = [
+        {"task_index": index, "id": str(index + 1), "project_id": "10", "title": f"Task {index + 1}", "description": ""}
+        for index in range(12)
+    ]
+    grouping_results = [
+        {
+            "id": str(index + 1),
+            "pairs": [
+                {"id": str(index + 1), "other": str(index + 2), "score": 0.9, "label": "duplicate"}
+            ],
+        }
+        for index in range(11)
+    ]
+
+    result = main(
+        '{"actions":[]}',
+        json.dumps(refs),
+        '["10"]',
+        "[]",
+        "[]",
+        "[]",
+        "live",
+        "github.com",
+        "https://api.github.com",
+        "",
+        "",
+        "",
+        "",
+        "",
+        grouping_results,
+        "",
+        "",
+        0,
+    )
+
+    grouped = json.loads(result["grouping_json"])
+    close_duplicates = [action for action in grouped["actions"] if action["kind"] == "close_duplicate"]
+    assert len(close_duplicates) == 5
 
 
 def test_grouping_render_uses_parallel_iterations_and_one_named_prompt():
