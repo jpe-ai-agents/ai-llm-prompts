@@ -2,6 +2,11 @@
 
 ## 2026-11-20
 
+* **Feature (agents)**: `vikunja-clerk` takes one plain-words ask and adds comment, relate, close and reopen. It
+  resolves a named project from a run-time project list (the inbox when unresolved), searches open tasks before a
+  create and comments on a matching open task instead, checks every target task's project, and answers with the
+  write's IDs plus a readback. Project write subcommands are denied. The Dify renderer accepts a second, read-only
+  MCP tool prefix.
 * **Fix (automation)**: The CI-fix prompt's size-limit step keeps `import_tasks` when moved Ansible tasks carry their
   own tags, and keeps every rule stated in the comments around a moved block.
 * **Feature (automation)**: Add `ai-workflows-conflict-fix`, which re-applies a conflicted pull request's change

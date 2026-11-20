@@ -712,9 +712,9 @@ def test_declared_individual_tool_without_a_node_fails(tmp_path):
     assert "must appear on a tool node" in result.stderr
 
 
-def test_subcommand_tools_with_two_prefixes_fail(tmp_path):
+def test_secondary_prefix_with_a_write_operation_fails(tmp_path):
     path, definition = sample_checkout(tmp_path)
-    definition.update(mcp_servers=["vikunja"], tools=["vikunja_tasks.list", "zammad_rest.search"])
+    definition.update(mcp_servers=["vikunja"], tools=["vikunja_tasks.list", "vikunja_projects.create"])
     definition["dify"] = {
         "prompt": "__DIFY_SYSTEM_PROMPT__",
         "workflow": {"graph": {"nodes": [tool_node("vikunja", "vikunja_tasks")]}},
@@ -722,4 +722,19 @@ def test_subcommand_tools_with_two_prefixes_fail(tmp_path):
     path.write_text(yaml.safe_dump(definition))
     result = render_checkout(tmp_path)
     assert result.returncode != 0
-    assert "must share one MCP tool prefix" in result.stderr
+    assert "a secondary MCP tool prefix may declare only list or get" in result.stderr
+
+
+def test_secondary_read_prefix_keeps_the_primary_tool_name_and_operations(tmp_path):
+    path, definition = sample_checkout(tmp_path)
+    definition.update(mcp_servers=["vikunja"], tools=["vikunja_tasks.create", "vikunja_projects.list"])
+    definition["dify"] = {
+        "prompt": "__DIFY_SYSTEM_PROMPT__",
+        "names": "__DIFY_TOOL_NAME__ __DIFY_TOOL_OPERATIONS__",
+        "workflow": {"graph": {"nodes": [tool_node("vikunja", "vikunja_tasks")]}},
+    }
+    path.write_text(yaml.safe_dump(definition))
+    result = render_checkout(tmp_path)
+    assert result.returncode == 0, result.stderr
+    rendered = (tmp_path / "agents" / "dify" / f"{definition['name']}.dsl.yml").read_text()
+    assert "vikunja_tasks {'create'}" in rendered

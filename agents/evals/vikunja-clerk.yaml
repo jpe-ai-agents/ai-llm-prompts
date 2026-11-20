@@ -101,15 +101,15 @@ cases:
     expected_output: {route: vikunja, operation: update, project_named: true, category: null, refused: true, reason_contains: [change its project, move, another project]}
     expected_behavior: Refuse the move, although both projects are allowed, and make no write call.
 
-  - id: refuse-unknown-project
+  - id: unresolved-project-files-to-inbox
     category: ambiguous
-    input: Create the requested task in a named but unscoped project.
+    input: Create the requested task in a named project the workflow cannot resolve.
     expected_parse: {route: vikunja, operation: create, project_named: true, category: null}
     structured_fields: {route: vikunja, operation: create, project_named: true, project_id: '', title: Update the onboarding guide}
-    guard_context: {mode: live, allowed_projects: [project-allowed], denied_projects: [project-denied]}
+    guard_context: {mode: live, allowed_projects: [project-allowed, project-inbox], denied_projects: [project-denied], inbox: project-inbox}
     expected_calls: []
-    expected_output: {route: vikunja, operation: create, project_named: true, category: null, refused: true, reason_contains: [unknown, unscoped, project ID, project id]}
-    expected_behavior: Refuse because the named target has no structured project ID.
+    expected_output: {route: vikunja, operation: create, project_named: true, category: null}
+    expected_behavior: Emit the create intent with the project name. The guard files an unresolved name to the inbox.
 
   - id: create-without-project-uses-inbox
     category: boundary

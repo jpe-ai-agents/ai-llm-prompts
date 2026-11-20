@@ -1,0 +1,134 @@
+# Code-guard fixtures for the clerk's write guard (the "Update project guard" node): comment, relate, close, reopen,
+# and search-before-create. Keys are as in vikunja-clerk-update.yaml, plus context.plan (the first guard's plan),
+# context.other_task_result (the second read, used by relate), and task_result given as a string when it is the
+# server's markdown reply. mandates.task_id is the task the first guard resolved.
+# Each refusal has a "<id>-control" case that changes only its offends paths and must pass.
+cases:
+  - id: comment-on-allowed-task-markdown-read
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      allowed_projects: ["301"]
+      plan: {operation: comment, task_id: "101", comment: Measured again today.}
+    task_result: "## ✅ Success\n\n**Operation:** get-task\n\n### 1. **Slow tests** (ID: 101)\n- **Status:** ❌ Not Done\n- **Project:** 301\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: comment
+        args: {id: "101", comment: Measured again today.}
+  - id: refuse-comment-task-in-denied-project
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      allowed_projects: ["301"]
+      denied_projects: ["301"]
+      plan: {operation: comment, task_id: "101", comment: Measured again today.}
+    task_result: "### 1. **Slow tests** (ID: 101)\n- **Project:** 301\n"
+    refusal: The current task project is denied
+    offends: [context.denied_projects]
+    expected_tool_calls: []
+  - id: refuse-comment-task-in-denied-project-control
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      allowed_projects: ["301"]
+      denied_projects: [project-denied]
+      plan: {operation: comment, task_id: "101", comment: Measured again today.}
+    task_result: "### 1. **Slow tests** (ID: 101)\n- **Project:** 301\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: comment
+        args: {id: "101", comment: Measured again today.}
+  - id: relate-two-allowed-tasks
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "102", category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      plan: {operation: relate, task_id: "101", other_task_id: 102}
+      other_task_result: {task: {id: "102", projectId: project-allowed}}
+    task_result: {task: {id: "101", projectId: project-allowed}}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: relate
+        args: {id: "101", otherTaskId: 102, relationKind: related}
+  - id: refuse-relate-other-task-outside-policy
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "102", category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      plan: {operation: relate, task_id: "101", other_task_id: 102}
+      other_task_result: {task: {id: "102", projectId: project-unknown}}
+    task_result: {task: {id: "101", projectId: project-allowed}}
+    refusal: The other task project is unknown or outside the allowed policy.
+    offends: [context.other_task_result.task.projectId]
+    expected_tool_calls: []
+  - id: refuse-relate-other-task-outside-policy-control
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "102", category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      plan: {operation: relate, task_id: "101", other_task_id: 102}
+      other_task_result: {task: {id: "102", projectId: project-allowed}}
+    task_result: {task: {id: "101", projectId: project-allowed}}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: relate
+        args: {id: "101", otherTaskId: 102, relationKind: related}
+  - id: close-sets-done-true
+    intent: {route: vikunja, operation: close, project_named: false, task_id: "101", category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      plan: {operation: update, task_id: "101", done: true}
+    task_result: {task: {id: "101", projectId: project-allowed}}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: update
+        args: {id: "101", projectId: project-allowed, done: true}
+  - id: reopen-sets-done-false
+    intent: {route: vikunja, operation: reopen, project_named: false, task_id: "101", category: null}
+    mandates: {project_id: "", task_id: "101"}
+    context:
+      plan: {operation: update, task_id: "101", done: false}
+    task_result: {task: {id: "101", projectId: project-allowed}}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: update
+        args: {id: "101", projectId: project-allowed, done: false}
+  - id: create-with-no-open-match-creates
+    intent: {route: vikunja, operation: create, project_named: false, title: Update the onboarding guide, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      plan: {operation: create, project_id: project-allowed, title: Update the onboarding guide}
+    task_result: "## ✅ Success\n\nFound 1 tasks\n\n1. **Rotate the backup key** (ID: 110)\n   - **Status:** ❌ Not Done\n   - **Project:** 301\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: create
+        args: {projectId: project-allowed, title: Update the onboarding guide}
+  - id: create-matching-open-task-becomes-comment
+    intent: {route: vikunja, operation: create, project_named: false, title: Update the onboarding guide, description: Add the current steps., category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed, "301"]
+      plan: {operation: create, project_id: project-allowed, title: Update the onboarding guide, description: Add the current steps.}
+    task_result: "## ✅ Success\n\nFound 2 tasks\n\n1. **Rotate the backup key** (ID: 110)\n   - **Project:** 301\n2. **Update the onboarding guide.** (ID: 111)\n   - **Status:** ❌ Not Done\n   - **Project:** 301\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: comment
+        args: {id: "111", comment: Filed again with the same title. Add the current steps.}
+  - id: refuse-duplicate-in-unscoped-project
+    intent: {route: vikunja, operation: create, project_named: false, title: Update the onboarding guide, description: Add the current steps., category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed]
+      plan: {operation: create, project_id: project-allowed, title: Update the onboarding guide, description: Add the current steps.}
+    task_result: "1. **Update the onboarding guide** (ID: 111)\n   - **Project:** 301\n"
+    refusal: Open task 111 already has this title; the create is refused as a duplicate.
+    offends: [context.allowed_projects]
+    expected_tool_calls: []
+  - id: refuse-duplicate-in-unscoped-project-control
+    intent: {route: vikunja, operation: create, project_named: false, title: Update the onboarding guide, description: Add the current steps., category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed, "301"]
+      plan: {operation: create, project_id: project-allowed, title: Update the onboarding guide, description: Add the current steps.}
+    task_result: "1. **Update the onboarding guide** (ID: 111)\n   - **Project:** 301\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: comment
+        args: {id: "111", comment: Filed again with the same title. Add the current steps.}

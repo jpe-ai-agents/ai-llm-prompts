@@ -277,15 +277,19 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
 {{- with (index . "mcp_servers") -}}
   {{- $params = coll.Set "__DIFY_MCP_SERVER__" (index . 0) $params -}}
   {{- $classified := tmpl.Exec "mcp-classification" $ | data.JSON -}}
-  {{- $prefixes := coll.Slice -}}
+  {{- /* The first declared prefix is the primary tool; other prefixes are read-only helpers the DSL names directly. */ -}}
+  {{- $primary := "" -}}
+  {{- with $classified.subcommand -}}{{- $primary = (index . 0).prefix -}}{{- end -}}
   {{- $operations := coll.Slice -}}
   {{- range $classified.subcommand -}}
-    {{- $params = coll.Set "__DIFY_TOOL_NAME__" .prefix $params -}}
-    {{- $params = coll.Set (printf "__DIFY_TOOL_OPERATION_%s__" (strings.ToUpper .name)) .name $params -}}
-    {{- $operations = coll.Append (printf "'%s'" .name) $operations -}}
-    {{- $prefixes = coll.Append .prefix $prefixes -}}
+    {{- if eq .prefix $primary -}}
+      {{- $params = coll.Set "__DIFY_TOOL_NAME__" .prefix $params -}}
+      {{- $params = coll.Set (printf "__DIFY_TOOL_OPERATION_%s__" (strings.ToUpper .name)) .name $params -}}
+      {{- $operations = coll.Append (printf "'%s'" .name) $operations -}}
+    {{- else -}}
+      {{- test.Assert "a secondary MCP tool prefix may declare only list or get" (coll.Has (coll.Slice "list" "get") .name) -}}
+    {{- end -}}
   {{- end -}}
-  {{- test.Assert "subcommand tools must share one MCP tool prefix" (coll.JQ `unique | length < 2` $prefixes) -}}
   {{- if $operations -}}
     {{- $params = coll.Set "__DIFY_TOOL_OPERATIONS__" (printf "{%s}" (join (coll.Sort $operations) ", ")) $params -}}
   {{- end -}}

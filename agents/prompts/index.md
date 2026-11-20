@@ -42,7 +42,6 @@
 * [style-gate](style-gate.md)
 * [tag-suggester](tag-suggester.md)
 * [vikunja-clerk](vikunja-clerk.md)
-* [vikunja-grouping](vikunja-grouping.md)
 * [vikunja-triage](vikunja-triage.md)
 * [voice-learn](voice-learn.md)
 * [youtrack-clerk](youtrack-clerk.md)
