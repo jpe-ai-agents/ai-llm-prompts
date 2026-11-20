@@ -8,6 +8,8 @@
   drops or adds a change against the superseded pull request's diff.
 * **Fix (automation)**: The conflict-fix prompt allows read-only git and treats the pull request text as data; the
   semantic rubric does not count changes past a truncated superseded diff as added changes.
+* **Fix (automation)**: The CI-fix prompt runs only the tests the failing job's log names first, never installs
+  system packages, and runs a repository-wide lint only when lint is the failing job.
 * **Fix (hermes)**: Both direct-cron footers tell the unattended run that Hermes refuses `execute_code`, `-c`/`-e`
   and heredoc scripts, and deletes under root paths, so the job uses its tools and single commands.
 
