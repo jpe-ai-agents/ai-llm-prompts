@@ -82,7 +82,7 @@ guards:
     create_with_unresolved_project_name: inbox
     project_lookup: vikunja_projects.list
     search_open_tasks_before_create: true
-    duplicate_create_becomes_comment: true
+    duplicate_create_is_refused: true
     write_targets_in_allowed_projects: true
     readback_after_write: true
     allowed_projects_environment_variable: VIKUNJA_ALLOWED_PROJECTS
@@ -373,7 +373,8 @@ dify:
 
             def project_ids(text):
                 # shortcut: one page of up to 50 projects; a name past it resolves to the inbox. Search by name if projects outgrow it.
-                return {title.strip().lower(): pid for title, pid in re.findall(r"\*\*(.+?)\*\* \(ID: (\d+)\)", str(text or ""))}
+                # Item lines only: "N. **Title** (ID: n)" from the start of a line; the ID is the last token on that line.
+                return {title.strip().lower(): pid for title, pid in re.findall(r"^\d+\. \*\*(.*)\*\* \(ID: (\d+)\)$", str(text or ""), re.M)}
 
             def output(allowed=False, reason="", **values):
                 result = {
@@ -715,8 +716,13 @@ dify:
                 args = {key: value for key, value in args.items() if value is not None and value != ""}
                 return json.dumps({"tool": "__DIFY_TOOL_NAME__", "args": {"subcommand": operation, **args}}, separators=(",", ":"))
 
+            # Task text is untrusted: a title or description can carry look-alike lines. Match whole lines only, take the ID
+            # as the last token of a header line, and refuse a reply with more than one header or Project line.
+            HEADER = re.compile(r"^(?:### )?\d+\. \*\*(.*)\*\* \(ID: (\d+)\)$", re.M)
+            PROJECT = re.compile(r"^(?:- |   - )\*\*Project:\*\* (\d+)$", re.M)
+
             def task_scope(text):
-                # One task read: JSON, or the server's markdown reply. Returns (task id, project id).
+                # One task read: JSON, or the server's markdown reply. Returns (task id, project id), or blanks when unsure.
                 text = str(text or "")
                 if text.lstrip().startswith(("{", "[")):
                     result = json.loads(text)
@@ -727,24 +733,19 @@ dify:
                     if not isinstance(result, dict):
                         return "", ""
                     return str(result.get("id", result.get("taskId", ""))).strip(), str(result.get("projectId", result.get("project_id", ""))).strip()
-                task = re.search(r"\(ID: (\d+)\)", text)
-                project = re.search(r"\*\*Project:\*\* (\d+)", text)
-                return (task.group(1) if task else ""), (project.group(1) if project else "")
+                headers, projects = HEADER.findall(text), PROJECT.findall(text)
+                if len(headers) != 1 or len(projects) != 1:
+                    return "", ""
+                return headers[0][1], projects[0]
 
             def open_tasks(text):
-                # An open-task search: JSON, or markdown "N. **Title** (ID: n)" items. Returns (id, title, project id) rows.
+                # An open-task search: JSON, or markdown item header lines. Returns (id, title) rows; used only to refuse.
                 text = str(text or "")
                 if text.lstrip().startswith(("{", "[")):
                     items = json.loads(text)
                     items = items.get("tasks", []) if isinstance(items, dict) else items
-                    return [(str(item.get("id", "")), str(item.get("title", "")), str(item.get("projectId", item.get("project_id", "")))) for item in items if isinstance(item, dict)]
-                rows = []
-                for block in re.split(r"\n(?=\d+\. \*\*)", text):
-                    head = re.match(r"\d+\. \*\*(.+?)\*\* \(ID: (\d+)\)", block.strip())
-                    if head:
-                        project = re.search(r"\*\*Project:\*\* (\d+)", block)
-                        rows.append((head.group(2), head.group(1), project.group(1) if project else ""))
-                return rows
+                    return [(str(item.get("id", "")), str(item.get("title", ""))) for item in items if isinstance(item, dict)]
+                return [(task_id, title) for title, task_id in HEADER.findall(text)]
 
             def same_title(first, second):
                 first, second = (" ".join(re.findall(r"[a-z0-9]+", str(value).lower())) for value in (first, second))
@@ -779,16 +780,15 @@ dify:
                         reason = out_of_scope(str(plan.get("project_id", "")), "target")
                         if reason:
                             return output(reason=reason)
-                        for match_id, match_title, match_project in open_tasks(task_result):
+                        # A search row is not a verified read, so a match refuses and names the task; the caller comments there.
+                        for match_id, match_title in open_tasks(task_result):
                             if same_title(match_title, plan.get("title", "")):
-                                if not match_project or out_of_scope(match_project, "matching task"):
-                                    return output(reason=f"Open task {match_id} already has this title; the create is refused as a duplicate.")
-                                comment = "Filed again with the same title. " + str(plan.get("description") or plan["title"])
-                                preview = preview_call("comment", id=match_id, comment=comment)
-                                return output(True, dispatch=dispatch, preview=preview, operation="comment", task_id=match_id, comment=comment, summary=f"Open task {match_id} has this title; commenting there instead of creating a duplicate.")
+                                ask = f"comment on task {match_id}: {plan.get('description') or plan['title']}"
+                                return output(reason=f"Open task {match_id} already has this title; the create is refused as a duplicate. To add this there, send: {ask}")
                         fields = {"project_id": str(plan["project_id"]), "title": str(plan["title"]), "description": str(plan.get("description", "")), "due_date": str(plan.get("due_date", "")), "priority": plan.get("priority"), "done": plan.get("done")}
                         preview = preview_call("create", projectId=fields["project_id"], title=fields["title"], description=fields["description"], dueDate=fields["due_date"], priority=fields["priority"], done=fields["done"])
                         return output(True, dispatch=dispatch, preview=preview, operation="create", summary=f"No open task has this title; creating it in project {fields['project_id']}.", **fields)
+                    # The task read back must be the asked task, for update, comment and relate alike.
                     current_task_id, current_project_id = task_scope(task_result)
                     if not task_id or task_id != current_task_id or not current_project_id:
                         return output(reason="The current task scope could not be verified; update refused.")
@@ -838,7 +838,7 @@ dify:
                 except (TypeError, ValueError, KeyError, json.JSONDecodeError):
                     return output(reason="The current task or project policy could not be parsed safely; update refused.")
           code_language: python3
-          desc: Check each write against the reads; a create matching an open task becomes a comment on it.
+          desc: Check each write against the reads; a create matching an open task is refused and names that task.
           isInIteration: false
           isInLoop: false
           outputs:
