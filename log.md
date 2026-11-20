@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-20
+
+* **Feature (agents)**: `pr-shepherd` declares `egress: network`, so the delegation hook runs it in the session instead
+  of an executor rung with no network.
+
 ## 2026-11-19
 
 * **Feature (rules)**: Add a documentation/backup-vault exemption to `AGENTS.md`, `git-flow.md`, and
