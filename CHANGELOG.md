@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.123.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.123.0...v1.123.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **hermes:** tell unattended cron runs which commands are refused ([#525](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/525)) ([26c612d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/26c612db2226fdcf076a4a93b2cbe6d847084b3c))
+
 ## [1.123.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.122.0...v1.123.0) (2026-11-19)
 
 
