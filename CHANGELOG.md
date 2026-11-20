@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.0...v1.126.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ci:** run the Langfuse prompt sync only for same-repository pull request heads ([#537](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/537)) ([73791d7](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/73791d78b61e9eb56491314ab680e7e7edca7d85))
+
 ## [1.126.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.125.1...v1.126.0) (2026-11-20)
 
 
