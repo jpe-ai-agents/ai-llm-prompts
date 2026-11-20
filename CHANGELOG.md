@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.127.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.1...v1.127.2) (2026-11-20)
+
+
+### Bug Fixes
+
+* **automation:** pass a removed or narrowed scope in the security rubric's permission_widening check ([#556](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/556)) ([2ca67b9](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2ca67b93973ec756dde1b1804595cc59a7ef79f7))
+* **automation:** rerun only the changed files' checks in the conflict-fix prompt, 120 seconds per command ([#555](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/555)) ([2ef9eaa](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2ef9eaa6dc4681b1304fc3f6afee3b420b56e84b))
+
 ## [1.127.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.0...v1.127.1) (2026-11-20)
 
 
