@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-20T10:00:00Z"
+timestamp: "2026-11-20T12:57:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -49,7 +49,10 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
    the content before; only its place changes:
    - move whole blocks, resources, variables or document sections into a new file next to the old one;
    - never delete a declaration, a test, a test case or a document section to get under the limit;
-   - after the move, every reference must still resolve, and no declaration may be left unused.
+   - after the move, every reference must still resolve, and no declaration may be left unused;
+   - when moved Ansible tasks carry their own tags, pull the new file in with `import_tasks`, never `include_tasks`,
+     so the tags stay selectable with `--tags`;
+   - read the comments around the moved block and keep every rule they state.
 9. Never delete or weaken a test to make a check pass.
 10. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
