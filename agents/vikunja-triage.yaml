@@ -58,7 +58,7 @@ guards:
   deny_unknown_tools_and_operations: true
   allowed_operations: [list, update, comment]
   no_delete_create_move_or_reassignment: true
-  incident_security_classifier: copied_from_vikunja_clerk_guard
+  incident_security_classifier: shared_dify_helper
   incident_action: fixed_zammad_comment_only
   shadow_mode: {dispatch_writes: false, return_intended_actions: true}
   on_error: deny
@@ -456,14 +456,9 @@ dify:
         width: 244
       - data:
           code: |-
-            import json,re,urllib.request
+            import json,urllib.request
             from urllib.parse import urlsplit
-            incident=re.compile(r'\b(?:incidents?|outages?|down|breaches?|vulnerabilit(?:y|ies)|cve|exploits?|leaks?|credentials?|secrets?|security|weakness(?:es)?|compromised|compromise|compromising)\b',re.I)
-            def marker_text(value):
-                if isinstance(value,dict): return ' '.join(str(x) for x in value.values())
-                if isinstance(value,(list,tuple)): return ' '.join(str(x) for x in value)
-                return '' if value is None else str(value)
-            def has_incident_marker(*values): return any(incident.search(marker_text(x)) for x in values)
+            __DIFY_HELPER_INCIDENT_CLASSIFIER__
             def projects(raw):
                 v=json.loads(raw)
                 if not isinstance(v,list) or any(not str(x).strip() for x in v): raise ValueError()
