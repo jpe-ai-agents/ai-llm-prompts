@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.127.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.0...v1.127.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **agents:** vikunja-clerk matches task reply lines whole and refuses look-alike lines ([#553](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/553)) ([1c1c5f0](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/1c1c5f0b33a34d2b34b5afd563474ae180cd6cf8))
+
 ## [1.127.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.5...v1.127.0) (2026-11-20)
 
 
