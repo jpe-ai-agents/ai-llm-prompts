@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.125.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.124.0...v1.125.0) (2026-11-20)
+
+
+### Features
+
+* **automation:** check a superseding pull request against the superseded diff in the semantic rubric ([#531](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/531)) ([582619a](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/582619afa3bff65259b05e9369cbb17f7080d459))
+
 ## [1.124.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.123.1...v1.124.0) (2026-11-20)
 
 
