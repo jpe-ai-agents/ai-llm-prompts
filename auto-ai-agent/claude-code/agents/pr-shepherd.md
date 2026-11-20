@@ -7,7 +7,7 @@ tags:
   - "claude-code"
   - "subagent"
   - "pull-requests"
-timestamp: "2026-11-04T10:10:00-04:00"
+timestamp: "2026-11-20T00:58:00Z"
 status: active
 consumers:
   - "dryvist/nix-ai"
@@ -21,6 +21,7 @@ source_history:
     note: "Sibling executor definition; this agent follows its report and refusal rules."
 name: pr-shepherd
 effort: xhigh
+egress: network
 ---
 
 # pr-shepherd
