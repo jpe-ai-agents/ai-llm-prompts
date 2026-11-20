@@ -97,6 +97,7 @@ _PUBLIC_NODES = {
     ("vikunja-clerk.dsl.yml", "Code guard"),
     ("vikunja-clerk.dsl.yml", "Update project guard"),
     ("vikunja-triage.dsl.yml", "Guard proposed actions"),
+    ("vikunja-triage.dsl.yml", "Bind grouping result"),
     ("zammad-triage.dsl.yml", "Guard and dispatch"),
 }
 

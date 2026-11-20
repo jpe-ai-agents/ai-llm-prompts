@@ -9,6 +9,8 @@
 
 ## 2026-11-19
 
+* **Feature (prompts)**: Add a Dify grouping prompt for reusable task themes and indexed duplicate/related labels.
+
 * **Feature (rules)**: Add a documentation/backup-vault exemption to `AGENTS.md`, `git-flow.md`, and
   `task-tracking.md` so repo-local root `AGENTS.md` overrides for direct commits, commit prefixes, and dedicated
   task trackers take precedence over global defaults.
