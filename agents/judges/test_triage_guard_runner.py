@@ -143,6 +143,8 @@ def _guard(tasks, proposed, policy, mode="live"):
             "priority": task.get("priority"),
             "done": task.get("done", False),
             "labels": task.get("labels", []),
+            "has_subtasks": task.get("has_subtasks", False),
+            "is_epic": task.get("is_epic", False),
         }
         for index, task in enumerate(tasks)
     ]
@@ -244,3 +246,92 @@ def test_done_gate_decides_from_the_linked_github_state(
         else []
     )
     assert result["actions"] == expected
+
+
+def test_merged_linked_work_does_not_close_a_task_with_open_subtasks(monkeypatch):
+    url = f"https://{_WEB_HOST}/dryvist/ai-llm-prompts/pull/236"
+    api_url = f"{_API_BASE}/repos/dryvist/ai-llm-prompts/pulls/236"
+    requests = _install_stub(monkeypatch, {api_url: _PAYLOADS["merged"]})
+    tasks = [
+        {
+            "id": "7",
+            "project_id": "10",
+            "title": "Parent task",
+            "description": f"Merged work: {url}",
+            "related_tasks": {"subtask": [{"id": "8", "done": False}]},
+            "has_subtasks": True,
+        }
+    ]
+
+    result = _guard(
+        tasks,
+        [{"task_index": 0, "kind": "done"}, {"task_index": 0, "kind": "comment"}],
+        _POLICY,
+    )
+
+    assert requests == [api_url]
+    assert result["actions"] == [
+        {
+            "operation": "comment",
+            "id": "7",
+            "projectId": "10",
+            "comment": f"Linked GitHub work: {url} (state: merged).",
+        }
+    ]
+
+
+def test_epic_label_blocks_rank_updates(monkeypatch):
+    requests = _install_stub(monkeypatch, {})
+    tasks = [
+        {
+            "id": "7",
+            "project_id": "10",
+            "title": "Parent task",
+            "labels": [{"title": "ePiC"}],
+            "is_epic": True,
+        }
+    ]
+
+    result = _guard(
+        tasks,
+        [{"task_index": 0, "kind": "rank", "priority": 4, "labels": ["ranked"]}],
+        _POLICY,
+    )
+
+    assert requests == []
+    assert result["actions"] == []
+
+
+def test_plain_task_still_accepts_rank_and_done_updates(monkeypatch):
+    url = f"https://{_WEB_HOST}/dryvist/ai-llm-prompts/pull/236"
+    api_url = f"{_API_BASE}/repos/dryvist/ai-llm-prompts/pulls/236"
+    requests = _install_stub(monkeypatch, {api_url: _PAYLOADS["merged"]})
+    tasks = [
+        {
+            "id": "7",
+            "project_id": "10",
+            "title": "Ordinary task",
+            "description": f"Merged work: {url}",
+        }
+    ]
+
+    result = _guard(
+        tasks,
+        [
+            {"task_index": 0, "kind": "rank", "priority": 4, "labels": ["ranked"]},
+            {"task_index": 0, "kind": "done"},
+        ],
+        _POLICY,
+    )
+
+    assert requests == [api_url]
+    assert result["actions"] == [
+        {
+            "operation": "update",
+            "id": "7",
+            "projectId": "10",
+            "priority": 4,
+            "labels": ["ranked"],
+        },
+        {"operation": "update", "id": "7", "projectId": "10", "done": True},
+    ]

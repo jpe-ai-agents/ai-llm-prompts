@@ -34,3 +34,36 @@ def test_fetched_task_secrets_are_redacted_before_the_model():
     payload = json.loads(model_tasks)
     assert payload["tasks"][0]["title"] == "Rotate the leaked deploy credential"
     assert payload["tasks"][0]["description"] == "token [REDACTED] reported in CI logs"
+
+
+def test_prepare_carries_subtask_and_epic_flags_into_refs_and_model_tasks():
+    tasks = [
+        {"id": 7, "related_tasks": {"subtask": [{"id": 8}]}},
+        {"id": 8, "labels": [{"title": "ePiC"}]},
+        {"id": 9, "title": "EPIC Roadmap"},
+        {"id": 10, "title": "Epic: Platform"},
+        {"id": 11, "related_tasks": {"subtask": []}},
+    ]
+    result = node_main("vikunja-triage", "prepare")(
+        results=[json.dumps({"project_id": "p1", "tasks": tasks})],
+        policy_ok=True,
+        timestamp="1794312000",
+        web_host="github.example",
+        api_base="https://api.github.example",
+        bao_addr="",
+        role_id="role",
+        secret_id="secret",
+        token_path="github-token/vikunja-triage",
+    )
+
+    expected = [
+        {"has_subtasks": True, "is_epic": False},
+        {"has_subtasks": False, "is_epic": True},
+        {"has_subtasks": False, "is_epic": True},
+        {"has_subtasks": False, "is_epic": True},
+        {"has_subtasks": False, "is_epic": False},
+    ]
+    refs = json.loads(result["task_refs"])
+    model_tasks = json.loads(result["model_tasks"])["tasks"]
+    assert [{key: ref[key] for key in expected[0]} for ref in refs] == expected
+    assert [{key: task[key] for key in expected[0]} for task in model_tasks] == expected
