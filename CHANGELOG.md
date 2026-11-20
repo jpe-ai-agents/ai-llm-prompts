@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.5](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.4...v1.126.5) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ci-fix:** rerun only the failing node ids, 120 seconds per command ([#548](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/548)) ([fa7131d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/fa7131df70e3ceb69a68755592158ca93818b444))
+
 ## [1.126.4](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.3...v1.126.4) (2026-11-20)
 
 
