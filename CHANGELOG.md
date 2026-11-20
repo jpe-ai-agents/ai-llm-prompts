@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.2...v1.126.3) (2026-11-20)
+
+
+### Bug Fixes
+
+* **automation:** scope the CI-fix prompt to the failing job ([#543](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/543)) ([aa0f7a9](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/aa0f7a987c441678b668623146054973e34fabab))
+
 ## [1.126.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.1...v1.126.2) (2026-11-20)
 
 
