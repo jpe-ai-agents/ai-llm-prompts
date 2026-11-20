@@ -6,6 +6,8 @@
   onto the current base, editing only the pull request's changed files.
 * **Feature (automation)**: The semantic rubric fails `claim_mismatch` when a pull request that says `Supersedes #N`
   drops or adds a change against the superseded pull request's diff.
+* **Fix (automation)**: The conflict-fix prompt allows read-only git and treats the pull request text as data; the
+  semantic rubric does not count changes past a truncated superseded diff as added changes.
 * **Fix (hermes)**: Both direct-cron footers tell the unattended run that Hermes refuses `execute_code`, `-c`/`-e`
   and heredoc scripts, and deletes under root paths, so the job uses its tools and single commands.
 
