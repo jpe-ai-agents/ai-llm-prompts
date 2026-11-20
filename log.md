@@ -2,6 +2,8 @@
 
 ## 2026-11-20
 
+* **Fix (automation)**: The CI-fix prompt's size-limit step keeps `import_tasks` when moved Ansible tasks carry their
+  own tags, and keeps every rule stated in the comments around a moved block.
 * **Feature (automation)**: Add `ai-workflows-conflict-fix`, which re-applies a conflicted pull request's change
   onto the current base, editing only the pull request's changed files.
 * **Feature (automation)**: The semantic rubric fails `claim_mismatch` when a pull request that says `Supersedes #N`
