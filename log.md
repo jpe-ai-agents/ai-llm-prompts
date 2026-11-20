@@ -2,6 +2,8 @@
 
 ## 2026-11-20
 
+* **Fix (automation)**: The CI-fix prompt regenerates a golden or snapshot value when the pull request only bumps a
+  pinned input and the test fails because its stored value came from the old input. Nothing else in the test changes.
 * **Fix (automation)**: The CI-fix prompt's size-limit step keeps `import_tasks` when moved Ansible tasks carry their
   own tags, and keeps every rule stated in the comments around a moved block.
 * **Feature (automation)**: Add `ai-workflows-conflict-fix`, which re-applies a conflicted pull request's change
