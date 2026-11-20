@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.124.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.123.1...v1.124.0) (2026-11-20)
+
+
+### Features
+
+* **automation:** add the conflict-fix prompt ([#528](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/528)) ([bf766b3](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/bf766b3537e0fa0d662d4b86a3dde2f96aefa7b3))
+
 ## [1.123.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.123.0...v1.123.1) (2026-11-20)
 
 
