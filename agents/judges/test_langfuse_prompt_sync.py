@@ -46,6 +46,12 @@ def run_sync(tmp_path, dry_run, content="---\ntitle: Example\n---\nHello {{name}
     return result, calls
 
 
+def test_sync_never_runs_a_fork_head():
+    condition = WORKFLOW["jobs"]["sync"]["if"]
+    assert "github.event_name != 'pull_request'" in condition
+    assert "github.event.pull_request.head.repo.full_name == github.repository" in condition
+
+
 def test_pull_request_dry_run_needs_no_credentials_or_cli(tmp_path):
     result, calls = run_sync(tmp_path, True)
     assert result.returncode == 0, result.stderr
