@@ -55,9 +55,11 @@ def _load_cases(*names):
 
 _MAIN = _code_guard("Code guard")
 _UPDATE_MAIN = _code_guard("Update project guard")
-_FIXTURES = _load_cases("vikunja-clerk-args.yaml", "vikunja-clerk-args-scope.yaml")
+_FIXTURES = _load_cases(
+    "vikunja-clerk-args.yaml", "vikunja-clerk-args-scope.yaml", "vikunja-clerk-args-ops.yaml"
+)
 _UPDATE_FIXTURES = _load_cases(
-    "vikunja-clerk-update.yaml", "vikunja-clerk-update-gaps.yaml"
+    "vikunja-clerk-update.yaml", "vikunja-clerk-update-gaps.yaml", "vikunja-clerk-write.yaml"
 )
 _BY_ID = {case["id"]: case for case in _FIXTURES}
 _UPDATE_BY_ID = {case["id"]: case for case in _UPDATE_FIXTURES}
@@ -108,8 +110,11 @@ def _run(case):
         json.dumps(context["denied_projects"]),
         context["inbox"],
         context["mode"],
+        context.get("projects_text", ""),
     )
+    assert result["read_operation"] in {"", "list", "get"}, "the first guard plans reads only"
     if result["needs_update_check"]:
+        assert result["read_operation"] == "get"
         return [_call("get", {"id": result["task_id"]})], True, result
     if result["preview"]:
         assert result["dispatch"] == (context["mode"] == "live"), (
@@ -134,17 +139,24 @@ def _run(case):
     return [], False, result
 
 
+def _tool_text(value):
+    # A string is the server's markdown reply as Dify passes it; anything else is a JSON read.
+    return value if isinstance(value, str) else json.dumps(value)
+
+
 def _run_update(case):
     inputs = _inputs(case)
     context = inputs["context"]
     result = _UPDATE_MAIN(
         json.dumps(inputs["intent"]),
-        json.dumps(inputs["task_result"]),
+        _tool_text(inputs["task_result"]),
         inputs["mandates"]["project_id"],
         inputs["mandates"]["task_id"],
         context.get("allowed_projects_raw", json.dumps(context["allowed_projects"])),
         context.get("denied_projects_raw", json.dumps(context["denied_projects"])),
         context["mode"],
+        _tool_text(context["other_task_result"]) if "other_task_result" in context else "",
+        json.dumps(context["plan"]) if "plan" in context else "",
     )
     if result["preview"]:
         assert result["dispatch"] == (context["mode"] == "live"), (
@@ -255,3 +267,35 @@ def test_model_suite_reason_names_the_guard_refusal(model_case):
     _, _, result = _run(_BY_ID[model_case["id"]])
     assert result["allowed"] is False, result["reason"]
     assert any(fragment in result["reason"] for fragment in fragments)
+
+
+_DEFINITION = Path(__file__).resolve().parents[2] / "agents" / "vikunja-clerk.yaml"
+
+
+def test_project_lookup_can_only_list_and_project_writes_are_denied():
+    nodes = yaml.safe_load(_DSL.read_text())["workflow"]["graph"]["nodes"]
+    project_nodes = [node["data"] for node in nodes if node["data"].get("tool_name") == "vikunja_projects"]
+    assert project_nodes, "the project lookup node is missing"
+    for data in project_nodes:
+        assert data["tool_parameters"]["subcommand"] == {"type": "constant", "value": "list"}
+    guards = yaml.safe_load(_DEFINITION.read_text())["guards"]["vikunja"]
+    assert guards["operation_allowlist"]["vikunja_projects"] == ["list"]
+    for operation in ("create", "update", "delete", "archive", "move", "setup-kanban"):
+        assert f"vikunja_projects.{operation}" in guards["deny_operations"]
+
+
+def test_only_the_write_node_takes_a_write_subcommand():
+    nodes = {node["id"]: node["data"] for node in yaml.safe_load(_DSL.read_text())["workflow"]["graph"]["nodes"]}
+    variable_subcommands = {
+        node_id: data["tool_parameters"]["subcommand"]["value"]
+        for node_id, data in nodes.items()
+        if data.get("type") == "tool" and data["tool_parameters"]["subcommand"].get("type") == "variable"
+    }
+    assert variable_subcommands == {
+        "preflight-tool": ["guard", "read_operation"],
+        "other-read-tool": ["guard", "read_operation"],
+        "update-tool": ["update-guard", "operation"],
+    }
+    edges = yaml.safe_load(_DSL.read_text())["workflow"]["graph"]["edges"]
+    into_write = [(edge["source"], edge["sourceHandle"]) for edge in edges if edge["target"] == "update-tool"]
+    assert into_write == [("update-mode-gate", "live-mode")]

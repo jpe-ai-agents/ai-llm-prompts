@@ -1,0 +1,116 @@
+# Code-guard fixtures for the clerk's first Code guard node: comment, relate, close, reopen, and project lookup.
+# Keys are as in vikunja-clerk-args.yaml. context.projects_text is the vikunja_projects list reply the guard reads.
+# A write that checks an existing task returns the get that reads it first; only that first call is compared.
+# Each refusal has a "<id>-control" case that changes only its offends paths and must pass.
+cases:
+  - id: comment-on-asked-task
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today; still slow., category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: refuse-comment-without-text
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: "", category: null}
+    mandates: {project_id: "", task_id: ""}
+    refusal: Comment text is required for comment.
+    offends: [intent.comment]
+    expected_tool_calls: []
+  - id: refuse-comment-without-text-control
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: refuse-comment-incident-text
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: The outage is back., category: null}
+    mandates: {project_id: "", task_id: ""}
+    refusal: Refused; file this in Zammad
+    offends: [intent.comment]
+    expected_tool_calls: []
+  - id: refuse-comment-incident-text-control
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: The check is back., category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: refuse-asked-task-differs-from-mandate
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "102", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: "101"}
+    refusal: The asked task does not match the structured task_id.
+    offends: [intent.task_id]
+    expected_tool_calls: []
+  - id: refuse-asked-task-differs-from-mandate-control
+    intent: {route: vikunja, operation: comment, project_named: false, task_id: "101", comment: Measured again today., category: null}
+    mandates: {project_id: "", task_id: "101"}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: relate-two-asked-tasks
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "102", category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: refuse-relate-to-itself
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "101", category: null}
+    mandates: {project_id: "", task_id: ""}
+    refusal: Relate needs two different numeric task references.
+    offends: [intent.other_task_id]
+    expected_tool_calls: []
+  - id: refuse-relate-to-itself-control
+    intent: {route: vikunja, operation: relate, project_named: false, task_id: "101", other_task_id: "103", category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: close-asked-task
+    intent: {route: vikunja, operation: close, project_named: false, task_id: "101", category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: reopen-asked-task
+    intent: {route: vikunja, operation: reopen, project_named: false, task_id: "101", category: null}
+    mandates: {project_id: "", task_id: ""}
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: get
+        args: {id: "101"}
+  - id: create-in-named-project-resolved-at-run-time
+    intent: {route: vikunja, operation: create, project_named: true, project: Example Area, title: Update the onboarding guide, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed, "201"]
+      projects_text: "## ✅ Success\n\nFound 2 projects\n\n1. **Inbox** (ID: 200)\n2. **Example Area** (ID: 201)\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: create
+        args: {projectId: "201", title: Update the onboarding guide}
+  - id: refuse-named-project-resolves-to-denied
+    intent: {route: vikunja, operation: create, project_named: true, project: Example Area, title: Update the onboarding guide, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed, "201"]
+      denied_projects: ["201"]
+      projects_text: "## ✅ Success\n\nFound 2 projects\n\n1. **Inbox** (ID: 200)\n2. **Example Area** (ID: 201)\n"
+    refusal: The target project is denied
+    offends: [context.denied_projects]
+    expected_tool_calls: []
+  - id: refuse-named-project-resolves-to-denied-control
+    intent: {route: vikunja, operation: create, project_named: true, project: Example Area, title: Update the onboarding guide, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      allowed_projects: [project-allowed, "201"]
+      denied_projects: [project-denied]
+      projects_text: "## ✅ Success\n\nFound 2 projects\n\n1. **Inbox** (ID: 200)\n2. **Example Area** (ID: 201)\n"
+    expected_tool_calls:
+      - tool: vikunja_tasks
+        operation: create
+        args: {projectId: "201", title: Update the onboarding guide}

@@ -89,19 +89,15 @@ cases:
       - tool: vikunja_tasks
         operation: create
         args: {projectId: project-allowed, title: Update the onboarding guide}
-  - id: refuse-unknown-project
-    intent: {route: vikunja, operation: create, project_named: true, title: Update the onboarding guide, category: null}
+  # A named project the run-time project list cannot resolve files to the inbox.
+  - id: unresolved-project-files-to-inbox
+    intent: {route: vikunja, operation: create, project_named: true, project: Unlisted Project, title: Update the onboarding guide, category: null}
     mandates: {project_id: "", task_id: ""}
-    refusal: The named project is unknown or unscoped
-    offends: [mandates.project_id]
-    expected_tool_calls: []
-  - id: refuse-unknown-project-control
-    intent: {route: vikunja, operation: create, project_named: true, title: Update the onboarding guide, category: null}
-    mandates: {project_id: project-allowed, task_id: ""}
+    context: {allowed_projects: [project-allowed, project-inbox]}
     expected_tool_calls:
       - tool: vikunja_tasks
         operation: create
-        args: {projectId: project-allowed, title: Update the onboarding guide}
+        args: {projectId: project-inbox, title: Update the onboarding guide}
   # Node 1 cannot read the task's current project, so it fetches the task. The move refusal is in the Update project guard node, which this runner does not cover.
   - id: update-named-other-project-fetches-task
     intent: {route: vikunja, operation: update, project_named: true, title: Update the onboarding guide, category: null}
