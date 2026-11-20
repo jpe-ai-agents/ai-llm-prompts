@@ -33,6 +33,7 @@ in GitHub Actions on a GitHub App token — so it and the one fragment it includ
 * [Best Practices Recommender](ai-workflows-best-practices.md) - Weekly repository-practices audit prompt.
 * [CI Failure Issue](ai-workflows-ci-fail-issue.md) - Dormant prompt for creating an issue from a main-branch CI failure.
 * [CI Failure Auto-Fix](ai-workflows-ci-fix.md) - Prompt for diagnosing and minimally fixing CI failures.
+* [Conflict Fix](ai-workflows-conflict-fix.md) - Prompt for re-applying a conflicted pull request's change onto the current base branch.
 * [Code Simplifier](ai-workflows-code-simplifier.md) - Behavior-preserving code simplification prompt.
 * [Dependency Update Risk Review](ai-workflows-dep-review.md) - Advisory dependency-update risk review prompt.
 * [DRY Principles](ai-workflows-dry-principles-fragment.md) - Reusable code-simplification and duplication rules.
