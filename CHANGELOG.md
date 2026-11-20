@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.1...v1.126.2) (2026-11-20)
+
+
+### Bug Fixes
+
+* **vikunja-triage:** never close or re-rank an epic or a task with subtasks ([#539](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/539)) ([5db8597](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/5db85979f54779d5943e57aaf5b6e7b55e018f09))
+
 ## [1.126.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.0...v1.126.1) (2026-11-20)
 
 
