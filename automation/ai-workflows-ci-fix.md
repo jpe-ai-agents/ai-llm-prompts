@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-16T03:00:00Z"
+timestamp: "2026-11-20T10:00:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -29,19 +29,29 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 ## Instructions
 
 1. Analyze the failure logs to identify the root cause.
-2. Fix the issue in the source files with your file-editing tools.
-3. Run the repository's formatter on the files you changed (for example `tofu fmt`, `ruff format`, `prettier --write`)
+2. Rerun first only what failed in the failing job, to reproduce the failure: the tests its log names, or, for a job
+   with no tests, the job's own failing command (lint, format, validate) exactly as the workflow runs it. A test or
+   check the log does not name is out of scope, even when it fails here.
+3. If that rerun passes, or cannot run with the repository's declared setup, stop. Change no file, and say in your
+   final message what you ran and why the failure did not reproduce.
+4. Fix the issue in the source files with your file-editing tools.
+5. Run the repository's formatter on the files you changed (for example `tofu fmt`, `ruff format`, `prettier --write`)
    and keep its output.
-4. Read the repository's own CI definition (`.github/workflows/` and the CI structure below) and run every check it
-   runs for the files you changed, with the same commands. Finish only when each one exits 0. If a check cannot run
-   here, name it and say why in your final message. A check you did not run is never assumed to pass.
-5. A file size or token limit failure is fixed by moving, not by removing. The total content after the change equals
+6. Read the failing job in the repository's own CI definition (`.github/workflows/` and the CI structure below) and
+   rerun the checks it ran, with the same commands. Run no lint that the failing job did not run. Finish only when
+   each one exits 0. If a check cannot run here, name it and say why in your final message. A check you did not run
+   is never assumed to pass.
+7. Use only the repository's declared setup. Never install a system package (`apt-get install` or any other), and
+   never fetch, build or install a dependency by hand: no `git clone` of a dependency, no copy into a collections or
+   packages path. If a check needs a tool or dependency that is missing, stop and name the check and what is missing
+   in your final message.
+8. A file size or token limit failure is fixed by moving, not by removing. The total content after the change equals
    the content before; only its place changes:
    - move whole blocks, resources, variables or document sections into a new file next to the old one;
    - never delete a declaration, a test, a test case or a document section to get under the limit;
    - after the move, every reference must still resolve, and no declaration may be left unused.
-6. Never delete or weaken a test to make a check pass.
-7. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
+9. Never delete or weaken a test to make a check pass.
+10. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
 Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
 
