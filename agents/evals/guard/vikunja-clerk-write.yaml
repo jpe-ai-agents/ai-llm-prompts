@@ -107,7 +107,7 @@ cases:
       allowed_projects: [project-allowed, "301"]
       plan: {operation: create, project_id: project-allowed, title: Update the onboarding guide, description: Add the current steps.}
     task_result: "## ✅ Success\n\nFound 2 tasks\n\n1. **Rotate the backup key** (ID: 110)\n   - **Project:** 301\n2. **Update the onboarding guide.** (ID: 111)\n   - **Status:** ❌ Not Done\n   - **Project:** 301\n"
-    refusal: Open task 111 already has this title; the create is refused as a duplicate. Comment on task 111 instead.
+    refusal: "Open task 111 already has this title; the create is refused as a duplicate. To add this there, send: comment on task 111: Add the current steps."
     offends: [task_result]
     expected_tool_calls: []
   - id: refuse-create-matching-open-task-control

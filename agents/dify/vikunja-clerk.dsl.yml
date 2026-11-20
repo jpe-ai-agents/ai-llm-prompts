@@ -996,7 +996,8 @@ workflow:
                         # A search row is not a verified read, so a match refuses and names the task; the caller comments there.
                         for match_id, match_title in open_tasks(task_result):
                             if same_title(match_title, plan.get("title", "")):
-                                return output(reason=f"Open task {match_id} already has this title; the create is refused as a duplicate. Comment on task {match_id} instead.")
+                                ask = f"comment on task {match_id}: {plan.get('description') or plan['title']}"
+                                return output(reason=f"Open task {match_id} already has this title; the create is refused as a duplicate. To add this there, send: {ask}")
                         fields = {"project_id": str(plan["project_id"]), "title": str(plan["title"]), "description": str(plan.get("description", "")), "due_date": str(plan.get("due_date", "")), "priority": plan.get("priority"), "done": plan.get("done")}
                         preview = preview_call("create", projectId=fields["project_id"], title=fields["title"], description=fields["description"], dueDate=fields["due_date"], priority=fields["priority"], done=fields["done"])
                         return output(True, dispatch=dispatch, preview=preview, operation="create", summary=f"No open task has this title; creating it in project {fields['project_id']}.", **fields)

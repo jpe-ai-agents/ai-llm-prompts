@@ -5,6 +5,8 @@
 * **Fix (agents)**: `vikunja-clerk` reads task replies by whole lines only. It takes the task ID from the header line,
   refuses a reply with more than one header or Project line, and refuses a write when the task read back is not the
   asked task. A create that matches an open task's title is refused and names that task.
+* **Fix (agents)**: the `vikunja-clerk` duplicate-create refusal includes the ready-to-send ask, `comment on task N:
+  text`.
 * **Feature (agents)**: `vikunja-clerk` takes one plain-words ask and adds comment, relate, close and reopen. It
   resolves a named project from a run-time project list (the inbox when unresolved), searches open tasks before a
   create and comments on a matching open task instead, checks every target task's project, and answers with the
