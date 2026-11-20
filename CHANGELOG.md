@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.125.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.125.0...v1.125.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **automation:** allow read-only git in the conflict-fix prompt and note a truncated superseded diff in the semantic rubric ([#534](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/534)) ([3e2256d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/3e2256d0c912f9dea66f1256c4faa1a026726cd1))
+
 ## [1.125.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.124.0...v1.125.0) (2026-11-20)
 
 
