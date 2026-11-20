@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.126.4](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.3...v1.126.4) (2026-11-20)
+
+
+### Bug Fixes
+
+* **automation:** keep import_tasks for tagged tasks in the CI-fix size step ([#545](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/545)) ([93223df](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/93223df91a37f1681de2b87466a68225966e4268))
+
 ## [1.126.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.2...v1.126.3) (2026-11-20)
 
 
