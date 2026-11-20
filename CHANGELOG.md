@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.127.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.5...v1.127.0) (2026-11-20)
+
+
+### Features
+
+* **agents:** vikunja-clerk takes a plain-words ask with comment, relate, close and reopen ([#550](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/550)) ([420ee0e](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/420ee0e16b10eb82855ed75efc627f7cbff170ee))
+
 ## [1.126.5](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.126.4...v1.126.5) (2026-11-20)
 
 
