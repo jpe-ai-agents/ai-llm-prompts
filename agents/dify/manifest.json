@@ -317,7 +317,7 @@
     "tier": 0,
     "kind": "agent",
     "path": "agents/dify/vikunja-clerk.dsl.yml",
-    "sha256": "07b72f2198b26438c6e340ca7172cbaf861990f1623d5bdef0741a703d5e702e"
+    "sha256": "69854a6b65065baf634bf45ee60f84e7f97750a2a094fc135743f0f54425de8d"
   },
   {
     "name": "vikunja-triage",
@@ -325,7 +325,7 @@
     "tier": 2,
     "kind": "agent",
     "path": "agents/dify/vikunja-triage.dsl.yml",
-    "sha256": "5d1ddf286c02afd26025f20e62584f9b14727b2f849951e08c00f006f1c747e8"
+    "sha256": "ea5c10c8e65f764afe4749afc683779b36081f76d8dfd724300a2aeda8e4aea6"
   },
   {
     "name": "voice-learn",

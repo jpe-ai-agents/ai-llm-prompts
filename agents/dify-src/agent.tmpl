@@ -204,6 +204,19 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
 {{- $prompt := printf "%s\n\n%s" (tmpl.Exec "prompt" .shared_prefix) (tmpl.Exec "prompt" .prompt) -}}
 {{- $params := dict "__DIFY_AGENT_NAME__" .name "__DIFY_LITELLM_ROLE__" .litellm_role -}}
 {{- with (index . "mode") -}}{{- $params = coll.Set "__DIFY_MODE__" . $params -}}{{- end -}}
+{{- if coll.Has . "grouping" -}}
+  {{- test.Assert "grouping parallel must be a positive integer" (and (test.IsKind "map" .grouping) (test.IsKind "int" .grouping.parallel) (ge .grouping.parallel 1)) -}}
+  {{- $params = coll.Set "__DIFY_GROUPING_PARALLEL__" (printf "%v" .grouping.parallel) $params -}}
+{{- end -}}
+{{- $namedPrompts := dict -}}
+{{- with (index . "dify_prompts") -}}
+  {{- test.Assert "dify_prompts must be a map" (test.IsKind "map" .) -}}
+  {{- range $name, $path := . -}}
+    {{- test.Assert "named Dify prompt names must be uppercase identifiers" (regexp.Match `^[A-Z][A-Z0-9_]*$` $name) -}}
+    {{- test.Assert "named Dify prompt paths must be strings" (test.IsKind "string" $path) -}}
+    {{- $namedPrompts = coll.Set (printf "__DIFY_PROMPT_%s__" $name) (tmpl.Exec "prompt" $path) $namedPrompts -}}
+  {{- end -}}
+{{- end -}}
 {{- $anchors := coll.Slice -}}
 {{- $rotation := false -}}
 {{- $nativeRotation := false -}}
@@ -257,7 +270,7 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
   {{- $schema := tmpl.Exec "json" . | strings.ReplaceAll "\\" "\\\\" | strings.ReplaceAll "'" "\\'" -}}
   {{- $params = coll.Set "__DIFY_OUTPUT_SCHEMA__" (printf "'%s'" $schema) $params -}}
 {{- end -}}
-{{- range $name := coll.Slice "redact" "json_fence" "finder_inputs" "envelope" "slack_delivery" -}}
+{{- range $name := coll.Slice "redact" "json_fence" "finder_inputs" "envelope" "slack_delivery" "incident_classifier" -}}
   {{- $body := file.Read (printf "%s/helpers/%s.py" (tmpl.PathDir) $name) | strings.TrimSuffix "\n" -}}
   {{- $params = coll.Set (printf "__DIFY_HELPER_%s__" (strings.ToUpper $name)) $body $params -}}
 {{- end -}}
@@ -279,6 +292,12 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
 {{- end -}}
 {{- $dsl := tmpl.Exec "workflow" . | data.YAML -}}
 {{- with (index . "dify") -}}{{- $dsl = . -}}{{- end -}}
+{{- $continueIterationLLMFailures := false -}}
+{{- if coll.Has $dsl "continue_iteration_llm_failures" -}}
+  {{- test.Assert "continue_iteration_llm_failures must be boolean" (test.IsKind "bool" $dsl.continue_iteration_llm_failures) -}}
+  {{- $continueIterationLLMFailures = $dsl.continue_iteration_llm_failures -}}
+  {{- $dsl = coll.JQ `del(.continue_iteration_llm_failures)` $dsl -}}
+{{- end -}}
 {{- /* Dify's LLM node schema requires context: every LLM node gets the disabled default unless it sets its own. */ -}}
 {{- $dsl = coll.JQ `(.workflow.graph.nodes[]? | select(.data.type == "llm") | .data) |= ({context: {enabled: false, variable_selector: []}} + .)` $dsl -}}
 {{- test.Assert "renderer owns schedules" (eq (coll.JQ `[.. | objects | keys[] | select(. == "cron" or . == "cadence")] | length` .) 0) -}}
@@ -393,12 +412,12 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
       .edges += [$ends[] | {id: ("deliver-" + . + "-end"), source: ("deliver-" + .), sourceHandle: "source", target: ., targetHandle: "target", type: "custom", data: {sourceType: "code", targetType: "end"}}]
     )` -}}
   {{- $dsl = coll.JQ `.workflow.graph.nodes |= map(if .data.type == "end" then .data.outputs += [{variable: "delivery_status", value_selector: [("deliver-" + .id), "status"]}] else . end)` $dsl -}}
-  {{- $dsl = dict "dsl" $dsl "code" $failureCode "inputs" $common | coll.JQ `
+  {{- $dsl = dict "dsl" $dsl "code" $failureCode "inputs" $common "continue_iteration_llm_failures" $continueIterationLLMFailures | coll.JQ `
     . as $c | $c.dsl | .workflow.graph |= (
-      .nodes |= map(if .data.type == "llm" then .data.error_strategy = "fail-branch" else . end) |
-      .nodes += [.nodes[] | select(.data.type == "llm") | {id: ("notify-failure-" + .id), type: "custom", position: {x: .position.x, y: (.position.y + 240)}, data: {title: "Notify agent failure", type: "code", code_language: "python3", code: $c.code, variables: $c.inputs, outputs: {text: {type: "string", children: null}}}}] |
-      .nodes += [.nodes[] | select(.data.type == "llm") | {id: ("failed-" + .id), type: "custom", position: {x: (.position.x + 200), y: (.position.y + 240)}, data: {title: "Failed run", type: "end", outputs: [{variable: "text", value_selector: [("notify-failure-" + .id), "text"]}]}}] |
-      .edges += [.nodes[] | select(.data.type == "llm") | ({id: (.id + "-failed"), source: .id, sourceHandle: "fail-branch", target: ("notify-failure-" + .id), targetHandle: "target", type: "custom", data: {sourceType: "llm", targetType: "code"}}, {id: ("notify-failure-" + .id + "-end"), source: ("notify-failure-" + .id), sourceHandle: "source", target: ("failed-" + .id), targetHandle: "target", type: "custom", data: {sourceType: "code", targetType: "end"}})]
+      .nodes |= map(if .data.type == "llm" and (($c.continue_iteration_llm_failures | not) or .data.isInIteration != true) then .data.error_strategy = "fail-branch" else . end) |
+      .nodes += [.nodes[] | select(.data.type == "llm" and (($c.continue_iteration_llm_failures | not) or .data.isInIteration != true)) | {id: ("notify-failure-" + .id), type: "custom", position: {x: .position.x, y: (.position.y + 240)}, data: {title: "Notify agent failure", type: "code", code_language: "python3", code: $c.code, variables: $c.inputs, outputs: {text: {type: "string", children: null}}}}] |
+      .nodes += [.nodes[] | select(.data.type == "llm" and (($c.continue_iteration_llm_failures | not) or .data.isInIteration != true)) | {id: ("failed-" + .id), type: "custom", position: {x: (.position.x + 200), y: (.position.y + 240)}, data: {title: "Failed run", type: "end", outputs: [{variable: "text", value_selector: [("notify-failure-" + .id), "text"]}]}}] |
+      .edges += [.nodes[] | select(.data.type == "llm" and (($c.continue_iteration_llm_failures | not) or .data.isInIteration != true)) | ({id: (.id + "-failed"), source: .id, sourceHandle: "fail-branch", target: ("notify-failure-" + .id), targetHandle: "target", type: "custom", data: {sourceType: "llm", targetType: "code"}}, {id: ("notify-failure-" + .id + "-end"), source: ("notify-failure-" + .id), sourceHandle: "source", target: ("failed-" + .id), targetHandle: "target", type: "custom", data: {sourceType: "code", targetType: "end"}})]
     )` -}}
 {{- end -}}
 {{- with (index . "dify_pr_queue_shadow") -}}
@@ -439,8 +458,15 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
 {{- test.Assert "no iteration starts at an http-request node" (coll.JQ `[(.workflow.graph.nodes // []) as $n | $n[] | select(.data.type == "iteration") | . as $it | [$n[] | select(.id == $it.data.start_node_id and .data.type == "http-request")] | length == 0] | all` $dsl) -}}
 {{- /* Substitute data values, never evaluate prompts or Code-node source as templates. */ -}}
 {{- $dsl = dict "dsl" $dsl "params" $params | coll.JQ `.params as $params | .dsl | walk(if type == "string" then reduce ($params | to_entries[]) as $p (.; split($p.key) | join($p.value)) else . end)` -}}
+{{- with (index . "grouping") -}}
+  {{- $dsl = dict "dsl" $dsl "parallel" .parallel | coll.JQ `. as $c | $c.dsl | .workflow.graph.nodes |= map(if .id == "theme_loop" or .id == "group_loop" then .data.parallel_nums = $c.parallel else . end)` -}}
+{{- end -}}
 {{- test.Assert "workflow must contain exactly one system prompt" (eq (coll.JQ `[.. | strings | select(contains("__DIFY_SYSTEM_PROMPT__"))] | length` $dsl) 1) -}}
 {{- $source := data.ToJSON $dsl | strings.ReplaceAll "__DIFY_SYSTEM_PROMPT__" "" -}}
+{{- range $marker, $_ := $namedPrompts -}}
+  {{- test.Assert (printf "workflow must contain named prompt %s" $marker) (strings.Contains $marker $source) -}}
+  {{- $source = strings.ReplaceAll $marker "" $source -}}
+{{- end -}}
 {{- test.Assert "workflow has unresolved Dify parameters" (not (regexp.Match `__DIFY_[A-Z0-9_]+__` $source)) -}}
 {{- $difyMcpAgent := . -}}
 {{- with (dict "agent" .) -}}
@@ -483,7 +509,11 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
   {{- test.Assert "individually declared MCP tools cannot take a subcommand parameter" (eq (coll.JQ `.subcommand | length` $report) 0) -}}
   {{- test.Assert "every individually declared MCP tool must appear on a tool node" (eq (coll.JQ `.missing | length` $report) 0) -}}
 {{- end -}}
-{{- $dsl = dict "dsl" $dsl "prompt" $prompt | coll.JQ `.prompt as $prompt | .dsl | walk(if type == "string" then split("__DIFY_SYSTEM_PROMPT__") | join($prompt) else . end)` -}}
+{{- $dsl = dict "dsl" $dsl "prompt" $prompt "named_prompts" $namedPrompts | coll.JQ `
+  . as $c | .dsl | walk(if type == "string" then
+    (reduce ($c.named_prompts | to_entries[]) as $p (. ; split($p.key) | join($p.value))) |
+    split("__DIFY_SYSTEM_PROMPT__") | join($c.prompt)
+  else . end)` -}}
 # Generated from agents/{{ .name }}.yaml, agents/dify-src/agent.tmpl, and {{ .shared_prefix }} + {{ .prompt }}; edit sources, then run make render-dify.
 {{- /* Quote the YAML 1.1 value indicator for Dify's PyYAML loader. */}}
 {{ data.ToYAML $dsl | strings.ReplaceAll ": =\n" ": '='\n" | strings.TrimSuffix "\n" }}
