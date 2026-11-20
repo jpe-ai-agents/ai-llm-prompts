@@ -4,6 +4,8 @@
 
 * **Feature (automation)**: Add `ai-workflows-conflict-fix`, which re-applies a conflicted pull request's change
   onto the current base, editing only the pull request's changed files.
+* **Feature (automation)**: The semantic rubric fails `claim_mismatch` when a pull request that says `Supersedes #N`
+  drops or adds a change against the superseded pull request's diff.
 * **Fix (hermes)**: Both direct-cron footers tell the unattended run that Hermes refuses `execute_code`, `-c`/`-e`
   and heredoc scripts, and deletes under root paths, so the job uses its tools and single commands.
 
