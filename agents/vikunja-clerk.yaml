@@ -214,26 +214,26 @@ dify:
         id: other-read-to-guard
         source: other-read-tool
         sourceHandle: source
-        target: update-guard
+        target: update_guard
         targetHandle: target
         type: custom
       - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: code}
         id: read-or-create-to-result
         source: update-route
         sourceHandle: 'false'
-        target: read-result
+        target: read_result
         targetHandle: target
         type: custom
       - data: {isInIteration: false, isInLoop: false, sourceType: code, targetType: answer}
-        id: read-result-to-answer
-        source: read-result
+        id: read_result-to-answer
+        source: read_result
         sourceHandle: source
         target: preflight-answer
         targetHandle: target
         type: custom
       - data: {isInIteration: false, isInLoop: false, sourceType: code, targetType: if-else}
-        id: update-guard-to-gate
-        source: update-guard
+        id: update_guard-to-gate
+        source: update_guard
         sourceHandle: source
         target: update-gate
         targetHandle: target
@@ -284,12 +284,12 @@ dify:
         id: readback-to-receipt
         source: readback-tool
         sourceHandle: source
-        target: write-receipt
+        target: write_receipt
         targetHandle: target
         type: custom
       - data: {isInIteration: false, isInLoop: false, sourceType: code, targetType: answer}
         id: receipt-to-answer
-        source: write-receipt
+        source: write_receipt
         sourceHandle: source
         target: update-answer
         targetHandle: target
@@ -953,7 +953,7 @@ dify:
           - variable: mode_raw
             value_selector: [env, VIKUNJA_MODE]
         height: 54
-        id: update-guard
+        id: update_guard
         position: {x: 1840, y: 180}
         positionAbsolute: {x: 1840, y: 180}
         selected: false
@@ -969,7 +969,7 @@ dify:
               id: update-allowed-condition
               value: true
               varType: boolean
-              variable_selector: [update-guard, allowed]
+              variable_selector: [update_guard, allowed]
             id: update-allowed
             logical_operator: and
           desc: Refused writes terminate without a write call.
@@ -993,7 +993,7 @@ dify:
               id: update-live-mode-condition
               value: true
               varType: boolean
-              variable_selector: [update-guard, dispatch]
+              variable_selector: [update_guard, dispatch]
             id: live-mode
             logical_operator: and
           desc: Shadow writes return the intended call and stop before the write.
@@ -1024,37 +1024,37 @@ dify:
           tool_parameters:
             subcommand:
               type: variable
-              value: [update-guard, operation]
+              value: [update_guard, operation]
             id:
               type: variable
-              value: [update-guard, task_id]
+              value: [update_guard, task_id]
             projectId:
               type: variable
-              value: [update-guard, project_id]
+              value: [update_guard, project_id]
             title:
               type: variable
-              value: [update-guard, title]
+              value: [update_guard, title]
             description:
               type: variable
-              value: [update-guard, description]
+              value: [update_guard, description]
             comment:
               type: variable
-              value: [update-guard, comment]
+              value: [update_guard, comment]
             dueDate:
               type: variable
-              value: [update-guard, due_date]
+              value: [update_guard, due_date]
             priority:
               type: variable
-              value: [update-guard, priority]
+              value: [update_guard, priority]
             done:
               type: variable
-              value: [update-guard, done]
+              value: [update_guard, done]
             otherTaskId:
               type: variable
-              value: [update-guard, other_task_id]
+              value: [update_guard, other_task_id]
             relationKind:
               type: variable
-              value: [update-guard, relation_kind]
+              value: [update_guard, relation_kind]
         height: 100
         id: update-tool
         position: {x: 2440, y: 80}
@@ -1107,9 +1107,9 @@ dify:
           - variable: write_items
             value_selector: [update-tool, json]
           - variable: operation
-            value_selector: [update-guard, operation]
+            value_selector: [update_guard, operation]
           - variable: task_id
-            value_selector: [update-guard, task_id]
+            value_selector: [update_guard, task_id]
         height: 54
         id: readback-id
         position: {x: 2640, y: 80}
@@ -1162,7 +1162,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: "{{#update-guard.summary#}}\n{{#update-guard.preview#}}"
+          answer: "{{#update_guard.summary#}}\n{{#update_guard.preview#}}"
           desc: The guarded write preview is returned without dispatch.
           selected: false
           title: Shadow preview
@@ -1178,7 +1178,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: '{{#read-result.answer#}}'
+          answer: '{{#read_result.answer#}}'
           desc: Return the guarded read result.
           selected: false
           title: Result
@@ -1194,7 +1194,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: '{{#update-guard.reason#}}'
+          answer: '{{#update_guard.reason#}}'
           desc: Refused before the update call.
           selected: false
           title: Update refusal
@@ -1210,7 +1210,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: '{{#write-receipt.answer#}}'
+          answer: '{{#write_receipt.answer#}}'
           desc: Return the write receipt with its IDs and the readback.
           selected: false
           title: Write result
@@ -1248,7 +1248,7 @@ dify:
           - variable: items
             value_selector: [preflight-tool, json]
         height: 54
-        id: read-result
+        id: read_result
         position: {x: 1840, y: 500}
         positionAbsolute: {x: 1840, y: 500}
         selected: false
@@ -1277,7 +1277,7 @@ dify:
           type: code
           variables:
           - variable: summary
-            value_selector: [update-guard, summary]
+            value_selector: [update_guard, summary]
           - variable: write_text
             value_selector: [update-tool, text]
           - variable: write_items
@@ -1287,7 +1287,7 @@ dify:
           - variable: readback_items
             value_selector: [readback-tool, json]
         height: 54
-        id: write-receipt
+        id: write_receipt
         position: {x: 3040, y: 80}
         positionAbsolute: {x: 3040, y: 80}
         selected: false

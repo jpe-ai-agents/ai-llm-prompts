@@ -406,9 +406,9 @@ def test_each_event_branch_stops_bad_input_before_the_model(name):
     dsl = yaml.safe_load((ROOT / "agents/dify" / f"{name}.dsl.yml").read_text())
     graph = dsl["workflow"]["graph"]
     nodes = {node["id"]: node["data"] for node in graph["nodes"]}
-    aggregate = nodes["trigger-input"]
+    aggregate = nodes["trigger_input"]
     model_input = next(message["text"] for message in nodes["model"]["prompt_template"] if message["role"] == "user")
-    assert "{{#trigger-input.output#}}" in model_input
+    assert "{{#trigger_input.output#}}" in model_input
     assert aggregate["type"] == "variable-aggregator" and aggregate["output_type"] == "string"
     payload = {"payload": {"action": "opened", "number": 7}, "scope": {"repository": "example/repo"},
                "mandate": {"operation": "create_pull_request", "request_id": "req-1"}}
@@ -431,7 +431,7 @@ def test_each_event_branch_stops_bad_input_before_the_model(name):
         assert any(edge["source"] == prepare and edge["target"] == gate for edge in graph["edges"])
         assert any(edge["source"] == gate and edge["sourceHandle"] == "stop" and edge["target"] == refused
                    for edge in graph["edges"])
-        assert any(edge["source"] == gate and edge["sourceHandle"] == "false" and edge["target"] == "trigger-input"
+        assert any(edge["source"] == gate and edge["sourceHandle"] == "false" and edge["target"] == "trigger_input"
                    for edge in graph["edges"])
         assert not any(edge["source"] == gate and edge["target"] == "model" for edge in graph["edges"])
         assert not any(edge["source"] == refused for edge in graph["edges"])
@@ -469,7 +469,7 @@ def test_each_event_branch_stops_bad_input_before_the_model(name):
             "status": "stop", "reason": "trigger input exceeds 30000 characters", "result": None,
         }
     assert saw_webhook
-    assert any(edge["source"] == "trigger-input" and edge["target"] == "model" for edge in graph["edges"])
+    assert any(edge["source"] == "trigger_input" and edge["target"] == "model" for edge in graph["edges"])
 
 
 @pytest.mark.parametrize("name", ["pr-keeper", "alert-triage", "release-promoter", "repo-janitor"])
