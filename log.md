@@ -2,6 +2,7 @@
 
 ## 2026-11-21
 
+* **Fix (automation)**: the `conflict-fix` prompt no longer runs the repository's pre-commit hooks.
 * **Fix (automation)**: the `conflict-fix` prompt runs the repository's pre-commit hooks on the changed files only.
 
 ## 2026-11-20
