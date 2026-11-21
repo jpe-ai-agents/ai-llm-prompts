@@ -127,9 +127,10 @@ def report_fields(suite):
 
 
 def suite_prompt(agent, suite):
-    shared = ROOT / agent.get("shared_prefix", "")
+    shared = agent.get("shared_prefix") or []
+    shared = [shared] if isinstance(shared, str) else shared
     prompt = ROOT / agent["prompt"]
-    sections = [prompt_body(shared)] if shared.is_file() else []
+    sections = [prompt_body(ROOT / path) for path in shared if (ROOT / path).is_file()]
     sections.append(prompt_body(prompt))
     sections.extend(
         (
