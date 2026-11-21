@@ -1,5 +1,5 @@
 name: vikunja-triage
-extends: local-batch
+extends: tracker-batch
 description: |
   Use when: a task webhook or rotation catch-up needs scoped triage.
   Do not use when: the request needs task creation, deletion, or reassignment.
