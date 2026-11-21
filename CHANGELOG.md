@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.128.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.3...v1.128.0) (2026-11-21)
+
+
+### Features
+
+* **agents:** read vikunja-clerk tool replies from json output and answer project lookups ([#561](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/561)) ([7fd0d49](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/7fd0d49d930b028a592631cadf78e1e3802a397a))
+
 ## [1.127.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.2...v1.127.3) (2026-11-21)
 
 
