@@ -343,6 +343,11 @@ def test_self_reference_does_not_require_a_peer():
     _validate_prompt_handoffs(agent, "You are task-clerk.", {"incident-clerk", "task-clerk"})
 
 
+def _prefix_paths(value):
+    """shared_prefix is one prompt path or an ordered list of them; returns a tuple of paths."""
+    return (value,) if isinstance(value, str) else tuple(value)
+
+
 def _chain_shared_prefixes(root, agent):
     """shared_prefix values declared by profiles in this definition's extends chain, resolved through
     root's agents/profiles; defaults.yaml joins every chain as its base layer, like make resolve-agents."""
@@ -353,12 +358,12 @@ def _chain_shared_prefixes(root, agent):
         seen.add(name)
         profile = yaml.safe_load((root / "agents" / "profiles" / f"{name}.yaml").read_text()) or {}
         if profile.get("shared_prefix"):
-            prefixes.add(profile["shared_prefix"])
+            prefixes.add(_prefix_paths(profile["shared_prefix"]))
         name = profile.get("extends")
     if seen:
         defaults = yaml.safe_load((root / "agents" / "profiles" / "defaults.yaml").read_text()) or {}
         if defaults.get("shared_prefix"):
-            prefixes.add(defaults["shared_prefix"])
+            prefixes.add(_prefix_paths(defaults["shared_prefix"]))
     return prefixes
 
 
@@ -373,18 +378,18 @@ def _roster_paths_and_prompt_metadata(definitions, root=None):
         assert not missing, f"{path.name} is missing non-empty roster fields: {missing}"
 
         for field in ("prompt", "eval_set", "shared_prefix"):
-            target = _ROOT / agent[field]
-            assert target.is_file(), (
-                f"{path.name} {field} does not name a file: {agent[field]}"
-            )
+            for target in _prefix_paths(agent[field]):
+                assert (_ROOT / target).is_file(), (
+                    f"{path.name} {field} does not name a file: {target}"
+                )
 
         _prompt_body(_ROOT / agent["prompt"])
         chain_prefixes = _chain_shared_prefixes(root, agent)
-        assert agent["shared_prefix"] in chain_prefixes, (
+        assert _prefix_paths(agent["shared_prefix"]) in chain_prefixes, (
             f"{path.name} shared_prefix {agent['shared_prefix']} is not declared by a profile in its "
             f"extends chain: {sorted(chain_prefixes)}"
         )
-        roster_prefixes.add(agent["shared_prefix"])
+        roster_prefixes.update(_prefix_paths(agent["shared_prefix"]))
 
     for shared_prefix in sorted(roster_prefixes):
         _prompt_body(_ROOT / shared_prefix)
@@ -642,7 +647,7 @@ def test_dify_system_prompt_matches_its_declared_source(agent_name):
     _, actual_prompt = system_prompts[0]
     expected = "\n\n".join(
         (
-            _prompt_body(_ROOT / agent["shared_prefix"]),
+            *(_prompt_body(_ROOT / prefix) for prefix in _prefix_paths(agent["shared_prefix"])),
             _prompt_body(_ROOT / agent["prompt"]),
         )
     )
@@ -686,3 +691,16 @@ def test_pr_keeper_replaces_ci_fixer():
         "agents/evals/ci-fixer.yaml", "agents/dify/ci-fixer.dsl.yml",
     ):
         assert not (_ROOT / path).exists()
+
+
+def test_a_profile_may_declare_an_ordered_prefix_list(tmp_path):
+    profiles = tmp_path / "agents" / "profiles"
+    profiles.mkdir(parents=True)
+    (profiles / "defaults.yaml").write_text("tier: 0\n")
+    layers = ["agents/prompts/shared/homelab.md", "agents/prompts/shared/trackers.md"]
+    (profiles / "layered.yaml").write_text(yaml.safe_dump({"shared_prefix": layers}))
+
+    _roster_paths_and_prompt_metadata([_chain_fixture("layered-clerk", "layered", layers)], root=tmp_path)
+    with pytest.raises(AssertionError, match="not declared by a profile in its extends chain"):
+        _roster_paths_and_prompt_metadata(
+            [_chain_fixture("layered-clerk", "layered", layers[::-1])], root=tmp_path)

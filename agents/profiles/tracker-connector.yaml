@@ -1,3 +1,5 @@
 # Tracker agents that serve callers; the shared tracker prompt layers live here.
 extends: connector
-shared_prefix: agents/prompts/shared/homelab.md
+shared_prefix:
+  - agents/prompts/shared/homelab.md
+  - agents/prompts/shared/trackers.md

@@ -182,7 +182,7 @@ def test_check_rejects_source_drift_and_hand_edits(tmp_path, runtime, drift):
 
 @pytest.mark.parametrize("runtime", RUNTIMES)
 @pytest.mark.parametrize("field,value", [
-    ("prompt", "agents/../../outside.md"), ("shared_prefix", "../outside.md"),
+    ("prompt", "agents/../../outside.md"), ("shared_prefix", "../outside.md"), ("shared_prefix", ["../outside.md"]),
     ("name", "different"), ("home_platform", None),
 ])
 def test_invalid_definition_fails_closed(tmp_path, runtime, field, value):
