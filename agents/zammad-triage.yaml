@@ -1,5 +1,5 @@
 name: zammad-triage
-extends: local-batch
+extends: tracker-batch
 description: |
   Use when: a ticket webhook or rotation catch-up needs scoped ranking.
   Do not use when: the request needs ticket closure, reassignment, or customer replies.

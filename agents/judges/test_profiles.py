@@ -56,6 +56,28 @@ def test_profile_cannot_rebind_explicit_or_conventional_fields(profiled_checkout
         resolve_records(tmp_path)
 
 
+def test_profile_extends_one_parent_with_profile_winning(profiled_checkout, tmp_path):
+    profiles = tmp_path / "agents" / "profiles"
+    (profiles / "parent.yaml").write_text(yaml.safe_dump({"routing": {"tier": 1, "lane": "parent"}, "limit": 3, "owner": "x"}))
+    (profiles / "interactive.yaml").write_text(yaml.safe_dump({"extends": "parent", "routing": {"tier": 0}, "limit": 9}))
+    record, = resolve_records(tmp_path)
+    assert record["profile"]["routing"] == {"local": True, "tier": 0, "lane": "parent"}
+    assert record["profile"]["owner"] == "x" and "extends" not in record["profile"]
+    assert record["agent"]["limit"] == 0 and record["agent"]["extends"] == "interactive"
+    result = render_checkout(tmp_path)
+    assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("parent", [{"extends": "other"}, {"identity": "another"}])
+def test_parent_profile_cannot_extend_or_rebind(profiled_checkout, tmp_path, parent):
+    profiles = tmp_path / "agents" / "profiles"
+    (profiles / "other.yaml").write_text("tier: 1\n")
+    (profiles / "parent.yaml").write_text(yaml.safe_dump(parent))
+    (profiles / "interactive.yaml").write_text(yaml.safe_dump({"extends": "parent"}))
+    with pytest.raises(subprocess.CalledProcessError):
+        resolve_records(tmp_path)
+
+
 @pytest.mark.parametrize("field", ["prompt", "eval_set"])
 def test_conventional_paths_cannot_be_overridden(profiled_checkout, tmp_path, field):
     path, agent = profiled_checkout

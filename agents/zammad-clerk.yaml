@@ -1,5 +1,5 @@
 name: zammad-clerk
-extends: connector
+extends: tracker-connector
 description: |
   Use when: an authorized caller requests a scoped incident ticket operation.
   Do not use when: the request targets another integration or lacks a mandate.

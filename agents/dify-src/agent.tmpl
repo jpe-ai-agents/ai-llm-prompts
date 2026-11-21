@@ -10,11 +10,20 @@
     {{- test.Assert "invalid profile name" (and (regexp.Match `^[a-z0-9]+(-[a-z0-9]+)*$` .) (ne . "defaults")) -}}
     {{- $profile = file.Read (printf "agents/profiles/%s.yaml" .) | data.YAML -}}
     {{- $defaults := file.Read "agents/profiles/defaults.yaml" | data.YAML -}}
-    {{- range $layer := coll.Slice $defaults $profile -}}
+    {{- /* A profile may extend exactly one parent profile; the parent extends nothing. */ -}}
+    {{- $parent := dict -}}
+    {{- with (index $profile "extends") -}}
+      {{- test.Assert "invalid profile name" (and (test.IsKind "string" .) (regexp.Match `^[a-z0-9]+(-[a-z0-9]+)*$` .) (ne . "defaults")) -}}
+      {{- $parent = file.Read (printf "agents/profiles/%s.yaml" .) | data.YAML -}}
+      {{- test.Assert "profiles extend at most one level" (not (coll.Has $parent "extends")) -}}
+    {{- end -}}
+    {{- $profile = coll.Omit "extends" $profile -}}
+    {{- range $layer := coll.Slice $defaults $parent $profile -}}
       {{- range $field := coll.Slice "extends" "name" "identity" "api_key_ref" "prompt" "eval_set" -}}
         {{- test.Assert (printf "profiles cannot set %s" $field) (not (coll.Has $layer $field)) -}}
       {{- end -}}
     {{- end -}}
+    {{- $profile = coll.Merge $profile $parent -}}
     {{- test.Assert "prompt and eval_set follow from name" (and (not (coll.Has $agent "prompt")) (not (coll.Has $agent "eval_set"))) -}}
     {{- $profile = coll.Merge $profile $defaults -}}
     {{- $agent = coll.Merge $agent $profile -}}

@@ -1,5 +1,5 @@
 name: vikunja-clerk
-extends: connector
+extends: tracker-connector
 description: |
   Use when: a plain-words task request needs a find, file, update, comment, relate, close, or reopen.
   Do not use when: the request concerns incidents, deletion, or unsupported operations.

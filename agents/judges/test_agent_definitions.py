@@ -417,6 +417,17 @@ def test_an_overlay_profile_may_declare_its_own_shared_prefix(tmp_path):
     _roster_paths_and_prompt_metadata([overlay], root=tmp_path)
 
 
+def test_a_parent_profile_may_declare_the_shared_prefix(tmp_path):
+    profiles = tmp_path / "agents" / "profiles"
+    profiles.mkdir(parents=True)
+    (profiles / "defaults.yaml").write_text("tier: 0\n")
+    (profiles / "parent.yaml").write_text("shared_prefix: agents/prompts/vikunja-clerk.md\n")
+    (profiles / "child.yaml").write_text("extends: parent\ntier: 1\n")
+    child = _chain_fixture("child-clerk", "child", "agents/prompts/vikunja-clerk.md")
+
+    _roster_paths_and_prompt_metadata([child], root=tmp_path)
+
+
 def test_a_definition_whose_chain_declares_no_prefix_fails(tmp_path):
     profiles = tmp_path / "agents" / "profiles"
     profiles.mkdir(parents=True)
