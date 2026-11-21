@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.129.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.128.2...v1.129.0) (2026-11-21)
+
+
+### Features
+
+* **agents:** shared tracker prompt layer and list shared_prefix ([#569](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/569)) ([75fa4a5](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/75fa4a589675b0a55027949cc9f77b0f80bc957e))
+
 ## [1.128.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.128.1...v1.128.2) (2026-11-21)
 
 
