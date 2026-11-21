@@ -295,7 +295,7 @@ def test_only_the_write_node_takes_a_write_subcommand():
     assert variable_subcommands == {
         "preflight-tool": ["guard", "read_operation"],
         "other-read-tool": ["guard", "read_operation"],
-        "update-tool": ["update-guard", "operation"],
+        "update-tool": ["update_guard", "operation"],
     }
     edges = yaml.safe_load(_DSL.read_text())["workflow"]["graph"]["edges"]
     into_write = [(edge["source"], edge["sourceHandle"]) for edge in edges if edge["target"] == "update-tool"]

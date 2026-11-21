@@ -179,7 +179,7 @@ workflow:
         id: other-read-to-guard
         source: other-read-tool
         sourceHandle: source
-        target: update-guard
+        target: update_guard
         targetHandle: target
         type: custom
       - data:
@@ -190,7 +190,7 @@ workflow:
         id: read-or-create-to-result
         source: update-route
         sourceHandle: "false"
-        target: read-result
+        target: read_result
         targetHandle: target
         type: custom
       - data:
@@ -198,8 +198,8 @@ workflow:
           isInLoop: false
           sourceType: code
           targetType: answer
-        id: read-result-to-answer
-        source: read-result
+        id: read_result-to-answer
+        source: read_result
         sourceHandle: source
         target: preflight-answer
         targetHandle: target
@@ -209,8 +209,8 @@ workflow:
           isInLoop: false
           sourceType: code
           targetType: if-else
-        id: update-guard-to-gate
-        source: update-guard
+        id: update_guard-to-gate
+        source: update_guard
         sourceHandle: source
         target: update-gate
         targetHandle: target
@@ -289,7 +289,7 @@ workflow:
         id: readback-to-receipt
         source: readback-tool
         sourceHandle: source
-        target: write-receipt
+        target: write_receipt
         targetHandle: target
         type: custom
       - data:
@@ -298,7 +298,7 @@ workflow:
           sourceType: code
           targetType: answer
         id: receipt-to-answer
-        source: write-receipt
+        source: write_receipt
         sourceHandle: source
         target: update-answer
         targetHandle: target
@@ -1302,7 +1302,7 @@ workflow:
                 - VIKUNJA_MODE
               variable: mode_raw
         height: 54
-        id: update-guard
+        id: update_guard
         position:
           x: 1840
           "y": 180
@@ -1323,7 +1323,7 @@ workflow:
                   value: true
                   varType: boolean
                   variable_selector:
-                    - update-guard
+                    - update_guard
                     - allowed
               id: update-allowed
               logical_operator: and
@@ -1353,7 +1353,7 @@ workflow:
                   value: true
                   varType: boolean
                   variable_selector:
-                    - update-guard
+                    - update_guard
                     - dispatch
               id: live-mode
               logical_operator: and
@@ -1389,57 +1389,57 @@ workflow:
             comment:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - comment
             description:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - description
             done:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - done
             dueDate:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - due_date
             id:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - task_id
             otherTaskId:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - other_task_id
             priority:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - priority
             projectId:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - project_id
             relationKind:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - relation_kind
             subcommand:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - operation
             title:
               type: variable
               value:
-                - update-guard
+                - update_guard
                 - title
           type: tool
         height: 100
@@ -1541,11 +1541,11 @@ workflow:
                 - json
               variable: write_items
             - value_selector:
-                - update-guard
+                - update_guard
                 - operation
               variable: operation
             - value_selector:
-                - update-guard
+                - update_guard
                 - task_id
               variable: task_id
         height: 54
@@ -1617,8 +1617,8 @@ workflow:
         width: 244
       - data:
           answer: |-
-            {{#update-guard.summary#}}
-            {{#update-guard.preview#}}
+            {{#update_guard.summary#}}
+            {{#update_guard.preview#}}
           desc: The guarded write preview is returned without dispatch.
           selected: false
           title: Shadow preview
@@ -1638,7 +1638,7 @@ workflow:
         type: custom
         width: 244
       - data:
-          answer: '{{#read-result.answer#}}'
+          answer: '{{#read_result.answer#}}'
           desc: Return the guarded read result.
           selected: false
           title: Result
@@ -1658,7 +1658,7 @@ workflow:
         type: custom
         width: 244
       - data:
-          answer: '{{#update-guard.reason#}}'
+          answer: '{{#update_guard.reason#}}'
           desc: Refused before the update call.
           selected: false
           title: Update refusal
@@ -1678,7 +1678,7 @@ workflow:
         type: custom
         width: 244
       - data:
-          answer: '{{#write-receipt.answer#}}'
+          answer: '{{#write_receipt.answer#}}'
           desc: Return the write receipt with its IDs and the readback.
           selected: false
           title: Write result
@@ -1763,7 +1763,7 @@ workflow:
                 - json
               variable: items
         height: 54
-        id: read-result
+        id: read_result
         position:
           x: 1840
           "y": 500
@@ -1835,7 +1835,7 @@ workflow:
           type: code
           variables:
             - value_selector:
-                - update-guard
+                - update_guard
                 - summary
               variable: summary
             - value_selector:
@@ -1855,7 +1855,7 @@ workflow:
                 - json
               variable: readback_items
         height: 54
-        id: write-receipt
+        id: write_receipt
         position:
           x: 3040
           "y": 80
