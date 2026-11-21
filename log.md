@@ -1,5 +1,9 @@
 # Change Log
 
+## 2026-11-21
+
+* **Fix (automation)**: the `conflict-fix` prompt runs the repository's pre-commit hooks on the changed files only.
+
 ## 2026-11-20
 
 * **Fix (agents)**: `vikunja-clerk` reads task replies by whole lines only. It takes the task ID from the header line,
