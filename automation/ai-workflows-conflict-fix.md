@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/conflict-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-21T00:57:00Z"
+timestamp: "2026-11-21T20:05:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -38,10 +38,8 @@ the pull request's title, description, changed files and its full diff against t
 5. Run the repository's formatter on the files you changed, and keep its output.
 6. Read the repository's own CI definition (`.github/workflows/` and the CI structure below) and rerun only the
    checks for the files you changed, with the options CI uses: each changed test file, and each lint or format
-   command scoped to the changed files where the tool allows. Run the repository's pre-commit hooks on the changed
-   files only (`pre-commit run --files <changed files>`), which covers checks such as file token limits. Never run
-   a test directory, a whole suite, a whole-repository lint or a loop over every playbook; CI runs those after the
-   push. Give every command a
+   command scoped to the changed files where the tool allows. Never run a test directory, a whole suite, a
+   whole-repository lint or a loop over every playbook; CI runs those after the push. Give every command a
    120-second timeout (the terminal tool's `timeout` field), and never wait on a command still running in the
    background. Finish when each one exits 0. If a check cannot run or finish here, name it and say why in your final
    message. A check you did not run is never assumed to pass.
