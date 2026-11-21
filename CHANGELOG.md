@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.128.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.128.0...v1.128.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* **ci-fix:** run no container command and fix container checks from the logs ([#565](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/565)) ([a868145](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/a868145bd2a7a631bc9b3d72cc0d58c1c552fa9e))
+* **dify:** node ids the Dify runtime resolves in templates ([#563](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/563)) ([20f794e](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/20f794e221006cdc987d811c9ff4cb59caaccbd2))
+
 ## [1.128.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.3...v1.128.0) (2026-11-21)
 
 
