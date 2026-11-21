@@ -24,6 +24,10 @@ and `parse-json-schema-valid` (the checker in `agents/judges/parse-json-schema.p
 A suite's top-level `expected_output_scoring` sets how `expected-output` scores: `field-credit` (the default) is the
 share of expected keys that match, and `strict` is 1 only when every key matches. `vikunja-clerk` is `strict`.
 
+`agents/evals/live/*.yaml` holds live regression questions. The generator does not read them. To run one, send each
+`question` to the published app, fill `<TASK_ID>` and `<INBOX_ID>` from the run's inputs, and pass the case only when
+`pass_pattern` matches and no `fail_patterns` entry matches. No runner ships with the set.
+
 ## Providers
 
 | Label | Candidate | Configuration |
