@@ -1,6 +1,6 @@
 """Tracker agents share one system-prompt prefix and add only their own prompt file after it.
 
-Report mode: mismatches are warnings until STRICT is set.
+STRICT asserts; with STRICT off, mismatches are warnings.
 """
 
 import warnings
@@ -12,7 +12,7 @@ import yaml
 from definitions import resolved_records
 
 ROOT = Path(__file__).resolve().parents[2]
-STRICT = False
+STRICT = True
 TRACKER_PROFILE_PREFIX = "tracker-"
 
 
@@ -46,6 +46,12 @@ def system_prompts(name):
     ]
 
 
+def prefix_text(shared_prefix):
+    """Bodies of the shared_prefix path or ordered path list, joined as the renderer joins them."""
+    paths = [shared_prefix] if isinstance(shared_prefix, str) else shared_prefix
+    return "\n\n".join(prompt_body(path) for path in paths)
+
+
 def prefix_problems(cases):
     """cases: (name, shared_prefix_text, prompt_text, rendered_system_prompts). Returns readable problems."""
     problems = []
@@ -72,7 +78,7 @@ def report(problems, strict):
 
 def test_tracker_agents_share_one_prefix_and_only_their_prompt():
     cases = [
-        (agent["name"], prompt_body(agent["shared_prefix"]), prompt_body(agent["prompt"]), system_prompts(agent["name"]))
+        (agent["name"], prefix_text(agent["shared_prefix"]), prompt_body(agent["prompt"]), system_prompts(agent["name"]))
         for agent in tracker_agents()
     ]
     assert cases, "no agent extends a tracker profile"

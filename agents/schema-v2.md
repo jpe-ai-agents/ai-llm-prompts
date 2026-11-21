@@ -60,7 +60,7 @@ The following requirements apply to the merged definition unless marked source-o
 | `code_work` | enum | Required: `none` or `sandbox`. Agents editing code declare `sandbox`. |
 | `mode` | enum | Required: `shadow` or `live`. |
 | `eval_set`, `prompt` | paths | Derived from `name`; existing eval and OKF prompt files. |
-| `shared_prefix` | path | Required existing OKF prompt file; declared by a profile in the definition's `extends` chain. |
+| `shared_prefix` | path or list | Existing OKF prompt file, or an ordered list joined by a blank line; declared in the `extends` chain. |
 | `tools`, `mcp_servers` | list[string] | With `mcp_servers`, `prefix.name` names tool `name` if `prefix` is listed, else (not `a2a.*`) a subcommand. |
 | `litellm_role` | string | Required router role. |
 | `memory_scope` | string | Required per-agent memory boundary, or `none`. |

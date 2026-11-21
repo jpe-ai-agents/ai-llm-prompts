@@ -41,6 +41,14 @@
     {{- index $parts 1 | strings.TrimSpace -}}
   {{- else -}}{{- $text | strings.TrimSpace -}}{{- end -}}
 {{- end -}}
+{{- /* shared_prefix is one prompt path or an ordered list; bodies join with a blank line. */ -}}
+{{- define "shared-prefix" -}}
+  {{- $paths := . -}}
+  {{- if test.IsKind "string" . -}}{{- $paths = coll.Slice . -}}{{- end -}}
+  {{- $bodies := coll.Slice -}}
+  {{- range $paths -}}{{- $bodies = coll.Append (tmpl.Exec "prompt" .) $bodies -}}{{- end -}}
+  {{- conv.Join $bodies "\n\n" -}}
+{{- end -}}
 {{- /* Preserve Python json.dumps(sort_keys=True)'s separators in existing Code nodes. */ -}}
 {{- define "json" -}}
   {{- if test.IsKind "map" . -}}
@@ -210,7 +218,7 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
 {{- if and (not (coll.Has . "dify")) (coll.Has . "tools") (gt (len .tools) 0) -}}
   {{- test.Assert "generic workflows with tools must be shadow proposals" (eq (index . "mode") "shadow") -}}
 {{- end -}}
-{{- $prompt := printf "%s\n\n%s" (tmpl.Exec "prompt" .shared_prefix) (tmpl.Exec "prompt" .prompt) -}}
+{{- $prompt := printf "%s\n\n%s" (tmpl.Exec "shared-prefix" .shared_prefix) (tmpl.Exec "prompt" .prompt) -}}
 {{- $params := dict "__DIFY_AGENT_NAME__" .name "__DIFY_LITELLM_ROLE__" .litellm_role -}}
 {{- with (index . "mode") -}}{{- $params = coll.Set "__DIFY_MODE__" . $params -}}{{- end -}}
 {{- if coll.Has . "grouping" -}}
@@ -527,6 +535,6 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
     (reduce ($c.named_prompts | to_entries[]) as $p (. ; split($p.key) | join($p.value))) |
     split("__DIFY_SYSTEM_PROMPT__") | join($c.prompt)
   else . end)` -}}
-# Generated from agents/{{ .name }}.yaml, agents/dify-src/agent.tmpl, and {{ .shared_prefix }} + {{ .prompt }}; edit sources, then run make render-dify.
+# Generated from agents/{{ .name }}.yaml, agents/dify-src/agent.tmpl, and {{ if test.IsKind "string" .shared_prefix }}{{ .shared_prefix }}{{ else }}{{ conv.Join .shared_prefix " + " }}{{ end }} + {{ .prompt }}; edit sources, then run make render-dify.
 {{- /* Quote the YAML 1.1 value indicator for Dify's PyYAML loader. */}}
 {{ data.ToYAML $dsl | strings.ReplaceAll ": =\n" ": '='\n" | strings.TrimSuffix "\n" }}

@@ -1,3 +1,5 @@
 # Tracker agents that run in batches; the shared tracker prompt layers live here.
 extends: local-batch
-shared_prefix: agents/prompts/shared/homelab.md
+shared_prefix:
+  - agents/prompts/shared/homelab.md
+  - agents/prompts/shared/trackers.md
