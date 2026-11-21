@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.127.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.2...v1.127.3) (2026-11-21)
+
+
+### Bug Fixes
+
+* **conflict-fix:** run pre-commit hooks on the changed files ([#558](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/558)) ([fc2585b](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/fc2585b00e5f0141ff9d16ab1a4fcd76189cd916))
+
 ## [1.127.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.127.1...v1.127.2) (2026-11-20)
 
 
