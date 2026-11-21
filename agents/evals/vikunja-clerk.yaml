@@ -281,3 +281,33 @@ cases:
       task_id: example-task
       category: null
     expected_behavior: Report the unavailable result or refuse unsupported input; do not invent task data or make writes.
+  - id: answer-from-json-tool-reply
+    category: boundary
+    input: Find open tasks that mention clerk.
+    expected_parse: {route: vikunja, operation: list, project_named: false, search: clerk, done: false, category: null}
+    structured_fields: {route: vikunja, operation: list, search: clerk, done: false}
+    tool_result:
+      tool: vikunja_tasks
+      operation: list
+      args: {search: clerk, done: false}
+      json_output:
+        - {id: task-example-a, title: Clerk regression notes, done: false}
+    expected_calls: []
+    expected_output: {route: vikunja, operation: list, project_named: false, search: clerk, done: false, category: null}
+    expected_behavior: Emit only the list intent. The guard runs the search. When the read reply is JSON, the answer lists each matching task by its ID from that reply and never reports that no task matched.
+  - id: project-find-named-project
+    category: boundary
+    input: Which project id is the project named Inbox?
+    expected_parse: {route: vikunja, operation: project-find, project_named: true, project: Inbox, category: null}
+    structured_fields: {route: vikunja, operation: project-find, project_named: true, project: Inbox}
+    expected_calls: []
+    expected_output: {route: vikunja, operation: project-find, project_named: true, project: Inbox, category: null}
+    expected_behavior: Emit the project-find intent with the named project. The guard answers from the project list, makes no task call, and never guesses an ID.
+  - id: project-find-visible-projects
+    category: boundary
+    input: Which projects can you see?
+    expected_parse: {route: vikunja, operation: project-find, project_named: false, project: null, category: null}
+    structured_fields: {route: vikunja, operation: project-find, project_named: false, project: null}
+    expected_calls: []
+    expected_output: {route: vikunja, operation: project-find, project_named: false, project: null, category: null}
+    expected_behavior: Emit the project-find intent with no project name. The guard lists the visible projects from the project list and makes no task call.

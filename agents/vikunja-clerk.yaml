@@ -168,10 +168,24 @@ dify:
         target: guard-gate
         targetHandle: target
         type: custom
-      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: tool}
-        id: guard-allowed-to-preflight
+      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: if-else}
+        id: guard-allowed-to-project-route
         source: guard-gate
         sourceHandle: guard-allowed
+        target: project-route
+        targetHandle: target
+        type: custom
+      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: answer}
+        id: project-route-to-answer
+        source: project-route
+        sourceHandle: project-find
+        target: project-answer
+        targetHandle: target
+        type: custom
+      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: tool}
+        id: project-route-to-preflight
+        source: project-route
+        sourceHandle: 'false'
         target: preflight-tool
         targetHandle: target
         type: custom
@@ -203,10 +217,17 @@ dify:
         target: update-guard
         targetHandle: target
         type: custom
-      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: answer}
-        id: read-or-create-to-answer
+      - data: {isInIteration: false, isInLoop: false, sourceType: if-else, targetType: code}
+        id: read-or-create-to-result
         source: update-route
         sourceHandle: 'false'
+        target: read-result
+        targetHandle: target
+        type: custom
+      - data: {isInIteration: false, isInLoop: false, sourceType: code, targetType: answer}
+        id: read-result-to-answer
+        source: read-result
+        sourceHandle: source
         target: preflight-answer
         targetHandle: target
         type: custom
@@ -259,9 +280,16 @@ dify:
         target: readback-tool
         targetHandle: target
         type: custom
-      - data: {isInIteration: false, isInLoop: false, sourceType: tool, targetType: answer}
-        id: readback-to-answer
+      - data: {isInIteration: false, isInLoop: false, sourceType: tool, targetType: code}
+        id: readback-to-receipt
         source: readback-tool
+        sourceHandle: source
+        target: write-receipt
+        targetHandle: target
+        type: custom
+      - data: {isInIteration: false, isInLoop: false, sourceType: code, targetType: answer}
+        id: receipt-to-answer
+        source: write-receipt
         sourceHandle: source
         target: update-answer
         targetHandle: target
@@ -360,6 +388,7 @@ dify:
           code: |-
             import json
             import re
+            __DIFY_HELPER_TOOL_REPLY__
             __DIFY_HELPER_INCIDENT_CLASSIFIER__
 
             def project_set(raw):
@@ -371,10 +400,39 @@ dify:
                     raise ValueError("project policy is invalid")
                 return values
 
+            def project_rows(text):
+                # Projects from the list reply as (ID, title) pairs: a JSON array, or the server's markdown item lines.
+                # Item lines only: "N. **Title** (ID: n)" from the start of a line; the ID is the last token on that line.
+                text = str(text or "")
+                if text.lstrip().startswith(("{", "[")):
+                    parsed = json.loads(text)
+                    if isinstance(parsed, dict):
+                        parsed = parsed.get("projects", [])
+                    return [(str(item.get("id", "")), str(item.get("title", item.get("name", ""))).strip()) for item in parsed if isinstance(item, dict)]
+                return [(pid, title.strip()) for title, pid in re.findall(r"^\d+\. \*\*(.*)\*\* \(ID: (\d+)\)$", text, re.M)]
+
             def project_ids(text):
                 # shortcut: one page of up to 50 projects; a name past it resolves to the inbox. Search by name if projects outgrow it.
-                # Item lines only: "N. **Title** (ID: n)" from the start of a line; the ID is the last token on that line.
-                return {title.strip().lower(): pid for title, pid in re.findall(r"^\d+\. \*\*(.*)\*\* \(ID: (\d+)\)$", str(text or ""), re.M)}
+                return {title.lower(): pid for pid, title in project_rows(text)}
+
+            def project_find(intent, projects):
+                # Answer from the project list the workflow already fetched; an ID is never guessed.
+                rows = project_rows(projects)
+                name = "" if intent.get("project") is None else str(intent["project"]).strip()
+                capped = " The list holds at most 50 projects, so a project past it may be missing." if len(rows) >= 50 else ""
+                if not rows:
+                    answer = "No projects were returned, so no project was checked."
+                elif not name:
+                    answer = "Visible projects:\n" + "\n".join(f"- {title} (ID: {pid})" for pid, title in rows) + capped
+                else:
+                    matches = [(pid, title) for pid, title in rows if title.lower() == name.lower()]
+                    if len(matches) == 1:
+                        answer = f'Project "{matches[0][1]}" has ID {matches[0][0]}.'
+                    elif matches:
+                        answer = f'More than one project is named "{name}": ' + "; ".join(f"{title} (ID: {pid})" for pid, title in matches) + "."
+                    else:
+                        answer = f'No project named "{name}" is in the project list.' + capped
+                return output(True, operation="project-find", project_answer=answer)
 
             def output(allowed=False, reason="", **values):
                 result = {
@@ -402,6 +460,7 @@ dify:
                     "filter": "",
                     "search": "",
                     "plan": "",
+                    "project_answer": "",
                 }
                 result.update(values)
                 if not result["read_operation"] and result["operation"] in {"list", "get"}:
@@ -419,7 +478,8 @@ dify:
                 return json.dumps({"tool": "__DIFY_TOOL_NAME__", "args": {"subcommand": operation, **args}}, separators=(",", ":"))
 
             __DIFY_HELPER_JSON_FENCE__
-            def main(intent_text: str, project_id_mandate: str, task_id_mandate: str, allowed_projects_raw: str, denied_projects_raw: str, inbox_project_id: str, mode_raw: str, projects_text: str = "") -> dict:
+            def main(intent_text: str, project_id_mandate: str, task_id_mandate: str, allowed_projects_raw: str, denied_projects_raw: str, inbox_project_id: str, mode_raw: str, projects_text: str = "", projects_items=None) -> dict:
+                projects = tool_text(projects_text, projects_items)
                 try:
                     intent = json.loads(strip_json_fence(intent_text))
                     if not isinstance(intent, dict) or intent.get("route") != "vikunja":
@@ -433,6 +493,8 @@ dify:
                     done = intent.get("done")
                     if operation in {"close", "reopen"}:
                         operation, done = "update", operation == "close"
+                    if operation == "project-find":
+                        return project_find(intent, projects)
                     if operation not in __DIFY_TOOL_OPERATIONS__:
                         return output(reason="The operation is missing or unsupported.")
                     mode = str(mode_raw or "").strip().lower()
@@ -470,7 +532,7 @@ dify:
                         if not title.strip():
                             return output(reason="A task title is required for create.")
                         project_name = "" if intent.get("project") is None else str(intent["project"]).strip().lower()
-                        project_id = project_id_mandate or (project_ids(projects_text).get(project_name, "") if project_named else "")
+                        project_id = project_id_mandate or (project_ids(projects).get(project_name, "") if project_named else "")
                         if not project_id:
                             # An unresolved or absent project name files to the inbox.
                             project_id = str(inbox_project_id or "").strip()
@@ -544,6 +606,7 @@ dify:
             filter: {type: string}
             search: {type: string}
             plan: {type: string}
+            project_answer: {type: string}
           selected: false
           title: Code guard
           type: code
@@ -564,6 +627,8 @@ dify:
             value_selector: [env, VIKUNJA_MODE]
           - variable: projects_text
             value_selector: [projects-tool, text]
+          - variable: projects_items
+            value_selector: [projects-tool, json]
         height: 54
         id: guard
         position: {x: 640, y: 280}
@@ -697,6 +762,7 @@ dify:
             import difflib
             import json
             import re
+            __DIFY_HELPER_TOOL_REPLY__
 
             def project_set(raw):
                 parsed = json.loads(raw)
@@ -752,7 +818,9 @@ dify:
                 return bool(first) and difflib.SequenceMatcher(None, first, second).ratio() >= 0.9
 
             __DIFY_HELPER_JSON_FENCE__
-            def main(intent_text: str, task_result: str, project_id_mandate: str, task_id_mandate: str, allowed_projects_raw: str, denied_projects_raw: str, mode_raw: str, other_task_result: str = "", plan: str = "") -> dict:
+            def main(intent_text: str, task_result: str, project_id_mandate: str, task_id_mandate: str, allowed_projects_raw: str, denied_projects_raw: str, mode_raw: str, other_task_result: str = "", plan: str = "", task_items=None, other_task_items=None) -> dict:
+                task_result = tool_text(task_result, task_items)
+                other_task_result = tool_text(other_task_result, other_task_items)
                 try:
                     intent = json.loads(strip_json_fence(intent_text))
                     plan = json.loads(plan) if str(plan or "").strip() else {"operation": "update"}
@@ -866,8 +934,12 @@ dify:
             value_selector: [intent, text]
           - variable: task_result
             value_selector: [preflight-tool, text]
+          - variable: task_items
+            value_selector: [preflight-tool, json]
           - variable: other_task_result
             value_selector: [other-read-tool, text]
+          - variable: other_task_items
+            value_selector: [other-read-tool, json]
           - variable: plan
             value_selector: [guard, plan]
           - variable: project_id_mandate
@@ -994,13 +1066,31 @@ dify:
         width: 244
       - data:
           code: |-
+            import json
             import re
 
-            def main(write_text: str, operation: str, task_id: str) -> dict:
+            __DIFY_HELPER_TOOL_REPLY__
+
+            def new_task_id(text):
+                # A create reply names the new task: "(ID: n)" in markdown, or an "id" in a JSON object or one-item array.
+                found = re.search(r"\(ID: (\d+)\)", text)
+                if found:
+                    return found.group(1)
+                try:
+                    value = json.loads(text)
+                except ValueError:
+                    return ""
+                if isinstance(value, list) and len(value) == 1:
+                    value = value[0]
+                if isinstance(value, dict) and isinstance(value.get("task"), dict):
+                    value = value["task"]
+                task_id = str(value.get("id", "")) if isinstance(value, dict) else ""
+                return task_id if task_id.isdigit() else ""
+
+            def main(write_text: str, write_items: list, operation: str, task_id: str) -> dict:
                 # A create reply names the new task ID; every other write names its target.
                 if operation == "create":
-                    found = re.search(r"\(ID: (\d+)\)", str(write_text or ""))
-                    return {"readback_id": found.group(1) if found else ""}
+                    return {"readback_id": new_task_id(tool_text(write_text, write_items))}
                 return {"readback_id": str(task_id or "")}
           code_language: python3
           desc: Pick the task to read back after the write.
@@ -1014,6 +1104,8 @@ dify:
           variables:
           - variable: write_text
             value_selector: [update-tool, text]
+          - variable: write_items
+            value_selector: [update-tool, json]
           - variable: operation
             value_selector: [update-guard, operation]
           - variable: task_id
@@ -1086,7 +1178,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: '{{#preflight-tool.text#}}'
+          answer: '{{#read-result.answer#}}'
           desc: Return the guarded read result.
           selected: false
           title: Result
@@ -1118,7 +1210,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: "{{#update-guard.summary#}}\n\n{{#update-tool.text#}}\n\nReadback:\n{{#readback-tool.text#}}"
+          answer: '{{#write-receipt.answer#}}'
           desc: Return the write receipt with its IDs and the readback.
           selected: false
           title: Write result
@@ -1126,8 +1218,118 @@ dify:
           variables: []
         height: 80
         id: update-answer
-        position: {x: 2740, y: 80}
-        positionAbsolute: {x: 2740, y: 80}
+        position: {x: 3240, y: 80}
+        positionAbsolute: {x: 3240, y: 80}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          code: |-
+            import json
+
+            __DIFY_HELPER_TOOL_REPLY__
+
+            def main(text: str, items: list) -> dict:
+                return {"answer": tool_answer(text, items) or "The read returned no data."}
+          code_language: python3
+          desc: Turn the guarded read reply into answer text, from its text or its JSON output.
+          isInIteration: false
+          isInLoop: false
+          outputs:
+            answer: {type: string}
+          selected: false
+          title: Read result
+          type: code
+          variables:
+          - variable: text
+            value_selector: [preflight-tool, text]
+          - variable: items
+            value_selector: [preflight-tool, json]
+        height: 54
+        id: read-result
+        position: {x: 1840, y: 500}
+        positionAbsolute: {x: 1840, y: 500}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          code: |-
+            import json
+
+            __DIFY_HELPER_TOOL_REPLY__
+
+            def main(summary: str, write_text: str, write_items: list, readback_text: str, readback_items: list) -> dict:
+                write = tool_answer(write_text, write_items) or "The write returned no data."
+                readback = tool_answer(readback_text, readback_items) or "The readback returned no data."
+                return {"answer": f"{summary}\n\n{write}\n\nReadback:\n{readback}"}
+          code_language: python3
+          desc: Join the write summary, the write reply, and the readback into the receipt text.
+          isInIteration: false
+          isInLoop: false
+          outputs:
+            answer: {type: string}
+          selected: false
+          title: Write receipt
+          type: code
+          variables:
+          - variable: summary
+            value_selector: [update-guard, summary]
+          - variable: write_text
+            value_selector: [update-tool, text]
+          - variable: write_items
+            value_selector: [update-tool, json]
+          - variable: readback_text
+            value_selector: [readback-tool, text]
+          - variable: readback_items
+            value_selector: [readback-tool, json]
+        height: 54
+        id: write-receipt
+        position: {x: 3040, y: 80}
+        positionAbsolute: {x: 3040, y: 80}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          cases:
+          - case_id: project-find
+            conditions:
+            - comparison_operator: is
+              id: project-find-condition
+              value: project-find
+              varType: string
+              variable_selector: [guard, operation]
+            id: project-find
+            logical_operator: and
+          desc: A project lookup answers from the project list and makes no task call.
+          selected: false
+          title: Project lookup?
+          type: if-else
+        height: 120
+        id: project-route
+        position: {x: 1240, y: 440}
+        positionAbsolute: {x: 1240, y: 440}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          answer: '{{#guard.project_answer#}}'
+          desc: Return the project answer computed by the Code guard.
+          selected: false
+          title: Project answer
+          type: answer
+          variables: []
+        height: 80
+        id: project-answer
+        position: {x: 1540, y: 440}
+        positionAbsolute: {x: 1540, y: 440}
         selected: false
         sourcePosition: right
         targetPosition: left

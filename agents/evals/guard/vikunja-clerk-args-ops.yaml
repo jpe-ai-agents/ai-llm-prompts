@@ -114,3 +114,21 @@ cases:
       - tool: vikunja_tasks
         operation: create
         args: {projectId: "201", title: Update the onboarding guide}
+  - id: project-find-named-project
+    intent: {route: vikunja, operation: project-find, project_named: true, project: Inbox, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      projects_text: "## ✅ Success\n\nFound 2 projects\n\n1. **Inbox** (ID: 200)\n2. **Example Area** (ID: 201)\n"
+    expected_tool_calls: []
+  - id: project-find-json-reply
+    intent: {route: vikunja, operation: project-find, project_named: true, project: Inbox, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      projects_items: [{id: 200, title: Inbox}, {id: 201, title: Example Area}]
+    expected_tool_calls: []
+  - id: project-find-visible-projects
+    intent: {route: vikunja, operation: project-find, project_named: false, project: null, category: null}
+    mandates: {project_id: "", task_id: ""}
+    context:
+      projects_items: [{id: 200, title: Inbox}, {id: 201, title: Example Area}]
+    expected_tool_calls: []

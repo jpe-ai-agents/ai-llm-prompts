@@ -111,6 +111,7 @@ def _run(case):
         context["inbox"],
         context["mode"],
         context.get("projects_text", ""),
+        context.get("projects_items"),
     )
     assert result["read_operation"] in {"", "list", "get"}, "the first guard plans reads only"
     if result["needs_update_check"]:

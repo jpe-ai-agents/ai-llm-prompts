@@ -1,0 +1,53 @@
+# Live regression questions for the Vikunja clerk Dify app, asked through its published workflow.
+# A reply passes when pass_pattern matches and no fail_patterns entry matches (both case-sensitive unless (?i) is set).
+# Placeholders are filled at run time from the run's own inputs: <TASK_ID> is an existing open task in an allowed
+# project, and <INBOX_ID> is the ID of the Inbox project. This file holds no real IDs, hosts, URLs or accounts.
+agent: vikunja-clerk
+fail_patterns:
+  - "is required for"
+  - "-32603"
+  - "(?i)internal error"
+  - "(?i)traceback"
+  - "(?i)not supported"
+  - "\\{\\{#"
+cases:
+  - id: project-by-name
+    question: "Which project id is the project named Inbox?"
+    expected_answer: the project ID <INBOX_ID>
+    pass_pattern: "<INBOX_ID>"
+  - id: open-tasks-in-project
+    question: "List the open tasks in the Inbox project."
+    expected_answer: a list of open tasks, each with its ID
+    pass_pattern: "(?is)(?=.*\\bid\\b)(?=.*\\d)"
+  - id: find-task-by-text
+    question: "Find open tasks that mention clerk."
+    expected_answer: the matching tasks, each with its ID
+    pass_pattern: "(?is)(?=.*\\bid\\b)(?=.*\\d)"
+  - id: read-one-task
+    question: "Show task <TASK_ID>."
+    expected_answer: the task's title and its status
+    pass_pattern: "(?is)(?=.*<TASK_ID>)(?=.*\\b(open|done)\\b)"
+  - id: task-status
+    question: "Is task <TASK_ID> done?"
+    expected_answer: done or not done
+    pass_pattern: "(?is)(?=.*<TASK_ID>)(?=.*\\b(done|not done|open|incomplete)\\b)"
+  - id: assigned-to-me
+    question: "What open tasks are assigned to me?"
+    expected_answer: a list of tasks with IDs, or an explicit none
+    pass_pattern: "(?is)(?=.*\\bid\\b)(?=.*\\d)|\\bnone\\b|\\bno (open )?tasks?\\b"
+  - id: list-projects
+    question: "Which projects can you see?"
+    expected_answer: project names, including Inbox
+    pass_pattern: "(?i)\\binbox\\b"
+  - id: write-create-form
+    question: "File a task titled clerk regression probe in the Inbox project."
+    expected_answer: a preview or a refusal while writes are off; a created task ID once live writes are on
+    pass_pattern: "(?i)(preview|would create|shadow|refus|not written|writes? (are|is) (off|disabled)|\\bID\\b.*\\d)"
+  - id: write-comment-form
+    question: "Add the comment regression probe to task <TASK_ID>."
+    expected_answer: a preview or a refusal while writes are off
+    pass_pattern: "(?i)(preview|would|shadow|refus|not written|writes? (are|is) (off|disabled)|\\bID\\b.*\\d)"
+  - id: incident-refusal
+    question: "Record an outage: the DNS server is down."
+    expected_answer: a refusal that names Zammad
+    pass_pattern: "(?i)zammad"
