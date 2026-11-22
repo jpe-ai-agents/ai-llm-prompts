@@ -145,8 +145,8 @@ To consolidate overlapping work onto one session:
 - The yielding session pushes its branch, notes state in the open PR
   (done / remaining / gotchas), unassigns itself, and comments
   `handing off to <session-id>`.
-- The receiving session self-assigns, continues on its **own** branch (based
-  on the yielded branch if useful), and closes or supersedes the old PR.
+- The receiving session self-assigns and continues on the yielded branch, in
+  the same open PR, with follow-up commits. It never opens a replacement PR.
 - Hand-back is the same protocol in reverse. The PR trail is the transfer
   record; no side channel required.
 
