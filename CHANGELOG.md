@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.131.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.130.1...v1.131.0) (2026-11-22)
+
+
+### Features
+
+* **rules:** add the chain rule (gates first, follow-up commits, merged is not done) ([#579](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/579)) ([f2e216c](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/f2e216c46dfa6c11cc1841475ddfcaf077e46898))
+
 ## [1.130.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.130.0...v1.130.1) (2026-11-22)
 
 
