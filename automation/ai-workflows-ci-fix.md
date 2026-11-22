@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-21T19:05:00Z"
+timestamp: "2026-11-22T02:45:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -65,6 +65,31 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 12. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
 Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
+
+## Known failure classes
+
+Apply the matching class when the failing check or log names it. Steps 1 to 12 still apply.
+
+### Flake Lock Fresh
+
+The check fails when a root flake input is older than the allowed age and its locked ref has newer commits. The log
+names each stale input.
+
+1. Run `nix flake update <input>` once per input the log names, and no other input. Never run a bare
+   `nix flake update`.
+2. Search the repository for digests computed over `flake.lock` (for example a `flakeLockSha256` golden read with
+   `builtins.hashString "sha256" (builtins.readFile ./flake.lock)`). Set each to the new file's SHA-256.
+3. Change no other file. If an input is pinned to a tag or branch that has no newer commit, stop and say so.
+
+### Release Please hides a dependency update
+
+A dependency update merged as `chore(deps)` gets no release, because Release Please hides `chore` commits. The fix
+is in the Renovate configuration, not in the dependency:
+
+1. In the package rule that matches the dependency (`matchDepNames` or `matchPackageNames`), set
+   `semanticCommitType` to `fix`. Add that rule when none matches.
+2. Keep every other rule unchanged, and validate with `renovate-config-validator --strict` when the repository
+   declares it.
 
 ## Repository
 
