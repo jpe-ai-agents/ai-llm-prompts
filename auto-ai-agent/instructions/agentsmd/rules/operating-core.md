@@ -77,6 +77,10 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
 - **Background work:** never foreground-wait on a long external job (CI, an infrastructure plan or apply, a
   build). Launch it in the background with one monitor for completion *and* failure, never a `sleep N`-poll.
   Detail: `subagent-resilience.md`.
+- **Context cost.** Every turn re-reads its whole context, so cost is turns times context. Never spend a turn to
+  acknowledge or relay. A session writes results to its report file and its own tracker entries, and messages
+  another session only for a decision, a gate or a finished chain. Restart fresh from a handoff file before a new
+  chain or past 150k tokens of context. Detail: `fleet-utilization.md`.
 - **Tools:** prefer native tools over Bash (Read/Edit/Write/Grep/Glob); a delegate with file-editing tools, never
   Bash-only, for file edits. No ambient forge authentication (sole exception: `claude-projects.md`) — `gh` and
   equivalents aren't logged in; a probe finding no session is expected, never a blocker; mint a short-lived token from the credential store at call
