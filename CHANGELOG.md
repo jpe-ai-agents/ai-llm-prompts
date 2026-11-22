@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.130.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.129.0...v1.130.0) (2026-11-22)
+
+
+### Features
+
+* **ci-fix:** add Flake Lock Fresh and Release Please dependency classes ([#572](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/572)) ([7533e36](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/7533e3637bd478996cc18d979b1dfb749ff42661))
+* **rules:** operating model roles and the never-stuck order ([#574](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/574)) ([0fed496](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/0fed496249d1952912b23070ee429e90bf350155))
+
 ## [1.129.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.128.2...v1.129.0) (2026-11-21)
 
 
