@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.133.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.132.1...v1.133.0) (2026-11-22)
+
+
+### Features
+
+* **ci-fix:** add the class for tracked files the repository ignores ([#585](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/585)) ([9abd88c](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/9abd88c8dac4790fd24075703a3b7a6ab0d017e4))
+
 ## [1.132.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.132.0...v1.132.1) (2026-11-22)
 
 
