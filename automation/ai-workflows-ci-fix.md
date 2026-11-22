@@ -91,6 +91,18 @@ is in the Renovate configuration, not in the dependency:
 2. Keep every other rule unchanged, and validate with `renovate-config-validator --strict` when the repository
    declares it.
 
+### The branch tracks files the repository ignores
+
+Checks fail on files under a path that `.gitignore` excludes, for example an installed dependency or a build output
+that an earlier commit added. Lint, size, token and leak checks then name files the pull request never meant to
+change.
+
+1. List them with `git ls-files -ci --exclude-standard`. This read-only command is the one git command this class
+   allows.
+2. Delete each listed file from the working tree, and nothing else under those paths. Steps 10 and 11 do not apply
+   to these files.
+3. Fix what still fails after that as steps 1 to 12 say. Change no `.gitignore` rule.
+
 ### Review gate finds the description incomplete
 
 A `<Name> review / Policy gate` job fails when the pull request description does not match the diff, for example
