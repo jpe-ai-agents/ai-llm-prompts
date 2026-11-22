@@ -63,7 +63,7 @@ An operator may declare further zones in the estate's arrangement document.
    zone that matches its kind; destructive reach means `ext-critical`.
 3. Otherwise it goes in `int`.
 
-Unsure which zone? Follow the role and question rules in `operating-core.md`.
+Unsure which zone? See `operating-core.md`, "Questions".
 
 ## Identity classes and grants
 
@@ -101,22 +101,21 @@ To change who can read what, change that document. Never hand-write a policy.
 ## Grant loop
 
 1. Read the exact path and capability from the denial.
-2. Open a PR that adds that exact-name grant to the acting identity.
-3. A second model reviews it. The store's owner merges additive exact-name grants alone.
+2. Open a PR adding that exact-name grant to the acting identity.
+3. A second model reviews it. The store's owner merges an additive exact-name grant alone.
 4. Apply the merged render: zero removals, then a readback.
-5. Retry, and record the first-seen and cleared times.
+5. Retry. Record first-seen and cleared times.
 
-A deterministic CI check labels a grant escalation-class when it touches system paths, credential minting,
-identity, auth-method configuration or the requester's own policy. Such a grant needs the operator delegate plus
-a second-model review. Exactly one session writes the secret store. No agent uses a root or break-glass credential.
+A CI check labels a grant escalation-class when it touches system paths, credential minting, identity,
+auth-method configuration or the requester's own policy. That grant also needs the operator delegate.
+One session writes the secret store. No agent uses a root or break-glass credential.
 
 ## The operator session
 
 One identity has full access: a session opened by the operator with a
 hardware-key touch or a single-sign-on approval. It ends after 12 hours. It can
 read and write every mount and engine. It cannot create a token that outlives
-the session, change its own unlock factor, or disable audit. Requests outside
-an identity's grants follow the Grant loop above.
+the session, change its own unlock factor, or disable audit.
 
 Reads within an identity's grants are pre-authorized. Never propose a locally stored key, a pasted token, or a switch
 of identity to get past a refusal: name the gate that is missing.
@@ -126,8 +125,7 @@ of identity to get past a refusal: name the gate that is missing.
 - **Prefer a secrets engine wherever one exists.** Short-lived minted credentials remove the rotation problem.
 - An engine keeps its own mount. Its management credential lives in the
   engine's own configuration, not in a key-value leaf.
-- If the engine for a resource is not configured, follow the obstacle path in `operating-core.md`; never store a
-  static copy.
+- An unconfigured engine is an obstacle (`operating-core.md`, "Never stuck"); never store a static copy.
 - **Migrating a secret is not done when it is copied.** It is done when a live
   consumer is proven against the new path and the original is deleted.
 
@@ -138,9 +136,6 @@ a process gives it exactly two things: the address of the central store, and
 the login pair of the identity it runs as. Every other value resolves from the
 central store at run time. A second value in the wrapper is a second store, and
 it drifts.
-
-Privileged unattended convergence runs as the **automation identity**, distinct from the interactive human account, which stays interactively gated
-and never carries a standing password-less grant.
 
 A hosted cloud thread has forge write through the hosting provider's app only
 and no secret-store access (`claude-projects.md`).
@@ -155,11 +150,8 @@ and no secret-store access (`claude-projects.md`).
 
 ## Forge credentials: minted per call, never ambient
 
-A code-hosting CLI is **not** authenticated on any agent harness, by design. **A probe that finds no session is the expected state**, never a reason to stop.
-
-- **Mint at call time, in the shell that uses it.** Never mint at
-  environment-load time: a direnv-style loader caches its dump to disk, which
-  persists the credential.
+- **Mint at call time, in the shell that uses it**, never at environment-load
+  time: a direnv-style loader caches its dump to disk.
 - **Take the narrowest scope.** Read for anything that only reads; a
   repo-scoped write credential only to write.
 - **Interactive wrappers are shell functions or aliases** and do not exist in an agent shell. Use the underlying command the operator's local notes name.
@@ -172,20 +164,19 @@ Helper names, variables and endpoints live in the operator's local files, never 
 
 ## Handling a credential
 
-- **Never print a value.** Capture it into a variable and use the variable. No
-  echo, no verbose HTTP client, no dump of the environment.
+- **Never print a value.** Capture it into a variable. No echo, no verbose
+  HTTP client, no environment dump.
 - **Never put a credential in a command's arguments**, a file, or a brief sent
   to another agent. Pass it in memory or through a file descriptor.
 - **Record the accessor at mint time** and hold it in memory with the token.
 - **Revoke in an EXIT trap in the same shell**, set before the token is used,
   so every exit path revokes it. Expiry is not revocation.
-- **Never leave a minted token alive after its shell exits.**
 - **Never hand-type a credential into a shared store.** Generate it at the
   source, idempotently, at the least-shared place it is first used.
 
 ## Access: certificate first, break-glass never casually
 
-Try the rungs in order and never invert them:
+Try the rungs in order:
 
 1. **The certificate authority.** Sign an ephemeral keypair, use it, discard it.
 2. **A legacy shared key**, only while its retirement is unfinished.
@@ -200,8 +191,6 @@ re-verify that host, and record why.
 
 - An HTTP 429 from a secret-store standby node means the standby is healthy.
 - A helper that exits successfully having exported nothing is the bug. A credential helper fails loudly.
-- If a tool cannot authenticate, the fix is the credential path. Never a local
-  copy, and never a credential pasted into a file.
 - **A source-address or network-class refusal is not a broken credential.**
   Check which network class the caller is on before rotating or recreating
   anything.
