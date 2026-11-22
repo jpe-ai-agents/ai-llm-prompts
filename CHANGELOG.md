@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.132.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.131.0...v1.132.0) (2026-11-22)
+
+
+### Features
+
+* **ci-fix:** add a class for a description the review gate finds incomplete ([#581](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/581)) ([a3f01aa](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/a3f01aaab1a1b0791bdcbf1309f828953f698ca7))
+
 ## [1.131.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.130.1...v1.131.0) (2026-11-22)
 
 
