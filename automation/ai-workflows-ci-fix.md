@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-22T02:45:00Z"
+timestamp: "2026-11-22T18:40:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -90,6 +90,17 @@ is in the Renovate configuration, not in the dependency:
    `semanticCommitType` to `fix`. Add that rule when none matches.
 2. Keep every other rule unchanged, and validate with `renovate-config-validator --strict` when the repository
    declares it.
+
+### Review gate finds the description incomplete
+
+A `<Name> review / Policy gate` job fails when the pull request description does not match the diff, for example
+with an `omitted_behavior` finding. The log ends with the review findings, then the current description and the
+base branch. The review cannot run here, so steps 2, 5 and 8 do not apply.
+
+1. Read the change with `git diff origin/<base branch>...HEAD`.
+2. Write the complete corrected description to `.ai-workflows/pr-body.md`. Keep the current text and its headings,
+   and add what the findings name as missing. State only what the diff does.
+3. Change no source file, unless a finding names a defect in the code itself.
 
 ## Repository
 
