@@ -44,6 +44,13 @@ Pick the file by role before writing. Identity, tone and posture: `soul.md`, not
 `operating-core.md`. Routing and the workflow index: `AGENTS.md`. Activity-specific rules: `on-demand/`, listed in
 `rule-tiers.md`. No agent adds a rule, tool name, command, path or workflow to `soul.md`.
 
+## Sessions
+
+- **Sessions.** Start fresh from a written brief and restart at each milestone; a long context costs more than a
+  handoff. Lessons live in git, shared by every CLI, never in one CLI's memory. Never force early compaction and
+  never ration usage.
+- **Top-tier core sessions** start with the shell permission classifier off. Deterministic guards stay on.
+
 ## Orchestrator vs single model
 
 Use an orchestrator (fan out to subagents/workers) only when the combined
