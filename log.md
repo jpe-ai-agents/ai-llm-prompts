@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-22
+
+* **Feature (rules)**: `task-tracking` names the work management standard as the one home for ranking, epics, states
+  and the card contract. Program work attaches to an existing epic by label.
+
 ## 2026-11-21
 
 * **Fix (automation)**: the `conflict-fix` prompt no longer runs the repository's pre-commit hooks.
