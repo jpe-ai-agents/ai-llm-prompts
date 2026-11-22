@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.132.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.132.0...v1.132.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **conflict-fix:** bound the checks the agent runs on its resolution ([#583](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/583)) ([4417c8f](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/4417c8fb657c09f710c50e4d33c34212b9343dda))
+
 ## [1.132.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.131.0...v1.132.0) (2026-11-22)
 
 
