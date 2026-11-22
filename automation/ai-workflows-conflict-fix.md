@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/conflict-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-21T20:05:00Z"
+timestamp: "2026-11-22T19:15:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -41,8 +41,10 @@ the pull request's title, description, changed files and its full diff against t
    command scoped to the changed files where the tool allows. Never run a test directory, a whole suite, a
    whole-repository lint or a loop over every playbook; CI runs those after the push. Give every command a
    120-second timeout (the terminal tool's `timeout` field), and never wait on a command still running in the
-   background. Finish when each one exits 0. If a check cannot run or finish here, name it and say why in your final
-   message. A check you did not run is never assumed to pass.
+   background. Never write a playbook, script or test of your own to check the result, and never run a playbook.
+   Run each check at most twice: once, then once more after a fix. If it still fails or cannot finish here, stop
+   checking, keep your edits, and name the check and its error in your final message; CI verifies after the push.
+   A check you did not run is never assumed to pass.
 7. Never delete or weaken a test to make a check pass.
 8. Do not commit, branch or push. Read-only `git log`, `git diff`, `git show` and `git status` are fine. Your file
    edits are committed to a new branch automatically after you finish.
