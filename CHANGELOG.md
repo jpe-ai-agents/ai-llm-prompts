@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.130.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.130.0...v1.130.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **automation:** leak rubric passes loopback, semantic rubric reads Nix // as an operator ([578d31d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/578d31dac155a5df5c98eb1fc7a8c16eaa8fc6e4))
+* **automation:** update the disclosure and semantic review rubrics ([#576](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/576)) ([578d31d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/578d31dac155a5df5c98eb1fc7a8c16eaa8fc6e4))
+
 ## [1.130.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.129.0...v1.130.0) (2026-11-22)
 
 
