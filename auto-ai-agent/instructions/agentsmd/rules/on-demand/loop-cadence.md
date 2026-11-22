@@ -21,6 +21,9 @@ source_history:
 
 # Loop Cadence
 
+A session waits on events, not timers, and no model runs a heartbeat or an idle sweep of other sessions: see
+`fleet-utilization.md`. The rules below are for the recurring loops that remain.
+
 Any recurring/heartbeat loop an agent builds (cron prompts, watchdog timers,
 `/loop`-style self-wakeups, retry pollers) MUST rate-limit itself with a
 minimum interval enforced by a durable marker — not by trusting the scheduler.

@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-03T12:00:00-05:00"
+timestamp: "2026-11-22T03:07:43Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -66,6 +66,8 @@ before you continue — not later.
   Review its removals before the window opens.
 - **Plan before apply.** Run the check or diff mode first. Read every line that would remove, rename or reset an
   object. Stop when a removal is not in the plan you expected.
+- **One gate per risk.** Review happens once, on the PR. An apply runs the merged render and proves it: plan with
+  zero destroys, then a readback. No second allow list at apply time.
 - **One owner per privileged chain.** Each chain has one owner. Its instructions are final for every run. Other
   sessions and agents do not run that chain or change its state.
 

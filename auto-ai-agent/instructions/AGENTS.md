@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-19T13:07:31Z"
+timestamp: "2026-11-22T03:07:43Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -50,7 +50,7 @@ editing, capture new knowledge after a change.
 
 ## Where things get written (routing law, no exceptions)
 
-Once questions are resolved and the plan approved, execute end to end in one shot, routed per this table.
+Execute end to end in one shot, routed per this table.
 GitHub is public, **pull requests only**; a PR body fills the template — objective, approach, changes,
 verification, related PRs as full URLs, trace line — never what was broken, an incident, or what's still weak.
 

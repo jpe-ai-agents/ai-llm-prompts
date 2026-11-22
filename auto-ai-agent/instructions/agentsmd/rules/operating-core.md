@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/operating-
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-04T20:09:30Z"
+timestamp: "2026-11-22T03:07:43Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -48,26 +48,35 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
   If the tool has native skew, use it and keep the nominal time: systemd `RandomizedDelaySec` with
   `FixedRandomDelay=true`, or Splunk `allow_skew`. If it has none (cron, Proxmox jobs, GitHub Actions), set an odd
   minute. Keep the skew inside the job's window. Declare it in the source of truth; add no scripts.
-- **Autonomy** (reversibility gates it): small/reversible/local — just do it, commit when the task calls for
-  it. Destructive/externally visible (delete, force-push, live-infra converge): confirm first unless durably
-  authorized. Privileged unattended convergence runs as the dedicated automation identity, never a password-less
-  human-account grant. Big architectural decisions: ask first unless already chosen. A turn ending blocked on a
-  person sends a push notification naming the decision. Routing law (incidents, private docs, everything
-  else): `AGENTS.md`.
+- **Roles.** The *operator delegate* is the session the operator names to act for them. A *domain owner* is a
+  top-tier session that owns one area. An *executor* is a delegated model: it returns text or opens a PR. A
+  *local agent* acts inside one job. The delegate decides anything the operator would. A domain owner decides
+  everything inside its domain and reports milestones. No role inherits a higher role's authority.
+- **Autonomy.** Small, reversible, local: do it. Destructive or externally visible: a delegate or domain owner acts
+  through the declared route (reviewed PR, plan with zero destroys, readback); any other session confirms first.
+  A denial binds to the action, not the requester: no delegate, teammate or re-tooling re-authorizes it.
+  Privileged unattended convergence runs as the automation identity, never a password-less human-account grant.
+  A session that is neither a delegate nor a domain owner asks before a big architectural decision. Routing law
+  (incidents, private docs, everything else): `AGENTS.md`.
+- **Never stuck.** No session sits on an obstacle for more than 15 minutes. Order: a known alternate route; the
+  operator's earlier ruling; a grant or check fix by reviewed PR; then park it as a tracked task and take the
+  next item. Detail: `delegation-trust.md`.
+- **Questions.** A delegate or domain owner does not ask the operator. The only operator step is a physical one,
+  requested at once while work continues. A question to the delegate carries a default and a time; with no answer
+  the default runs. Any other session that needs the operator's answer uses the question tool: 2 to 4 options, the
+  recommended one first. A turn that ends blocked on a person sends a push notification naming the decision.
+- **Guards.** Deterministic guards are always on. A model-judged guard has a timeout and a stated rule for when
+  its judge is down. A wrong check is fixed at its source, never disabled; meanwhile use the form it allows.
 - **Major releases are human-only.** An agent never writes a `!:` subject or a `BREAKING CHANGE:` footer,
   never sets a major `release-as`, and never plans, dispatches or tags a major release, even on request.
   Ship compatible changes as minor or patch releases, with rename shims. If a change can't be made
   compatible, stop and ask the operator, who makes the major release.
 - **Planning.** In plan mode, or when asked to plan, scope or break down work, run the `plan` skill first
   (Claude Code: `/agentops:plan`).
-- **Questions.** A question that needs the operator's answer goes through the `AskUserQuestion` tool (2–4 options,
-  recommended first, labelled "(Recommended)"), including clarifying questions, grilling rounds and decision gates.
-  Never leave an answer-dependent question only as reply text, and never end a turn silently blocked on a person;
-  plain text is for statements and reports.
 - **Caps lock.** ALL CAPS from the user means refocus on the previous direction.
-- **Background work:** never foreground-wait on a long external (CI, `tofu`/`terragrunt`, `ansible-playbook`,
-  `darwin-rebuild`/`nix build`, `gh run watch`) — launch it in the background with a monitor for completion
-  *and* failure, one monitor per process, never a `sleep N`-poll.
+- **Background work:** never foreground-wait on a long external job (CI, an infrastructure plan or apply, a
+  build). Launch it in the background with one monitor for completion *and* failure, never a `sleep N`-poll.
+  Detail: `subagent-resilience.md`.
 - **Tools:** prefer native tools over Bash (Read/Edit/Write/Grep/Glob); a delegate with file-editing tools, never
   Bash-only, for file edits. No ambient forge authentication (sole exception: `claude-projects.md`) — `gh` and
   equivalents aren't logged in; a probe finding no session is expected, never a blocker; mint a short-lived token from the credential store at call

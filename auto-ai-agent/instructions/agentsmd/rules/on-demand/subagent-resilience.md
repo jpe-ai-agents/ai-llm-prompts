@@ -47,6 +47,14 @@ fallback when that happens.
 - **Don't self-amplify.** When spawns fail, do not retry-loop new spawns on a
   timer; probe occasionally (with backoff), work solo meanwhile.
 
+## No silent job
+
+- Every dispatch sets the tool's own timeout.
+- One monitor per background job. It fires on exit, or after 15 minutes with no new output or commit.
+- On a breach: read the last output once, stop the job, log the failure case, then re-dispatch one rung up or
+  split the task. After two re-dispatches, park it as a tracked task.
+- A stuck job is also a defect. Its failure class goes on the fix list of the tool that let it hang.
+
 ## The artifact clock
 
 A live agent producing nothing is a worse failure than a dead one: it looks
@@ -65,9 +73,6 @@ healthy, so the lead keeps waiting. **Silence is no signal, never progress.**
   git -C <worktree> status --porcelain | wc -l
   ```
 
-- **Two strikes, on a clock.** No artifact at 30 min → one specific
-  corrective instruction. No artifact at 60 min → stop the agent, reassign
-  the work with the diagnosis attached. Never poll a third time.
 - **The lead lands the last mile.** If work exists on disk and is unpushed at
   the next check, the lead commits and pushes it — no further asking.
   Merging a green PR, running one diagnostic command, or rescuing an at-risk

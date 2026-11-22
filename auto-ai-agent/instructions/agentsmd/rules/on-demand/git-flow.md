@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-19T13:07:31Z"
+timestamp: "2026-11-22T03:07:43Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -75,6 +75,11 @@ complete only when:
    another repo. A new major (`vN+1`) is human-only: see `operating-core.md`.
 
 Report a promotion as complete only with both done.
+
+## Release trains
+
+A change to hooks, settings or instructions is live only after its release, the pin bumps and a rebuild. Cut a
+train at a fixed time. Report anything merged after the cut as "merged, not live".
 
 ## Working a change
 

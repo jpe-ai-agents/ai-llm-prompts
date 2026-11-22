@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-13T20:30:00-05:00"
+timestamp: "2026-11-22T03:17:26Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -63,7 +63,7 @@ An operator may declare further zones in the estate's arrangement document.
    zone that matches its kind; destructive reach means `ext-critical`.
 3. Otherwise it goes in `int`.
 
-Unsure which zone? Ask. Do not guess.
+Unsure which zone? Follow the role and question rules in `operating-core.md`.
 
 ## Identity classes and grants
 
@@ -98,23 +98,36 @@ identities and grants; the role renders every mount, identity and policy from it
 
 To change who can read what, change that document. Never hand-write a policy.
 
+## Grant loop
+
+1. Read the exact path and capability from the denial.
+2. Open a PR that adds that exact-name grant to the acting identity.
+3. A second model reviews it. The store's owner merges additive exact-name grants alone.
+4. Apply the merged render: zero removals, then a readback.
+5. Retry, and record the first-seen and cleared times.
+
+A deterministic CI check labels a grant escalation-class when it touches system paths, credential minting,
+identity, auth-method configuration or the requester's own policy. Such a grant needs the operator delegate plus
+a second-model review. Exactly one session writes the secret store. No agent uses a root or break-glass credential.
+
 ## The operator session
 
 One identity has full access: a session opened by the operator with a
 hardware-key touch or a single-sign-on approval. It ends after 12 hours. It can
 read and write every mount and engine. It cannot create a token that outlives
-the session, change its own unlock factor, or disable audit.
+the session, change its own unlock factor, or disable audit. Requests outside
+an identity's grants follow the Grant loop above.
 
-Reads within an identity's grants are pre-authorized; anything else waits for this session. Never propose a locally stored key, a pasted token, or a switch of
-identity to get past a refusal: name the gate that is missing.
+Reads within an identity's grants are pre-authorized. Never propose a locally stored key, a pasted token, or a switch
+of identity to get past a refusal: name the gate that is missing.
 
 ## Engines before static secrets
 
 - **Prefer a secrets engine wherever one exists.** Short-lived minted credentials remove the rotation problem.
 - An engine keeps its own mount. Its management credential lives in the
   engine's own configuration, not in a key-value leaf.
-- If the engine for a resource is not configured, that need is blocked. It is
-  not a licence to store a static copy.
+- If the engine for a resource is not configured, follow the obstacle path in `operating-core.md`; never store a
+  static copy.
 - **Migrating a secret is not done when it is copied.** It is done when a live
   consumer is proven against the new path and the original is deleted.
 

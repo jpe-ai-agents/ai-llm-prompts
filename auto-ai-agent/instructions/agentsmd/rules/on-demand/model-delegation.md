@@ -89,11 +89,6 @@ seconds apart:
 One worker, install or build never waits. When holding, state the reading and retry in 5 minutes. Batch small related
 tasks into one brief.
 
-## Claude models are main-session only
-
-No Claude subagents of any tier and no forks. Haiku `xhigh` runs only as the hook's logged last rung
-([AGENTS.md](../../../AGENTS.md), "Delegation routing").
-
 ## Skills
 
 Procedures ship as skills in the `ai-delegation` and `jpe-ai-delegation` plugins of the
