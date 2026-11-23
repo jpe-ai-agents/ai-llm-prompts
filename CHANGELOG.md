@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.134.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.2...v1.134.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci-fix:** handle long YAML lines and check tracked ignored files first ([#595](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/595)) ([8a286ab](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/8a286abca70ea719239660d4dcb63ec2671bd73b))
+
 ## [1.134.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.1...v1.134.2) (2026-11-23)
 
 
