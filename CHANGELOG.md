@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.134.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.0...v1.134.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci-fix:** check each description sentence against the diff ([#591](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/591)) ([4440340](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/4440340a92000036d56e3b5be6b68b262d503586))
+
 ## [1.134.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.133.0...v1.134.0) (2026-11-23)
 
 
