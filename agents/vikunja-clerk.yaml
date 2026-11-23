@@ -411,9 +411,14 @@ dify:
                     return [(str(item.get("id", "")), str(item.get("title", item.get("name", ""))).strip()) for item in parsed if isinstance(item, dict)]
                 return [(pid, title.strip()) for title, pid in re.findall(r"^\d+\. \*\*(.*)\*\* \(ID: (\d+)\)$", text, re.M)]
 
-            def project_ids(text):
+            def project_ids(text, denied=()):
                 # shortcut: one page of up to 50 projects; a name past it resolves to the inbox. Search by name if projects outgrow it.
-                return {title.lower(): pid for pid, title in project_rows(text)}
+                # Two projects can share a name; a denied one never shadows the other.
+                ids = {}
+                for pid, title in project_rows(text):
+                    if title.lower() not in ids or ids[title.lower()] in denied:
+                        ids[title.lower()] = pid
+                return ids
 
             def project_find(intent, projects):
                 # Answer from the project list the workflow already fetched; an ID is never guessed.
@@ -511,8 +516,16 @@ dify:
                         return output(reason="Priority must be a number.")
                     if done is not None and type(done) is not bool:
                         return output(reason="Done must be a boolean.")
-                    filter_value = "" if intent.get("filter") is None else str(intent["filter"])
+                    raw_filter = intent.get("filter")
                     search = "" if intent.get("search") is None else str(intent["search"])
+                    if isinstance(raw_filter, dict):
+                        # The model sometimes sends its filter as an object; the tool takes done and search as their own parameters.
+                        if done is None and type(raw_filter.get("done")) is bool:
+                            done = raw_filter["done"]
+                        if not search and raw_filter.get("search") is not None:
+                            search = str(raw_filter["search"])
+                    # Only a filter expression in text reaches the tool; an object, list or number never does.
+                    filter_value = raw_filter.strip() if isinstance(raw_filter, str) else ""
                     if operation == "list":
                         return output(True, operation="list", dispatch=True, done=done, filter=filter_value, search=search)
                     if operation == "get":
@@ -521,6 +534,9 @@ dify:
                             return output(reason="A task reference is required for get.")
                         return output(True, operation="get", dispatch=True, task_id=task_id)
                     project_named = intent.get("project_named")
+                    if project_named is None and operation in {"comment", "relate"}:
+                        # These act on a task by its number; the write guard checks that task's own project.
+                        project_named = False
                     if not project_id_mandate and type(project_named) is not bool:
                         return output(reason="Project scope is missing or ambiguous.")
                     try:
@@ -532,7 +548,7 @@ dify:
                         if not title.strip():
                             return output(reason="A task title is required for create.")
                         project_name = "" if intent.get("project") is None else str(intent["project"]).strip().lower()
-                        project_id = project_id_mandate or (project_ids(projects).get(project_name, "") if project_named else "")
+                        project_id = project_id_mandate or (project_ids(projects, denied).get(project_name, "") if project_named else "")
                         if not project_id:
                             # An unresolved or absent project name files to the inbox.
                             project_id = str(inbox_project_id or "").strip()
@@ -832,6 +848,9 @@ dify:
                     project_id_mandate = str(project_id_mandate or "").strip()
                     task_id = str(task_id_mandate or "").strip()
                     project_named = intent.get("project_named")
+                    if project_named is None and operation in {"comment", "relate"}:
+                        # These act on a task by its number; its own project is checked against the policy below.
+                        project_named = False
                     if not project_id_mandate and type(project_named) is not bool:
                         return output(reason="Project scope is missing or ambiguous; update refused.")
                     allowed = project_set(allowed_projects_raw)

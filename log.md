@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-23
+
+* **Fix (agents)**: `vikunja-clerk` passes only a text filter to its list call, scopes a comment or relate by the
+  task's own project, and never lets a denied project shadow another project with the same name.
+
 ## 2026-11-22
 
 * **Feature (rules)**: `task-tracking` names the work management standard as the one home for ranking, epics, states
