@@ -28,7 +28,10 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 
 ## Instructions
 
-1. Analyze the failure logs to identify the root cause.
+1. Before anything else, run `git ls-files -ci --exclude-standard`. If it prints a file, apply the class "The
+   branch tracks files the repository ignores" below first; a failure that names one of those files needs no other
+   analysis. Then analyze the failure logs to identify the root cause, and when several checks fail, start with
+   the ones a known failure class covers.
 2. Rerun first only what failed in the failing job, to reproduce the failure: each failing test by the node id its
    log names (for pytest, `path/to/test_file.py::test_name`), a whole test file only when the log names no node id,
    or, for a job with no tests, the job's own failing command (lint, format, validate) exactly as the workflow runs
@@ -97,11 +100,31 @@ Checks fail on files under a path that `.gitignore` excludes, for example an ins
 that an earlier commit added. Lint, size, token and leak checks then name files the pull request never meant to
 change.
 
-1. List them with `git ls-files -ci --exclude-standard`. This read-only command is the one git command this class
-   allows.
+1. Step 1 listed them with `git ls-files -ci --exclude-standard`, the one git command this class allows.
 2. Delete each listed file from the working tree, and nothing else under those paths. Steps 10 and 11 do not apply
    to these files.
 3. Fix what still fails after that as steps 1 to 12 say. Change no `.gitignore` rule.
+
+### Lint reports a YAML line too long
+
+A lint job fails with `yaml[line-length]` or `Line too long (N > LIMIT characters)` and names a file and line.
+Putting the value on one line, or in quotes on one line, makes the line longer and fails again.
+
+1. Read the limit from the message. Every line you write must be at most that long, indentation included.
+2. A value where a space would change the meaning (a regular expression, URL, path or command) becomes a
+   double-quoted scalar broken across lines. End every line except the last with a backslash: YAML joins the
+   lines with nothing between them and drops the indentation of the next line. Double every backslash the value
+   already holds.
+
+   ```yaml
+   pattern: "^RELEASED name=(alpha|beta|gamma|\
+     delta|epsilon) holder=[A-Za-z0-9_.:@-]*$"
+   ```
+
+3. Prose becomes a folded scalar (`>-`), broken between words.
+4. Change no lint configuration and add no disable comment.
+5. Before you finish, measure the lines you changed, for example with `awk 'length > LIMIT' <file>`. It must
+   print nothing for them.
 
 ### Review gate finds the description incomplete
 
