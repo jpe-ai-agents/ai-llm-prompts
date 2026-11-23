@@ -1,0 +1,29 @@
+description: Deployed Dify agent evaluation
+prompts:
+  - "{{dify_input}}"
+providers:
+  - id: http://dify-live
+    label: dify-live
+    config:
+      url: "{{ env.DIFY_BASE_URL }}/v1/workflows/run"
+      method: POST
+      headers:
+        Authorization: "Bearer {{ env[app_token_env] }}"
+        Content-Type: application/json
+      body:
+        inputs:
+          text: "{{prompt}}"
+        response_mode: blocking
+        user: evals
+      transformResponse: |
+        (json) => {
+          const data = json?.data;
+          if (data?.status !== "succeeded") {
+            return `Dify workflow failed: ${data?.error ?? "unknown workflow error"}`;
+          }
+          const outputs = data.outputs ?? {};
+          return outputs.envelope ?? outputs.text ?? JSON.stringify(outputs);
+        }
+tests: file://generate.py:generate_dify_tests
+sharing: false
+writeLatestResults: false

@@ -21,6 +21,12 @@ SCORING_MODES = ("field-credit", "strict")
 CUT_METRICS = {
     ("vikunja-clerk", "json-valid"),
 }
+DIFY_LIVE_SPECIAL_EXCLUSIONS = {
+    "code-simplifier": "no text start input",
+    "doc-contradiction-finder": "no text start input",
+    "docs-updater": "structured start variables",
+    "vikunja-clerk": "chat app",
+}
 # Reuses the parse checker the hosted Langfuse code evaluator runs (agents/judges/parse-json-schema.py).
 PARSE_SCHEMA_ASSERTION = f"""import importlib.util
 spec = importlib.util.spec_from_file_location("parse_json_schema", {str(ROOT / "agents/judges/parse-json-schema.py")!r})
@@ -126,6 +132,48 @@ def report_fields(suite):
     return sorted(fields - {"decision", "proposed_calls", "reply"})
 
 
+def resolve_agents():
+    resolved = subprocess.run(
+        ["make", "--no-print-directory", "resolve-agents"], cwd=ROOT,
+        capture_output=True, text=True, check=True,
+    )
+    return {record["agent"]["name"]: record["agent"] for record in map(json.loads, resolved.stdout.splitlines())}
+
+
+def dify_live_exclusions(agents):
+    exclusions = {}
+    for name in sorted(agents):
+        reasons = []
+        if name in DIFY_LIVE_SPECIAL_EXCLUSIONS:
+            reasons.append(DIFY_LIVE_SPECIAL_EXCLUSIONS[name])
+        # The resolver normalizes absent triggers, so inspect the source definition for declared triggers.
+        definition = load_yaml(ROOT / "agents" / f"{name}.yaml")
+        if definition.get("triggers"):
+            reasons.append("non-empty triggers (not a text start form)")
+        if reasons:
+            exclusions[name] = "; ".join(reasons)
+    return exclusions
+
+
+def generate_dify_tests(agents=None):
+    """Reuse matrix assertions for the deployed apps that accept one text start input."""
+    agents = resolve_agents() if agents is None else agents
+    excluded = dify_live_exclusions(agents)
+    live_tests = []
+    for test in generate_tests(agents):
+        name = test["metadata"]["suite"]
+        if name not in agents or name in excluded:
+            continue  # Parse-node tests do not represent a deployed app invocation.
+        case_data = json.loads(test["vars"]["case_data"])
+        if "input" not in case_data and "input_excerpt" not in case_data:
+            raise ValueError(f"{name} / {test['metadata']['case']}: Dify live cases require an input")
+        case_input = case_data.get("input", case_data.get("input_excerpt"))
+        test["vars"]["dify_input"] = case_input if isinstance(case_input, str) else json.dumps(case_input, ensure_ascii=False)
+        test["vars"]["app_token_env"] = f"DIFY_APP_{name.upper().replace('-', '_')}"
+        live_tests.append(test)
+    return live_tests
+
+
 def suite_prompt(agent, suite):
     shared = agent.get("shared_prefix") or []
     shared = [shared] if isinstance(shared, str) else shared
@@ -186,13 +234,9 @@ def parse_test(name, case, system, forbidden=()):
     }
 
 
-def generate_tests():
+def generate_tests(agents=None):
     tests = []
-    resolved = subprocess.run(
-        ["make", "--no-print-directory", "resolve-agents"], cwd=ROOT,
-        capture_output=True, text=True, check=True,
-    )
-    agents = {record["agent"]["name"]: record["agent"] for record in map(json.loads, resolved.stdout.splitlines())}
+    agents = resolve_agents() if agents is None else agents
     for name, agent in sorted(agents.items()):
         suite = load_suite(ROOT / agent["eval_set"])
         static_prefix = suite_prompt(agent, suite)
@@ -281,7 +325,12 @@ def generate_tests():
 
 
 if __name__ == "__main__":
-    generated = generate_tests()
+    agents = resolve_agents()
+    generated = generate_tests(agents)
     counts = Counter(test["vars"]["suite"] for test in generated)
     summary = ", ".join(f"{name}={count}" for name, count in counts.items())
     print(f"{len(generated)} tests: {summary}; every test has at least one assertion: {all(test['assert'] for test in generated)}")
+    exclusions = dify_live_exclusions(agents)
+    included = len(agents) - len(exclusions)
+    excluded = ", ".join(f"{name} ({reason})" for name, reason in exclusions.items())
+    print(f"dify-live: {included} included agents; excluded: {excluded}")

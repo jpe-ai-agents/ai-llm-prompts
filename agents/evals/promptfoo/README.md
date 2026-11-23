@@ -35,6 +35,7 @@ share of expected keys that match, and `strict` is 1 only when every key matches
 | `local` | an OpenAI-compatible endpoint | `EVAL_LOCAL_MODEL`, `OPENAI_BASE_URL`, `OPENAI_API_BASE_URL`, `OPENAI_API_KEY` |
 | `luna` | Codex, through `scripts/promptfoo/luna.sh` | an operator-signed-in `codex` CLI |
 | `go-kimi` | OpenCode Go, through `scripts/promptfoo/go-kimi.sh` | an operator-signed-in `opencode` CLI |
+| `dify-live` | deployed Dify Workflow apps | `DIFY_BASE_URL` and each included app's `DIFY_APP_<NAME>` bearer value |
 
 Cases scored only through `expected_behavior` use two graders: `behavior-rubric-judge-a` reads
 `EVAL_JUDGE_A_BASE_URL` and `EVAL_JUDGE_A_MODEL`, and `behavior-rubric-judge-b` reads
@@ -42,6 +43,21 @@ Cases scored only through `expected_behavior` use two graders: `behavior-rubric-
 `EVAL_JUDGE_B_API_KEY`; the grader sends it as a bearer header and never puts it on a command line. Keys come from the
 runtime secret store, never from this repository. Both judges must be models outside the candidate set. Rubric scores
 count only for cases where `not-truncated` passes.
+
+The `dify-live` provider sends each case's input as the app's `text` start value and scores the returned JSON with the same
+suite assertions. It excludes `code-simplifier` and `doc-contradiction-finder` because they have no text start input,
+`docs-updater` because it has structured start variables, including a numeric variable, and `vikunja-clerk` because it is a
+chat app. These agents have non-empty triggers and/or a non-text app shape, so they cannot be sent this provider's one
+`text` value:
+
+`agent-audit`, `ai-news`, `alert-triage`, `code-simplifier`, `credential-steward`, `daily-innovation`, `dep-review`,
+`doc-contradiction-finder`, `docs-drift`, `docs-updater`, `donna-evening-wrap`, `donna-morning-brief`, `donna-research`,
+`donna-weekly-review`, `merge-steward`, `model-benchmarker`, `model-scout`, `plan-reconciler`, `pr-keeper`,
+`promotion-review`, `release-digest`, `release-promoter`, `repo-janitor`, `session-closer`, `ship-runner`,
+`vikunja-clerk`, `vikunja-triage`, and `zammad-triage`.
+
+Triggered agents start from a schedule, webhook, or another app rather than a text start form. The generator prints every
+excluded agent and its reason. It does not create `<agent>-parse` tests for this provider.
 
 ## Installation
 
@@ -60,6 +76,18 @@ PROMPTFOO_PYTHON=python3 nix --extra-experimental-features 'nix-command flakes' 
   shell nixpkgs#nodejs_22 nixpkgs#yq-go nixpkgs#gomplate nixpkgs#python3 -c \
   npx -y promptfoo@0.118.14 eval -c promptfooconfig.yaml --filter-providers local \
   --no-cache --no-progress-bar -o /tmp/agent-evals-local.json
+```
+
+For deployed apps, set `DIFY_BASE_URL` and the `DIFY_APP_<NAME>` variables for included agents in the environment before
+running Promptfoo. `<NAME>` is the agent name upper-cased with hyphens replaced by underscores. The app values are bearer
+credentials and are read through Promptfoo's environment templating; do not put them in config files or command arguments.
+Run the live provider from this directory with:
+
+```sh
+PROMPTFOO_PYTHON=python3 nix --extra-experimental-features 'nix-command flakes' \
+  shell nixpkgs#nodejs_22 nixpkgs#yq-go nixpkgs#gomplate nixpkgs#python3 -c \
+  npx -y promptfoo@0.118.14 eval -c promptfooconfig-dify-live.yaml --filter-providers dify-live \
+  --no-cache --no-progress-bar -o /tmp/agent-evals-dify-live.json
 ```
 
 Promptfoo records per-assertion metric scores in each result's `namedScores`. Print suite/provider/metric counts and mean
