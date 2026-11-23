@@ -15,15 +15,11 @@ providers:
           text: "{{prompt}}"
         response_mode: blocking
         user: evals
-      transformResponse: |
-        (json) => {
-          const data = json?.data;
-          if (data?.status !== "succeeded") {
-            return `Dify workflow failed: ${data?.error ?? "unknown workflow error"}`;
-          }
-          const outputs = data.outputs ?? {};
-          return outputs.envelope ?? outputs.text ?? JSON.stringify(outputs);
-        }
+      # One expression: promptfoo 0.118 returns no output for a multi-line function body here.
+      transformResponse: >-
+        json?.data?.status === "succeeded"
+        ? (json.data.outputs?.envelope ?? json.data.outputs?.text ?? JSON.stringify(json.data.outputs ?? {}))
+        : `Dify workflow failed: ${json?.data?.error ?? json?.message ?? "unknown workflow error"}`
 tests: file://generate.py:generate_dify_tests
 sharing: false
 writeLatestResults: false
