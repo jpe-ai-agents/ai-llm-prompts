@@ -130,7 +130,7 @@ def _github_for(linked):
     }
 
 
-def _guard(tasks, proposed, policy, mode="live"):
+def _guard(tasks, proposed, policy, mode="live", today=None):
     refs = [
         {
             "task_index": index,
@@ -139,7 +139,7 @@ def _guard(tasks, proposed, policy, mode="live"):
             "title": task.get("title", ""),
             "description": task.get("description", ""),
             "created": task.get("created", ""),
-            "due_date": "",
+            "due_date": task.get("due_date", task.get("dueDate", "")),
             "priority": task.get("priority"),
             "done": task.get("done", False),
             "labels": task.get("labels", []),
@@ -163,6 +163,7 @@ def _guard(tasks, proposed, policy, mode="live"):
         "secret",
         _BAO_PATH,
         "",
+        today=today,
     )
 
 
@@ -170,6 +171,12 @@ def test_selected_and_skipped_fixtures_are_exactly_the_expected_set():
     print("skipped guard fixtures (no proposed list):", ", ".join(_SKIPPED))
     assert len(_SELECTED) == 11
     assert sorted(_SKIPPED) == sorted(_EXPECTED_SKIPPED)
+    assert all(
+        "labels" not in action
+        for case in _CASES
+        for action in case.get("expected_actions", [])
+        if action.get("operation") == "update"
+    )
 
 
 @pytest.mark.parametrize("case", _SELECTED, ids=[case["id"] for case in _SELECTED])
@@ -294,7 +301,7 @@ def test_epic_label_blocks_rank_updates(monkeypatch):
 
     result = _guard(
         tasks,
-        [{"task_index": 0, "kind": "rank", "priority": 4, "labels": ["ranked"]}],
+        [{"task_index": 0, "kind": "rank", "priority": 5, "labels": ["urgent"]}],
         _POLICY,
     )
 
@@ -311,6 +318,7 @@ def test_plain_task_still_accepts_rank_and_done_updates(monkeypatch):
             "id": "7",
             "project_id": "10",
             "title": "Ordinary task",
+            "priority": 3,
             "description": f"Merged work: {url}",
         }
     ]
@@ -318,7 +326,7 @@ def test_plain_task_still_accepts_rank_and_done_updates(monkeypatch):
     result = _guard(
         tasks,
         [
-            {"task_index": 0, "kind": "rank", "priority": 4, "labels": ["ranked"]},
+            {"task_index": 0, "kind": "rank", "priority": 5, "labels": ["urgent"]},
             {"task_index": 0, "kind": "done"},
         ],
         _POLICY,
@@ -326,12 +334,6 @@ def test_plain_task_still_accepts_rank_and_done_updates(monkeypatch):
 
     assert requests == [api_url]
     assert result["actions"] == [
-        {
-            "operation": "update",
-            "id": "7",
-            "projectId": "10",
-            "priority": 4,
-            "labels": ["ranked"],
-        },
+        {"operation": "update", "id": "7", "projectId": "10", "priority": 0},
         {"operation": "update", "id": "7", "projectId": "10", "done": True},
     ]

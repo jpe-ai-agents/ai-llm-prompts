@@ -20,7 +20,7 @@ See [generation, synchronization, and Dify 1.18 imports](./IMPORT.md) for the sh
 2. Configure the `vikunja` MCP provider and bind this app to its
    `agent-vikunja-triage` identity key through `openbao://agent-key/vikunja-triage`. Replace `VIKUNJA_MCP_PROVIDER_ID` in
    [vikunja-triage.dsl.yml](./vikunja-triage.dsl.yml) with its workspace identifier. Confirm the provider supports
-   `list`, `update`, and `comment` operations.
+   `list`, `update`, `apply-label`, and `comment` operations.
 3. Import [vikunja-triage.dsl.yml](./vikunja-triage.dsl.yml) as a **Workflow** app. Do not import it as a Chatflow. The
    tier 2 rotation driver calls this app's webhook hourly at minute 43 UTC (`every: 1h`, `minute: 43` in
    `agents/vikunja-triage.yaml`). The call sends no body; the workflow uses `sys.timestamp`.
@@ -82,5 +82,5 @@ Check the Langfuse trace for the scheduled Workflow run. Confirm its output cont
 route and contains no credential values.
 
 Promote `VIKUNJA_TRIAGE_MODE` to `live` only after the complete `agents/evals/vikunja-triage.yaml` set passes the judges
-gate and the guard/policy configuration is verified. Live mode dispatches only guarded priority/label updates, verified
-evidence comments, and completion updates whose GitHub reader result is merged or closed.
+gate and the guard/policy configuration is verified. Live mode updates computed priority, adds accepted labels with
+`apply-label`, and dispatches verified evidence comments and completion updates whose GitHub reader result is merged or closed.
