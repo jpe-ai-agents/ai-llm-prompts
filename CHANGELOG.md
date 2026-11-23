@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.135.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.1...v1.135.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci-fix:** correct a failing title and publish partial fixes in time ([#600](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/600)) ([b11d6b8](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/b11d6b8370387a0778703c2096d7283c3f8b312a))
+
 ## [1.135.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.0...v1.135.1) (2026-11-23)
 
 
