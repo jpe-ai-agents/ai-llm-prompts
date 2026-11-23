@@ -527,6 +527,17 @@ dify:
                     # Only a filter expression in text reaches the tool; an object, list or number never does.
                     filter_value = raw_filter.strip() if isinstance(raw_filter, str) else ""
                     if operation == "list":
+                        assignee_conditions = re.finditer(
+                            r"\bassignees?\b\s*(?:!=|<>|>=|<=|==|=|>|<)\s*(.*?)(?=\s*(?:&&|\|\||\bAND\b|\bOR\b|$))",
+                            filter_value,
+                            re.IGNORECASE,
+                        )
+                        for condition in assignee_conditions:
+                            assignee = condition.group(1).strip().strip("\"'").strip()
+                            if not assignee:
+                                return output(reason="The assignee filter needs a value.")
+                            if assignee.casefold() in {"me", "my", "mine"}:
+                                return output(reason='I cannot tell who "me" is; name the assignee.')
                         return output(True, operation="list", dispatch=True, done=done, filter=filter_value, search=search)
                     if operation == "get":
                         task_id = "" if intent.get("task_id") is None else str(intent["task_id"]).strip()
@@ -1181,7 +1192,7 @@ dify:
         type: custom
         width: 244
       - data:
-          answer: "{{#update_guard.summary#}}\n{{#update_guard.preview#}}"
+          answer: "Preview only, nothing was written. {{#update_guard.summary#}}\n{{#update_guard.preview#}}"
           desc: The guarded write preview is returned without dispatch.
           selected: false
           title: Shadow preview
