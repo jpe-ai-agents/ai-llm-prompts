@@ -106,13 +106,17 @@ change.
 ### Review gate finds the description incomplete
 
 A `<Name> review / Policy gate` job fails when the pull request description does not match the diff, for example
-with an `omitted_behavior` finding. The log ends with the review findings, then the current description and the
-base branch. The review cannot run here, so steps 2, 5 and 8 do not apply.
+with an `omitted_behavior` or `claim_mismatch` finding. The log ends with the review findings, then the current
+description and the base branch. The review cannot run here, so steps 2, 5 and 8 do not apply.
 
 1. Read the change with `git diff origin/<base branch>...HEAD`.
-2. Write the complete corrected description to `.ai-workflows/pr-body.md`. Keep the current text and its headings,
-   and add what the findings name as missing. State only what the diff does.
-3. Change no source file, unless a finding names a defect in the code itself.
+2. Write the complete corrected description to `.ai-workflows/pr-body.md`. Keep the current text and its headings.
+   For `omitted_behavior`, add what the finding names as missing. For `claim_mismatch`, delete or correct the
+   sentence the finding names.
+3. Before you finish, check every sentence of the description against the diff. Find the added or removed line
+   that shows it. Delete any sentence you cannot find a line for: a description that says less is correct, one that
+   says more than the diff fails the review again.
+4. Change no source file, unless a finding names a defect in the code itself.
 
 ## Repository
 
