@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.134.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.133.0...v1.134.0) (2026-11-23)
+
+
+### Features
+
+* **agents:** add the urgency score helper ([#588](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/588)) ([2ba60ea](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2ba60ead1a43a02996b36e7d6e0f0f5d834a4a6f))
+* **rules:** point task tracking at the work management standard ([#587](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/587)) ([53b66b7](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/53b66b76254b9a5914575d217cb182046fef0010))
+
 ## [1.133.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.132.1...v1.133.0) (2026-11-22)
 
 
