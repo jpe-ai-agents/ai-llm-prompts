@@ -28,7 +28,10 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 
 ## Instructions
 
-1. Before anything else, run `git ls-files -ci --exclude-standard`. If it prints a file, apply the class "The
+1. Before anything else, look at the end of the failure logs for the section `OTHER JOBS FAILING AT THIS HEAD`.
+   If it lists a title check (`PR Title`), write the one-line file the class "The pull request title check fails"
+   describes now, before any other work: it needs no analysis, and nothing else fixes that check. Then run
+   `git ls-files -ci --exclude-standard`. If it prints a file, apply the class "The
    branch tracks files the repository ignores" below first; a failure that names one of those files needs no other
    analysis. Then analyze the failure logs to identify the root cause, and when several checks fail, start with
    the ones a known failure class covers.
@@ -151,8 +154,9 @@ description and the base branch. The review cannot run here, so steps 2, 5 and 8
 A check named `PR Title` (or a title or conventional-commit lint) fails. No file in the branch causes it, so steps
 2, 5 and 8 do not apply.
 
-1. Read the change with `git diff origin/<base branch>...HEAD` and pick the one type that fits it: `feat` for new
-   behavior, `fix` for a correction, or `docs`, `test`, `ci`, `refactor`, `chore`.
+1. Take the current title from the section `PULL REQUEST TITLE` in the logs and pick the one type that fits it:
+   `feat` for new behavior, `fix` for a correction, or `docs`, `test`, `ci`, `refactor`, `chore`. Read the diff
+   only when the title does not say what the change is.
 2. Write `.ai-workflows/pr-body.md` with exactly one line: `Title: <type>(<scope>): <summary>`. The scope is the
    role, module or area the diff changes most. The summary starts lower case, has no final period, and the whole
    title is at most 72 characters. Never add `!` after the type or scope.
