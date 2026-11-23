@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.135.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.2...v1.135.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci-fix:** write the title fix first when the title check fails ([#603](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/603)) ([c0df31a](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c0df31aa718f9a051c4df77e50d73fcf79dae388))
+
 ## [1.135.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.1...v1.135.2) (2026-11-23)
 
 
