@@ -831,7 +831,7 @@ def test_an_invalid_action_item_is_a_fetch_error_and_is_not_dropped_silently(rep
 
 def test_a_reply_of_valid_action_items_has_no_fetch_error():
     ref = {"task_index": 0, "id": "7", "project_id": "p1", "title": "fix", "description": "",
-           "priority": None, "labels": [], "done": False}
+           "priority": 2, "labels": [], "done": False}
     out = guard_main(
         namespace_for(VIKUNJA, "guard"),
         model_text='{"actions": [{"task_index": 0, "kind": "rank", "priority": 3}]}',

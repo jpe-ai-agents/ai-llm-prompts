@@ -287,7 +287,7 @@ def main(run_timestamp, bot_token, api_base, digest_channel, failure_channel, da
   {{- $schema := tmpl.Exec "json" . | strings.ReplaceAll "\\" "\\\\" | strings.ReplaceAll "'" "\\'" -}}
   {{- $params = coll.Set "__DIFY_OUTPUT_SCHEMA__" (printf "'%s'" $schema) $params -}}
 {{- end -}}
-{{- range $name := coll.Slice "redact" "json_fence" "finder_inputs" "envelope" "slack_delivery" "incident_classifier" "tool_reply" -}}
+{{- range $name := coll.Slice "redact" "json_fence" "finder_inputs" "envelope" "slack_delivery" "incident_classifier" "tool_reply" "urgency_score" -}}
   {{- $body := file.Read (printf "%s/helpers/%s.py" (tmpl.PathDir) $name) | strings.TrimSuffix "\n" -}}
   {{- $params = coll.Set (printf "__DIFY_HELPER_%s__" (strings.ToUpper $name)) $body $params -}}
 {{- end -}}

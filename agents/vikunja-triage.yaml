@@ -7,6 +7,7 @@ connectors: [vikunja-clerk, github-clerk]
 tools:
   - vikunja_tasks.list
   - vikunja_tasks.update
+  - vikunja_tasks.apply-label
   - vikunja_tasks.comment
 mcp_servers: [vikunja]
 triggers:
@@ -58,7 +59,7 @@ dify_prompts: {GROUPING: agents/prompts/vikunja-grouping.md}
 guards:
   enforce_before_dispatch: true
   deny_unknown_tools_and_operations: true
-  allowed_operations: [list, update, comment]
+  allowed_operations: [list, update, apply-label, comment]
   no_delete_create_move_or_reassignment: true
   incident_security_classifier: shared_dify_helper
   incident_action: fixed_zammad_comment_only
@@ -232,11 +233,43 @@ dify:
         targetHandle: target
         type: custom
         zIndex: 1002
-      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: code, targetType: tool}
-        id: action-write
+      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: code, targetType: if-else}
+        id: action-route
         source: bind_action
         sourceHandle: source
+        target: dispatch_route
+        targetHandle: target
+        type: custom
+        zIndex: 1002
+      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: if-else, targetType: tool}
+        id: action-update
+        source: dispatch_route
+        sourceHandle: 'false'
         target: dispatch_write
+        targetHandle: target
+        type: custom
+        zIndex: 1002
+      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: if-else, targetType: tool}
+        id: action-labels
+        source: dispatch_route
+        sourceHandle: apply-label
+        target: dispatch_apply_labels
+        targetHandle: target
+        type: custom
+        zIndex: 1002
+      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: tool, targetType: code}
+        id: update-result
+        source: dispatch_write
+        sourceHandle: source
+        target: dispatch_result
+        targetHandle: target
+        type: custom
+        zIndex: 1002
+      - data: {isInIteration: true, iteration_id: dispatch_loop, sourceType: tool, targetType: code}
+        id: labels-result
+        source: dispatch_apply_labels
+        sourceHandle: source
+        target: dispatch_result
         targetHandle: target
         type: custom
         zIndex: 1002
@@ -841,7 +874,19 @@ dify:
                                 if found:url,state=candidate,found; break
                             visible.append({'task_index':i,'title':title,'description':desc,'created':task.get('created',''),'due_date':task.get('dueDate',task.get('due_date','')),'priority':task.get('priority'),'done':task.get('done',False),'labels':task.get('labels',[]),'has_subtasks':has_subtasks,'is_epic':is_epic,'linked_work':{'url':url,'state':state or 'unverified'} if url else None})
                     except Exception: failures.append('a task record could not be read')
-                return {'task_refs':json.dumps(refs),'model_tasks':json.dumps(redact({'timestamp':timestamp,'tasks':visible}),ensure_ascii=False),'fetch_error':'; '.join(sorted(set(failures)))}
+                cards={}; ambiguous=set()
+                for ref in refs:
+                    titles=[str(label.get('title','')) for label in ref.get('labels',[]) if isinstance(label,dict)]
+                    folded={title.casefold() for title in titles}
+                    if 'epic' not in folded: continue
+                    for title in titles:
+                        match=re.fullmatch(r'epic:([a-z0-9]+(?:-[a-z0-9]+)*)',title.casefold())
+                        if not match: continue
+                        slug=match.group(1)
+                        if slug in cards and cards[slug]['id']!=ref['id']: ambiguous.add(slug)
+                        else: cards[slug]={'id':ref['id'],'title':ref['title'],'slug':slug}
+                epics=[{'title':card['title'],'slug':slug} for slug,card in sorted(cards.items()) if slug not in ambiguous]
+                return {'task_refs':json.dumps(refs),'model_tasks':json.dumps(redact({'timestamp':timestamp,'epics':epics,'tasks':visible}),ensure_ascii=False),'fetch_error':'; '.join(sorted(set(failures)))}
           code_language: python3
           desc: Hide task and project IDs from the model and redact fetched text; retain immutable refs for the guard.
           outputs:
@@ -913,9 +958,11 @@ dify:
         width: 244
       - data:
           code: |-
-            import json,math,urllib.request
+            import json,math,re,urllib.request
+            from datetime import date,datetime,timezone
             from urllib.parse import urlsplit
             __DIFY_HELPER_INCIDENT_CLASSIFIER__
+            __DIFY_HELPER_URGENCY_SCORE__
             def projects(raw):
                 v=json.loads(raw)
                 if not isinstance(v,list) or any(not str(x).strip() for x in v): raise ValueError()
@@ -1000,13 +1047,13 @@ dify:
                 cache[url]=value if value in ('merged','closed','closed-unmerged','open') else None
                 return cache[url]
             __DIFY_HELPER_JSON_FENCE__
-            def main(model_text:str,refs_text:str,allowed_raw:str,readonly_raw:str,rank_raw:str,denied_raw:str,mode_raw:str,web_host:str,api_base:str,bao_addr:str,role_id:str,secret_id:str,token_path:str,prepare_error:str,grouping_results:list=None,grouping_error:str='',batch_error:str='',indexing_pending_count:int=0)->dict:
+            def main(model_text:str,refs_text:str,allowed_raw:str,readonly_raw:str,rank_raw:str,denied_raw:str,mode_raw:str,web_host:str,api_base:str,bao_addr:str,role_id:str,secret_id:str,token_path:str,prepare_error:str,grouping_results:list=None,grouping_error:str='',batch_error:str='',indexing_pending_count:int=0,today=None)->dict:
                 actions=[]; seen=set(); mode=str(mode_raw or '').strip().lower()
                 try:
                     allowed,readonly,rank_only,denied=map(projects,(allowed_raw,readonly_raw,rank_raw,denied_raw))
                     refs=json.loads(refs_text)
                     if rank_only-allowed or mode not in ('shadow','live'): raise ValueError()
-                except Exception: return {'actions':[],'actions_json':'[]','grouping_json':json.dumps({'pairs':[],'actions':[],'error':'project policy or task refs are invalid','indexing_pending_batches':0}),'dispatch':False,'mode':'invalid','fetch_error':'project policy or task refs are invalid'}
+                except Exception: return {'actions':[],'actions_json':'[]','grouping_json':json.dumps({'pairs':[],'actions':[],'error':'project policy or task refs are invalid','indexing_pending_batches':0}),'dispatch':False,'mode':'invalid','fetch_error':'project policy or task refs are invalid','unknown_label_count':0,'unknown_label_titles':[]}
                 cache={}; failures=[]; proposed=[]
                 try:
                     intent=json.loads(strip_json_fence(model_text))
@@ -1022,6 +1069,50 @@ dify:
                     key=(ref['id'],op,json.dumps(fields,sort_keys=True,ensure_ascii=False))
                     if key in seen:return
                     seen.add(key); actions.append({'operation':op,'id':ref['id'],'projectId':ref['project_id'],**fields})
+                if today is None: today=datetime.now(timezone.utc).date()
+                elif isinstance(today,datetime): today=today.astimezone(timezone.utc).date() if today.tzinfo else today.date()
+                elif not isinstance(today,date): today=date.fromisoformat(str(today))
+                def days_left(raw):
+                    if raw is None or not str(raw).strip(): return None
+                    value=str(raw).strip()
+                    try:
+                        if re.fullmatch(r'\d{4}-\d{2}-\d{2}',value): due=date.fromisoformat(value)
+                        else:
+                            parsed=datetime.fromisoformat(value[:-1]+'+00:00' if value.endswith('Z') else value)
+                            due=parsed.astimezone(timezone.utc).date() if parsed.tzinfo else parsed.date()
+                        return None if due==date.min else (due-today).days
+                    except (TypeError,ValueError,OverflowError): return None
+                def title_list(ref):
+                    return [str(label.get('title','')) for label in ref.get('labels',[]) if isinstance(label,dict)]
+                def slug_of(title):
+                    match=re.fullmatch(r'epic:([a-z0-9]+(?:-[a-z0-9]+)*)',str(title).casefold())
+                    return match.group(1) if match else None
+                def has_kind(titles,prefix):
+                    return any(str(title).casefold().startswith(prefix+':') for title in titles)
+                def valid_size(title):
+                    match=re.fullmatch(r'size:([0-9]+)',str(title).casefold())
+                    size=int(match.group(1)) if match else None
+                    return size if size in (1,2,3,5,8,13) else None
+                def wont(titles):
+                    return any(str(title).replace('’',"'").casefold()=="won't" for title in titles)
+                label_ids={}; unknown_titles=[]
+                for ref in refs:
+                    for label in ref.get('labels',[]) if isinstance(ref.get('labels'),list) else []:
+                        if not isinstance(label,dict) or not isinstance(label.get('title'),str): continue
+                        raw_id=label.get('id')
+                        if type(raw_id) is int and raw_id>0: label_ids.setdefault(label['title'],raw_id)
+                        elif isinstance(raw_id,str) and raw_id.isascii() and raw_id.isdigit() and int(raw_id)>0: label_ids.setdefault(label['title'],int(raw_id))
+                epic_cards={}; ambiguous_epics=set()
+                for ref in refs:
+                    titles=title_list(ref); folded={title.casefold() for title in titles}
+                    if 'epic' not in folded: continue
+                    for title in titles:
+                        slug=slug_of(title)
+                        if not slug: continue
+                        if slug in epic_cards and epic_cards[slug] is not ref: ambiguous_epics.add(slug)
+                        else: epic_cards[slug]=ref
+                epic_cards={slug:ref for slug,ref in epic_cards.items() if slug not in ambiguous_epics}
+                unknown_seen=set()
                 for ref in refs:
                     project=ref['project_id']
                     if project in denied or project not in allowed|readonly: continue
@@ -1029,18 +1120,51 @@ dify:
                     if has_incident_marker(ref.get('title'),ref.get('description'),ref.get('category'),ref.get('categories')):
                         if project in allowed and project not in rank_only: add(ref,'__DIFY_TOOL_OPERATION_COMMENT__',comment='This item belongs in Zammad.')
                         continue
+                    rank_items=[item for item in proposed if isinstance(item,dict) and type(item.get('task_index')) is int and item['task_index']==ref['task_index'] and item.get('kind')=='rank'] if isinstance(proposed,list) else []
+                    protected=ref.get('has_subtasks') or ref.get('is_epic')
+                    # Every eligible task is scored, mentioned by the model or not, so priority means one thing.
+                    if project in allowed and not protected:
+                        titles=title_list(ref); additions=[]; proposed_epic=False; proposed_size=False
+                        for item in rank_items:
+                            labels=item.get('labels')
+                            if not isinstance(labels,list): continue
+                            for proposal in labels:
+                                if not isinstance(proposal,str): continue
+                                slug=slug_of(proposal)
+                                if slug and not proposed_epic and not has_kind(titles,'epic') and slug in epic_cards:
+                                    proposed_epic=True
+                                    additions.append('epic:'+slug)
+                                size=valid_size(proposal)
+                                if size is not None and not proposed_size:
+                                    proposed_size=True
+                                    if not has_kind(titles,'size'): additions.append('size:'+str(size))
+                        future_titles=titles[:]
+                        for title in additions:
+                            label_id=label_ids.get(title)
+                            if label_id is None:
+                                if title not in unknown_seen: unknown_seen.add(title); unknown_titles.append(title)
+                            else: future_titles.append(title)
+                        epic_slugs=[]
+                        for title in future_titles:
+                            slug=slug_of(title)
+                            if slug: epic_slugs.append(slug)
+                        score=None; size_numbers=[valid_size(title) for title in future_titles]
+                        size_numbers=[size for size in size_numbers if size is not None]
+                        if len(epic_slugs)==1 and len(size_numbers)==1 and epic_slugs[0] in epic_cards:
+                            card_titles=title_list(epic_cards[epic_slugs[0]])
+                            value=label_number(card_titles,'value'); risk=label_number(card_titles,'risk')
+                            if value is not None and not 1<=value<=10: value=None
+                            if risk is not None and not 1<=risk<=10: risk=None
+                            score=urgency_score(value,risk,size_numbers[0],days_left(ref.get('due_date')),wont(titles) or wont(card_titles))
+                        priority=priority_band(score)
+                        if (ref.get('priority') or 0)!=priority: add(ref,'__DIFY_TOOL_OPERATION_UPDATE__',priority=priority)
+                        label_ids_to_add=[label_ids[title] for title in additions if title in label_ids]
+                        if label_ids_to_add: add(ref,'__DIFY_TOOL_OPERATION_APPLY-LABEL__',labels=label_ids_to_add)
                     for item in proposed if isinstance(proposed,list) else []:
                         if not isinstance(item,dict) or type(item.get('task_index')) is not int or item['task_index']!=ref['task_index']: continue
                         kind=item.get('kind')
                         protected=ref.get('has_subtasks') or ref.get('is_epic')
-                        if kind=='rank' and project in allowed and not protected:
-                            fields={}
-                            p=item.get('priority',ref.get('priority'))
-                            if isinstance(p,(int,float)) and not isinstance(p,bool): fields['priority']=p
-                            labels=item.get('labels',ref.get('labels',[]))
-                            if isinstance(labels,list) and all(isinstance(x,str) for x in labels): fields['labels']=labels
-                            if fields: add(ref,'__DIFY_TOOL_OPERATION_UPDATE__',**fields)
-                        elif kind in ('comment','done') and project in allowed and project not in rank_only:
+                        if kind in ('comment','done') and project in allowed and project not in rank_only:
                             if kind=='done' and protected: continue
                             urls=re.findall(r'https://[^\s<>"\']+',text)
                             for raw_url in urls:
@@ -1055,7 +1179,7 @@ dify:
                                     add(ref,'__DIFY_TOOL_OPERATION_UPDATE__',done=True); break
                 grouped=grouping_result(grouping_results,refs,allowed,readonly,rank_only,denied,grouping_error,indexing_pending_count)
                 fetch_errors=[str(value or '').strip() for value in (prepare_error,batch_error) if str(value or '').strip()]
-                return {'actions':actions,'actions_json':json.dumps(actions,ensure_ascii=False),'grouping_json':json.dumps(grouped,ensure_ascii=False),'dispatch':mode=='live','mode':mode,'fetch_error':'; '.join(sorted(set(fetch_errors+failures)))}
+                return {'actions':actions,'actions_json':json.dumps(actions,ensure_ascii=False),'grouping_json':json.dumps(grouped,ensure_ascii=False),'dispatch':mode=='live','mode':mode,'fetch_error':'; '.join(sorted(set(fetch_errors+failures))),'unknown_label_count':len(unknown_titles),'unknown_label_titles':unknown_titles}
           code_language: python3
           desc: Enforce project tiers and incidents; mint a short-lived public-read token through AppRole and verify GitHub
             state in code before authorizing comments or done.
@@ -1066,6 +1190,8 @@ dify:
             dispatch: {type: boolean}
             mode: {type: string}
             fetch_error: {type: string, children: null}
+            unknown_label_count: {type: number}
+            unknown_label_titles: {type: 'array[string]', children: null}
           selected: false
           title: Guard proposed actions
           type: code
@@ -1160,6 +1286,10 @@ dify:
             value_selector: [batch, batch_count]
           - variable: batch_size
             value_selector: [batch, batch_size]
+          - variable: unknown_label_count
+            value_selector: [guard, unknown_label_count]
+          - variable: unknown_label_titles
+            value_selector: [guard, unknown_label_titles]
           selected: false
           title: Shadow output
           type: end
@@ -1175,7 +1305,7 @@ dify:
       - data:
           desc: Dispatch only guard-approved updates and comments.
           iterator_selector: [guard, actions]
-          output_selector: [dispatch_write, text]
+          output_selector: [dispatch_result, output]
           output_type: array[string]
           selected: false
           startNodeType: code
@@ -1205,7 +1335,7 @@ dify:
             id: {type: string}
             project_id: {type: string}
             priority: {type: number}
-            labels: {type: 'array[string]', children: null}
+            labels: {type: 'array[number]', children: null}
             done: {type: boolean}
             comment: {type: string}
           selected: false
@@ -1226,7 +1356,35 @@ dify:
         type: custom
         width: 244
       - data:
-          desc: The only write node; its inputs come from the Code guard through the live branch.
+          cases:
+          - case_id: apply-label
+            id: label-operation
+            logical_operator: and
+            conditions:
+            - comparison_operator: is
+              id: apply-label-operation
+              value: apply-label
+              varType: string
+              variable_selector: [bind_action, operation]
+          desc: Route label additions to the add-only tool operation.
+          selected: false
+          title: Route guarded operation
+          type: if-else
+          isInIteration: true
+          iteration_id: dispatch_loop
+        height: 120
+        id: dispatch_route
+        parentId: dispatch_loop
+        extent: parent
+        position: {x: 250, y: 60}
+        positionAbsolute: {x: 2720, y: 280}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          desc: Write guarded priority or comment actions from the live branch.
           isInIteration: true
           iteration_id: dispatch_loop
           provider_id: VIKUNJA_MCP_PROVIDER_ID
@@ -1251,9 +1409,6 @@ dify:
             priority:
               type: variable
               value: [bind_action, priority]
-            labels:
-              type: variable
-              value: [bind_action, labels]
             done:
               type: variable
               value: [bind_action, done]
@@ -1272,6 +1427,70 @@ dify:
         type: custom
         width: 244
       - data:
+          desc: Add only guard-approved numeric label IDs without touching existing labels.
+          isInIteration: true
+          iteration_id: dispatch_loop
+          provider_id: VIKUNJA_MCP_PROVIDER_ID
+          provider_name: __DIFY_MCP_SERVER__
+          provider_type: mcp
+          selected: false
+          title: Apply guarded labels
+          type: tool
+          tool_configurations: {}
+          tool_label: __DIFY_TOOL_NAME__
+          tool_name: __DIFY_TOOL_NAME__
+          tool_parameters:
+            subcommand: {type: mixed, value: __DIFY_TOOL_OPERATION_APPLY-LABEL__}
+            id:
+              type: variable
+              value: [bind_action, id]
+            projectId:
+              type: variable
+              value: [bind_action, project_id]
+            labels:
+              type: variable
+              value: [bind_action, labels]
+        height: 90
+        id: dispatch_apply_labels
+        parentId: dispatch_loop
+        extent: parent
+        position: {x: 580, y: 150}
+        positionAbsolute: {x: 3050, y: 370}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
+          code: |-
+            def main(update_result:str='', label_result:str='')->dict:
+                return {'output':label_result or update_result or ''}
+          code_language: python3
+          desc: Return the result from the operation-specific write node.
+          isInIteration: true
+          iteration_id: dispatch_loop
+          outputs:
+            output: {type: string}
+          selected: false
+          title: Bind dispatch result
+          type: code
+          variables:
+          - variable: update_result
+            value_selector: [dispatch_write, text]
+          - variable: label_result
+            value_selector: [dispatch_apply_labels, text]
+        height: 54
+        id: dispatch_result
+        parentId: dispatch_loop
+        extent: parent
+        position: {x: 850, y: 60}
+        positionAbsolute: {x: 3320, y: 280}
+        selected: false
+        sourcePosition: right
+        targetPosition: left
+        type: custom
+        width: 244
+      - data:
           desc: Return guarded intent and dispatch receipts.
           outputs:
           - variable: actions
@@ -1280,6 +1499,10 @@ dify:
             value_selector: [guard, mode]
           - variable: dispatch_results
             value_selector: [dispatch_loop, output]
+          - variable: unknown_label_count
+            value_selector: [guard, unknown_label_count]
+          - variable: unknown_label_titles
+            value_selector: [guard, unknown_label_titles]
           selected: false
           title: Live output
           type: end
