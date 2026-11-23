@@ -2,6 +2,12 @@
 
 ## 2026-11-23
 
+* **Fix (auto-ai-agent)**: `hermes-assistant-pulse`, `hermes-assistant-nudge`, `hermes-pepper-scouting` and
+  `hermes-pepper-ai-news` start a quiet run's one line with `[SILENT]`. The gateway suppresses a reply that opens with
+  the marker or has it on a line of its own, so the old line that only ended with it was posted every run.
+* **Fix (auto-ai-agent)**: `hermes-assistant-pulse` and `hermes-assistant-nudge` raise an item at most once every 24
+  hours. The pulse may raise an overdue or due-within-the-hour item again after 4 hours.
+
 * **Feature (agents)**: `vikunja-triage` computes priority from epic value, risk, task size, and due-date urgency; it accepts only epic and size
   label proposals.
 
