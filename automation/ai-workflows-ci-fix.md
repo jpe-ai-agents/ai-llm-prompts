@@ -103,6 +103,27 @@ change.
    to these files.
 3. Fix what still fails after that as steps 1 to 12 say. Change no `.gitignore` rule.
 
+### Lint reports a YAML line too long
+
+A lint job fails with `yaml[line-length]` or `Line too long (N > LIMIT characters)` and names a file and line.
+Putting the value on one line, or in quotes on one line, makes the line longer and fails again.
+
+1. Read the limit from the message. Every line you write must be at most that long, indentation included.
+2. A value where a space would change the meaning (a regular expression, URL, path or command) becomes a
+   double-quoted scalar broken across lines. End every line except the last with a backslash: YAML joins the
+   lines with nothing between them and drops the indentation of the next line. Double every backslash the value
+   already holds.
+
+   ```yaml
+   pattern: "^RELEASED name=(alpha|beta|gamma|\
+     delta|epsilon) holder=[A-Za-z0-9_.:@-]*$"
+   ```
+
+3. Prose becomes a folded scalar (`>-`), broken between words.
+4. Change no lint configuration and add no disable comment.
+5. Before you finish, measure the lines you changed, for example with `awk 'length > LIMIT' <file>`. It must
+   print nothing for them.
+
 ### Review gate finds the description incomplete
 
 A `<Name> review / Policy gate` job fails when the pull request description does not match the diff, for example
