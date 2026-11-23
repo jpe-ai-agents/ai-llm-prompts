@@ -12,7 +12,8 @@ providers:
         Content-Type: application/json
       body:
         inputs:
-          text: "{{prompt}}"
+          # dump keeps a JSON-shaped input a string; the start form refuses an object.
+          text: "{{ prompt | dump }}"
         response_mode: blocking
         user: evals
       # One expression: promptfoo 0.118 returns no output for a multi-line function body here.

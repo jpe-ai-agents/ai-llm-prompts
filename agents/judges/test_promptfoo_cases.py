@@ -306,7 +306,7 @@ def test_dify_live_provider_covers_supported_agents_without_changing_the_matrix(
     assert provider["config"]["url"] == "{{ env.DIFY_BASE_URL }}/v1/workflows/run"
     assert provider["config"]["headers"]["Authorization"] == "Bearer {{ env[app_token_env] }}"
     assert provider["config"]["body"] == {
-        "inputs": {"text": "{{prompt}}"},
+        "inputs": {"text": "{{ prompt | dump }}"},
         "response_mode": "blocking",
         "user": "evals",
     }
@@ -314,7 +314,7 @@ def test_dify_live_provider_covers_supported_agents_without_changing_the_matrix(
     assert style_gate["vars"]["app_token_env"] == "DIFY_APP_STYLE_GATE"
     assert not any(test["metadata"]["suite"] == "vikunja-triage" for test in live_tests)
     assert all(not test["metadata"]["suite"].endswith("-parse") for test in live_tests)
-    assert len({test["metadata"]["suite"] for test in live_tests}) == 16
+    assert len({test["metadata"]["suite"] for test in live_tests}) == 15
     style_fixture = next(
         test for test in live_tests
         if test["metadata"] == {"suite": "style-gate", "case": "coverage-oversized"}

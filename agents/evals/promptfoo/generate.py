@@ -21,12 +21,6 @@ SCORING_MODES = ("field-credit", "strict")
 CUT_METRICS = {
     ("vikunja-clerk", "json-valid"),
 }
-DIFY_LIVE_SPECIAL_EXCLUSIONS = {
-    "code-simplifier": "no text start input",
-    "doc-contradiction-finder": "no text start input",
-    "docs-updater": "structured start variables",
-    "vikunja-clerk": "chat app",
-}
 # Reuses the parse checker the hosted Langfuse code evaluator runs (agents/judges/parse-json-schema.py).
 PARSE_SCHEMA_ASSERTION = f"""import importlib.util
 spec = importlib.util.spec_from_file_location("parse_json_schema", {str(ROOT / "agents/judges/parse-json-schema.py")!r})
@@ -141,17 +135,18 @@ def resolve_agents():
 
 
 def dify_live_exclusions(agents):
+    """Agents the Service API cannot run with one text value, read from each rendered app."""
     exclusions = {}
     for name in sorted(agents):
-        reasons = []
-        if name in DIFY_LIVE_SPECIAL_EXCLUSIONS:
-            reasons.append(DIFY_LIVE_SPECIAL_EXCLUSIONS[name])
-        # The resolver normalizes absent triggers, so inspect the source definition for declared triggers.
-        definition = load_yaml(ROOT / "agents" / f"{name}.yaml")
-        if definition.get("triggers"):
-            reasons.append("non-empty triggers (not a text start form)")
-        if reasons:
-            exclusions[name] = "; ".join(reasons)
+        dsl = load_yaml(ROOT / "agents" / "dify" / f"{name}.dsl.yml")
+        nodes = [node.get("data", {}) for node in dsl["workflow"]["graph"]["nodes"]]
+        start = [v.get("variable") for node in nodes if node.get("type") == "start" for v in node.get("variables", [])]
+        if dsl.get("app", {}).get("mode") != "workflow":
+            exclusions[name] = "not a workflow app"
+        elif any(str(node.get("type", "")).startswith("trigger") for node in nodes):
+            exclusions[name] = "trigger entry (the Service API cannot start it)"
+        elif start != ["text"]:
+            exclusions[name] = "start form is not one text input"
     return exclusions
 
 
