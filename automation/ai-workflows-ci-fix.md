@@ -67,6 +67,11 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 11. Never delete or weaken a test to make a check pass.
 12. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
+13. The run is stopped after 25 minutes, and a stopped run publishes nothing. When several unrelated checks fail,
+    fix them one at a time, the one with the clearest error first, and leave the files correct after each fix. Note
+    the time with `date` when you start. Once 12 minutes have passed, finish with what is fixed and name the checks
+    you left in your final message: a later run takes them. One published fix is worth more than three unfinished.
+
 Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
 
 ## Known failure classes
@@ -140,6 +145,19 @@ description and the base branch. The review cannot run here, so steps 2, 5 and 8
    that shows it. Delete any sentence you cannot find a line for: a description that says less is correct, one that
    says more than the diff fails the review again.
 4. Change no source file, unless a finding names a defect in the code itself.
+
+### The pull request title check fails
+
+A check named `PR Title` (or a title or conventional-commit lint) fails. No file in the branch causes it, so steps
+2, 5 and 8 do not apply.
+
+1. Read the change with `git diff origin/<base branch>...HEAD` and pick the one type that fits it: `feat` for new
+   behavior, `fix` for a correction, or `docs`, `test`, `ci`, `refactor`, `chore`.
+2. Write `.ai-workflows/pr-body.md` with exactly one line: `Title: <type>(<scope>): <summary>`. The scope is the
+   role, module or area the diff changes most. The summary starts lower case, has no final period, and the whole
+   title is at most 72 characters. Never add `!` after the type or scope.
+3. When another class also writes a description to that file, keep the `Title:` line first and the description
+   below it.
 
 ## Repository
 
