@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.135.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.3...v1.135.0) (2026-11-23)
+
+
+### Features
+
+* **agents:** vikunja-triage computes priority in code ([#594](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/594)) ([0e77217](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/0e7721780a720b1d0887e59101ded519fd905c68))
+
 ## [1.134.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.2...v1.134.3) (2026-11-23)
 
 
