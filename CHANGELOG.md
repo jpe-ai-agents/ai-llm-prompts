@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.134.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.1...v1.134.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* **agents:** make the clerk's list, comment and project lookup hold ([#590](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/590)) ([bfd80e6](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/bfd80e6d465133f0598fe32a591439edc2ec9069))
+
 ## [1.134.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.0...v1.134.1) (2026-11-23)
 
 
