@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.135.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.0...v1.135.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **vikunja-clerk:** label shadow previews and refuse an unnamed assignee ([#599](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/599)) ([b707de4](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/b707de4384251bd7367f24208fea7debe01e34d2))
+
 ## [1.135.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.134.3...v1.135.0) (2026-11-23)
 
 
