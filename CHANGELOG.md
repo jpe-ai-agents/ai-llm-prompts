@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.136.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.3...v1.136.0) (2026-11-23)
+
+
+### Features
+
+* **instructions:** no Claude route for delegated work ([0688fe1](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/0688fe1b571a1d2820ad053e643b46f2c0209f4e))
+* **instructions:** no Claude route for delegated work ([#605](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/605)) ([4dde943](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/4dde9433b9ba4c1673982ba0fd1c27454cb5bb7b))
+
 ## [1.135.3](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.2...v1.135.3) (2026-11-23)
 
 
