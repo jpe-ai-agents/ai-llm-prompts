@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-19T13:07:31Z"
+timestamp: "2026-11-22T23:15:30Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -65,11 +65,26 @@ code changes:
 2. **Dedupe and close.** Merge duplicates into one canonical task. Close
    finished, superseded, or obsolete tasks, and cite the evidence.
 3. **Retarget** tasks that the new direction changes.
-4. **File the epics.** One program epic, with one child epic per workstream.
-   Link existing tasks under their epic instead of filing copies.
+4. **Attach the work to an epic.** Use an epic that exists. A new epic needs a
+   person's confirmation. Mark each task with its epic's label instead of
+   filing copies or relation links.
 
 Then keep the tracker current: update each epic at every milestone, and close
 it only when its check passes.
+
+## The work management standard
+
+Priority, the urgency score, epics, states, view names and the card contract
+have one home: the page `tools/work-management-standard` in the private
+documentation source. Read it before you rank a task, start work from a card,
+or close one. Never restate its values in a prompt, a skill or a task.
+
+These hold even when the page cannot be read:
+
+- A person owns priority intent, value and risk. Never change them.
+- Code sets the score and the tracker's priority number. Never type one in.
+- Never delete or cancel a task on your own.
+- Never copy client work from one tracker to another.
 
 ## Finding the right project
 
