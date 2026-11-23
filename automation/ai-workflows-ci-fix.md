@@ -67,6 +67,11 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
 11. Never delete or weaken a test to make a check pass.
 12. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
+13. The run is stopped after 25 minutes, and a stopped run publishes nothing. When several unrelated checks fail,
+    fix them one at a time, the one with the clearest error first, and leave the files correct after each fix. Note
+    the time with `date` when you start. Once 12 minutes have passed, finish with what is fixed and name the checks
+    you left in your final message: a later run takes them. One published fix is worth more than three unfinished.
+
 Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
 
 ## Known failure classes
