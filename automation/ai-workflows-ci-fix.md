@@ -141,6 +141,19 @@ description and the base branch. The review cannot run here, so steps 2, 5 and 8
    says more than the diff fails the review again.
 4. Change no source file, unless a finding names a defect in the code itself.
 
+### The pull request title check fails
+
+A check named `PR Title` (or a title or conventional-commit lint) fails. No file in the branch causes it, so steps
+2, 5 and 8 do not apply.
+
+1. Read the change with `git diff origin/<base branch>...HEAD` and pick the one type that fits it: `feat` for new
+   behavior, `fix` for a correction, or `docs`, `test`, `ci`, `refactor`, `chore`.
+2. Write `.ai-workflows/pr-body.md` with exactly one line: `Title: <type>(<scope>): <summary>`. The scope is the
+   role, module or area the diff changes most. The summary starts lower case, has no final period, and the whole
+   title is at most 72 characters. Never add `!` after the type or scope.
+3. When another class also writes a description to that file, keep the `Title:` line first and the description
+   below it.
+
 ## Repository
 
 ${REPO_CONTEXT}
