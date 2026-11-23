@@ -76,8 +76,8 @@ judges results, and merges, fanning every independent task out to subagents in p
 and brief points here and never restates an executor order.
 
 1. **A Claude session orchestrates; it never runs Claude subagents.** It plans, decides, gates, integrates, and
-   reviews. No Sonnet, Opus or Fable subagent and no fork. The only Claude route is Haiku `xhigh`, which the hook
-   places as the logged last rung after every other eligible executor has failed.
+   reviews. No Claude subagent of any model (Haiku, Sonnet, Opus or Fable), no fork, and no teammate on the
+   session's model. A spawn that no non-Claude executor takes is refused and logged; nothing runs.
 2. **The delegation hook places every spawn.** No session, skill, rule, agent pin or brief picks an executor by
    name. Tags beat the hook's classifier: `[class: text]` sends self-contained text work, with every input in the
    prompt, to a local model; `[task: code] [repo: owner/repository]` marks coding work in that repository.
