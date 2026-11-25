@@ -125,7 +125,10 @@ def fail(api, token, failure_channel, digest_channel, dashboard_url, stamp, reas
 
 
 def post_digest(api, token, channel, failure_channel, dashboard_url, stamp, body):
-    """Post body as a reply in today's parent thread. Raises, after a failure notice, when any step fails."""
+    """Post body as a reply in today's parent thread. Raises, after a failure notice, when any step fails.
+    An empty token or digest channel means the run has no digest destination, so nothing is posted."""
+    if not token or not channel:
+        return "skipped (no digest destination)"
     day = stamp.strftime("%Y-%m-%d")
     parent = AGENT + " digest " + day + " (UTC)"
     try:

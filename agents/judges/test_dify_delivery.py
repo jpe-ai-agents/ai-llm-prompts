@@ -666,6 +666,15 @@ def test_fetch_error_sends_a_notice_and_fails_even_with_no_input(tmp_path):
     assert fake.posts(DIGEST) == []
 
 
+@pytest.mark.parametrize("empty", [{"digest_channel": ""}, {"bot_token": ""}])
+def test_an_empty_token_or_digest_channel_posts_nothing(tmp_path, empty):
+    namespace = namespace_for(render_sample(tmp_path), "deliver-done")
+    fake = FakeSlack()
+    namespace["call"] = fake
+    assert run(namespace, {"text": "x"}, **empty)["status"] == "skipped (no digest destination)"
+    assert fake.posts() == []
+
+
 @pytest.mark.parametrize("digest", ["#general", "general", "c0lowercase"])
 def test_digest_channel_must_be_a_channel_id(tmp_path, digest):
     namespace = namespace_for(render_sample(tmp_path), "deliver-done")
