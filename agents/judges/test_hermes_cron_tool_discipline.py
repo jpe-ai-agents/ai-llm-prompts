@@ -67,7 +67,9 @@ def test_inline_script_pattern_ignores_non_script_flags():
 
 
 # The assistant's attention jobs run with no scripts at all, and a quiet run
-# logs one line of reason before its [SILENT] marker.
+# replies with one line that opens with its [SILENT] marker and then gives the
+# reason. The gateway only suppresses a reply that starts with the marker, so a
+# line that merely ends with it is posted.
 NO_SCRIPT_PROMPTS = ("hermes-assistant-pulse.md", "hermes-assistant-nudge.md")
 
 
@@ -81,12 +83,15 @@ def test_assistant_attention_prompts_forbid_scripts_and_explain_silence():
             "never create a scratch file",
             "your whole reply is one line",
             "any check you skipped",
-            "name it inside the one line",
-            "End that line with the bare marker [SILENT], with nothing after it",
+            "name it inside the one [SILENT] line",
+            "starts with the bare marker [SILENT]",
+            "The marker must come first",
         ):
             assert clause in flat, f"{name} lacks: {clause}"
         assert "exactly [SILENT] and nothing else" not in flat, name
-        assert re.search(r"^Checked [^\n`]+\. \[SILENT\]$", text, re.M), f"{name} shows a reasoned [SILENT] line"
+        assert "End that line with the bare marker [SILENT]" not in flat, name
+        assert re.search(r"^\[SILENT\] Checked [^\n`]+\.$", text, re.MULTILINE), f"{name} shows a reasoned [SILENT] line"
+        assert not re.search(r"^Checked [^\n`]+\[SILENT\]$", text, re.MULTILINE), f"{name} shows a trailing [SILENT] line"
 
 
 # The assistant prompts that read task text and recalled notes treat that text as
