@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-22T18:40:00Z"
+timestamp: "2026-11-25T23:10:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -67,7 +67,10 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
     - when moved Ansible tasks carry their own tags, pull the new file in with `import_tasks`, never `include_tasks`,
       so the tags stay selectable with `--tags`;
     - read the comments around the moved block and keep every rule they state.
-11. Never delete or weaken a test to make a check pass.
+11. Never delete or weaken a test to make a check pass. Updating a golden value is allowed in one case: the pull
+    request only bumps a pinned input (a dependency, action or prompt pin), and a golden or snapshot test fails because
+    its stored value came from the old input. Then regenerate the stored value from the new input with the repository's
+    own update command, or compute it the way the test does, and change nothing else in the test.
 12. Do not run git or attempt to commit. Your file edits are committed to the PR branch automatically after you finish.
 
 13. The run is stopped after 25 minutes, and a stopped run publishes nothing. When several unrelated checks fail,

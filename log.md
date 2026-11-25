@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-25
+
+* **Fix (automation)**: The CI-fix prompt regenerates a golden or snapshot value when the pull request only bumps a
+  pinned input and the test fails because its stored value came from the old input. Nothing else in the test changes.
+
 ## 2026-11-23
 
 * **Fix (auto-ai-agent)**: `hermes-assistant-pulse`, `hermes-assistant-nudge`, `hermes-pepper-scouting` and
