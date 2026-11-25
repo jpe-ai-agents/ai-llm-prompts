@@ -8,7 +8,7 @@ tags:
 - pepper
 - autonomous-agent
 - cron
-timestamp: '2026-11-10T23:30:00Z'
+timestamp: '2026-11-23T23:59:00Z'
 status: active
 consumers:
 - dryvist/ansible-proxmox-ai
@@ -29,7 +29,7 @@ Recall memory keys "pepper-ai-preferences" and "pepper-scouting-last" (what you 
 
 Read each source before you report it. Every line carries a URL you retrieved in this run. Mark anything you could not confirm on the provider's own page as unconfirmed. Skip what you reported in "pepper-scouting-last" unless it changed.
 
-At most 4 items per section. Put a one-line recommendation at the top: the single change the principal should consider this week. If no section has anything new, reply with one line that says what you searched and why nothing qualified, then end that line with the bare marker [SILENT].
+At most 4 items per section. Put a one-line recommendation at the top: the single change the principal should consider this week. If no section has anything new, reply with one line that starts with the bare marker [SILENT], then says what you searched and why nothing qualified. The marker must come first: a line that only ends with it is posted.
 
 Save this week's items to "pepper-scouting-last", and any clear new preference to "pepper-ai-preferences". Never sign up for anything, redeem a code or enter payment details.
 

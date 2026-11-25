@@ -8,7 +8,7 @@ tags:
 - pepper
 - autonomous-agent
 - cron
-timestamp: '2026-11-15T07:55:00Z'
+timestamp: '2026-11-23T23:59:00Z'
 status: active
 consumers:
 - dryvist/ansible-proxmox-ai
@@ -71,8 +71,8 @@ or anything else." Then stop adding it. After you compose the post, append the i
 
 NOTHING NEW. If no unposted item from the last 7 days is worth a post, look for a smaller one before you give up: a
 price cut, a new quantization, a new provider for a model that exists. If there is still nothing, or `web_search`
-itself fails, reply with one line that says what you searched and why nothing qualified, then end that line with the
-bare marker [SILENT].
+itself fails, reply with one line that starts with the bare marker [SILENT], then says what you searched and why
+nothing qualified. The marker must come first: a line that only ends with it is posted.
 
 SEED for `preferences.md` (the principal's stated starting interests; the file grows from here):
 

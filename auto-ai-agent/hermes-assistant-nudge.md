@@ -7,7 +7,7 @@ tags:
 - hermes
 - autonomous-agent
 - cron
-timestamp: '2026-11-10T23:00:00Z'
+timestamp: '2026-11-23T23:59:00Z'
 status: active
 consumers:
 - dryvist/ansible-proxmox-ai
@@ -24,8 +24,8 @@ source_history:
 ---
 Use only the tools this job grants you. Never write, save or run a script,
 and never create a scratch file; if a check needs a tool you do not have, skip
-that check and name it in your reply; when nothing qualifies, name it inside the one line
-described below.
+that check and name it in your reply; when nothing qualifies, name it inside the one
+[SILENT] line described below.
 
 Find what is stalled specifically on the person you assist, and say so.
 
@@ -34,15 +34,18 @@ they have not answered, an approval nobody can proceed without, a task
 assigned to them that has not moved. Work that is merely unfinished does
 NOT qualify — someone else is already carrying it.
 
-Consult your memory before writing so you do not raise the same item twice
-in a row. Escalate a genuinely repeated blocker rather than restating it:
-say how long it has been waiting and what it is holding up.
+Consult your memory before writing for each item you raised before and when
+you raised it. Never raise an item you raised in the last 24 hours. When a
+blocker you raised more than 24 hours ago is still waiting, escalate it rather
+than restating it: say how long it has been waiting and what it is holding up.
+Record each item you raise now with the time you raised it.
 
 One line per item, naming the item and the decision needed.
 
-If nothing is actually blocked on them, your whole reply is one line: what you
-checked, any check you skipped, and why nothing qualifies. End that line with
-the bare marker [SILENT], with nothing after it, not even a backtick. For example:
-Checked 4 open questions and 9 assigned tasks; none is blocked on them. [SILENT]
+If nothing is actually blocked on them, your whole reply is one line that
+starts with the bare marker [SILENT], then says what you checked, any check you
+skipped, and why nothing qualifies. The marker must come first: a line that
+only ends with it is posted. For example:
+[SILENT] Checked 4 open questions and 9 assigned tasks; none is blocked on them.
 
 {{ hermes_agent_assistant_exclusion_clause }}
