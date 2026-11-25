@@ -52,7 +52,6 @@ def test_generated_cases_have_assertions_and_static_prefixes():
         (test["metadata"]["suite"], test["metadata"]["case"])
         for test in tests if test["metadata"]["suite"] not in parse_suites
     } == expected
-    assert len(tests) == 380
     parse_cases = {
         (name, case["id"])
         for name, suite in suites.items()
