@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.136.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.136.0...v1.136.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* **agents:** skip the digest post when its token or channel is empty ([#570](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/570)) ([c58b26d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c58b26d4560d1c6e8b8eefca901e8269bc45e9d3))
+* **auto-ai-agent:** lead quiet runs with [SILENT] and floor assistant repeats ([78d8fb2](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/78d8fb231832fb3f80180cfe234fb4b4d26cd7c3))
+* **auto-ai-agent:** lead quiet runs with [SILENT] and floor assistant repeats ([#607](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/607)) ([8f61c50](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/8f61c50331a77d5a5fb8ddfe24d131c8716e986f))
+
 ## [1.136.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.135.3...v1.136.0) (2026-11-23)
 
 
