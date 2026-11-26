@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/ai-workflows/ci-fix"
 tags:
   - "automation"
   - "ai-workflows"
-timestamp: "2026-11-25T23:10:00Z"
+timestamp: "2026-11-26T18:00:00Z"
 status: active
 consumers:
   - "JacobPEvans/.github-ai"
@@ -78,7 +78,9 @@ You are fixing a CI failure. The repository, its CI structure and the failure lo
     the time with `date` when you start. Once 12 minutes have passed, finish with what is fixed and name the checks
     you left in your final message: a later run takes them. One published fix is worth more than three unfinished.
 
-Only fix what the CI is complaining about. Do not refactor or improve unrelated code.
+Only fix what the CI is complaining about. Do not refactor or improve unrelated code. Never delete a file, and never
+move, rename or split a file the failing check does not name. The only exceptions are a move under step 10 and the
+class "The branch tracks files the repository ignores". Never delete a file that another file still references.
 
 ## Known failure classes
 
