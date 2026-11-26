@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.138.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.137.1...v1.138.0) (2026-11-26)
+
+
+### Features
+
+* **auto-ai-agent:** add the backlog review, session follow-up and stale-work prompts ([#613](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/613)) ([666b770](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/666b770074b9a7628018f48c130ec9e4caf84107))
+
 ## [1.137.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.137.0...v1.137.1) (2026-11-26)
 
 
