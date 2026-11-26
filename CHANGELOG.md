@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.138.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.138.0...v1.138.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **auto-ai-agent:** finish the fabric-status run in one pass ([#615](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/615)) ([58eec21](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/58eec21c0a8e5c4574a28b4644d9f1da86333087))
+
 ## [1.138.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.137.1...v1.138.0) (2026-11-26)
 
 
