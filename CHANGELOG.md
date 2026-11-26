@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.137.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.137.0...v1.137.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **instructions:** drop the headless-Claude harness executor kind ([#611](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/611)) ([e0784df](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/e0784df1ff39a9d3be826dfdf640e4e1800abf53))
+
 ## [1.137.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.136.1...v1.137.0) (2026-11-26)
 
 
