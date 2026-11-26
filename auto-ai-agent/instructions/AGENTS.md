@@ -6,7 +6,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/AGENTS"
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-22T03:07:43Z"
+timestamp: "2026-11-26T01:57:15Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -86,10 +86,9 @@ and brief points here and never restates an executor order.
    when the best subscription changes, nothing is edited and no person acts. Local models come first for small,
    checkable work. A failed local call is never just abandoned: a subagent finds what went wrong and what to improve.
 4. **Executor kinds.**
-   - **Router models through the harness.** Tool-using work runs in the headless Claude Code CLI (no Anthropic
-     account) driving a router model: a local model, or a non-Claude subscription the router exposes through a CLI
-     proxy where that provider's own terms allow it. Spawns from an interactive session run at the interactive
-     priority tier, ahead of batch and scheduled work.
+   - **No headless Claude.** No delegated work runs in a headless Claude Code CLI, with or without an Anthropic
+     account. Tool-using work runs in an own-CLI executor below or in the lead session. Router models are reached
+     through those executors or directly over the router's API.
    - **Own-CLI executors.** ZCode always runs in its own CLI (the `zcode-job` sandbox), as does any subscription
      whose discount or peak benefit is tied to its CLI. Claude is never proxied.
    - **Codex runs Luna at `xhigh`.** Luna is the only Codex model and `xhigh` the only Codex
