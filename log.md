@@ -2,6 +2,10 @@
 
 ## 2026-11-26
 
+* **Feature (auto-ai-agent)**: `hermes-vikunja-backlog-review` reviews one Vikunja project per run and leaves at most
+  eight suggestion comments, never a field change. `hermes-session-followups` reports operator requests left unfinished
+  in the gateway's own past conversations. `hermes-orchestrator-stale-work` lists maintenance windows past their end
+  date and tasks overdue or blocked for more than seven days.
 * **Fix (auto-ai-agent)**: The shared delegation statement drops the headless-Claude harness executor kind. Tool-using
   delegated work runs in an own-CLI executor or in the lead session.
 
