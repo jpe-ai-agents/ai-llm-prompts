@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.137.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.136.1...v1.137.0) (2026-11-26)
+
+
+### Features
+
+* **evals:** score the deployed Dify agents with a promptfoo provider ([#597](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/597)) ([566ec28](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/566ec285498c0d7b3d0c9a8637cc4352549f56a3))
+
+
+### Bug Fixes
+
+* **automation:** regenerate a golden after a pinned-input bump in the CI-fix prompt ([#609](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/609)) ([a7d6546](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/a7d654660e0fc669167b4dd28c20f7dcc26b4daa))
+
 ## [1.136.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.136.0...v1.136.1) (2026-11-25)
 
 
