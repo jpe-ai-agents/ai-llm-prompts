@@ -1,0 +1,26 @@
+description: Deployed Dify agent evaluation
+prompts:
+  - "{{dify_input}}"
+providers:
+  - id: http://dify-live
+    label: dify-live
+    config:
+      url: "{{ env.DIFY_BASE_URL }}/v1/workflows/run"
+      method: POST
+      headers:
+        Authorization: "Bearer {{ env[app_token_env] }}"
+        Content-Type: application/json
+      body:
+        inputs:
+          # dump keeps a JSON-shaped input a string; the start form refuses an object.
+          text: "{{ prompt | dump }}"
+        response_mode: blocking
+        user: evals
+      # One expression: promptfoo 0.118 returns no output for a multi-line function body here.
+      transformResponse: >-
+        json?.data?.status === "succeeded"
+        ? (json.data.outputs?.envelope ?? json.data.outputs?.text ?? JSON.stringify(json.data.outputs ?? {}))
+        : `Dify workflow failed: ${json?.data?.error ?? json?.message ?? "unknown workflow error"}`
+tests: file://generate.py:generate_dify_tests
+sharing: false
+writeLatestResults: false

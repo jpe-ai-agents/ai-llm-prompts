@@ -16,6 +16,7 @@
 * **Feature (agents)**: `vikunja-triage` computes priority from epic value, risk, task size, and due-date urgency; it accepts only epic and size
   label proposals.
 
+* **Feature (evals)**: Promptfoo scores eligible deployed Dify agents through HTTP and reports excluded trigger and non-text apps.
 * **Fix (agents)**: `vikunja-clerk` passes only a text filter to its list call, scopes a comment or relate by the
   task's own project, and never lets a denied project shadow another project with the same name.
 

@@ -292,6 +292,37 @@ def test_behavior_cases_use_two_independent_rubric_judges_alongside_other_assert
     )
 
 
+def test_dify_live_provider_covers_supported_agents_without_changing_the_matrix():
+    config_path = _ROOT / "agents" / "evals" / "promptfoo" / "promptfooconfig-dify-live.yaml"
+    config = yaml.safe_load(config_path.read_text())
+    provider = next(provider for provider in config["providers"] if provider.get("label") == "dify-live")
+    live_tests = cases.generate_dify_tests()
+    style_gate = next(
+        test for test in live_tests
+        if test["metadata"] == {"suite": "style-gate", "case": "normal-finds-violations"}
+    )
+
+    assert provider["config"]["url"] == "{{ env.DIFY_BASE_URL }}/v1/workflows/run"
+    assert provider["config"]["headers"]["Authorization"] == "Bearer {{ env[app_token_env] }}"
+    assert provider["config"]["body"] == {
+        "inputs": {"text": "{{ prompt | dump }}"},
+        "response_mode": "blocking",
+        "user": "evals",
+    }
+    assert style_gate["vars"]["dify_input"] == source_suites()["style-gate"]["cases"][0]["input"]
+    assert style_gate["vars"]["app_token_env"] == "DIFY_APP_STYLE_GATE"
+    assert not any(test["metadata"]["suite"] == "vikunja-triage" for test in live_tests)
+    assert all(not test["metadata"]["suite"].endswith("-parse") for test in live_tests)
+    assert len({test["metadata"]["suite"] for test in live_tests}) == 15
+    style_fixture = next(
+        test for test in live_tests
+        if test["metadata"] == {"suite": "style-gate", "case": "coverage-oversized"}
+    )
+    assert style_fixture["vars"]["dify_input"] == json.loads(style_fixture["vars"]["case_data"])["input_excerpt"]
+    proxmox = next(test for test in live_tests if test["metadata"]["suite"] == "proxmox-clerk")
+    assert json.loads(proxmox["vars"]["dify_input"]) == json.loads(proxmox["vars"]["case_data"])["input"]
+
+
 def test_ambiguous_actions_score_invented_tasks_and_owners_alongside_status():
     source = next(
         case for case in source_suites()["action-extractor"]["cases"]
