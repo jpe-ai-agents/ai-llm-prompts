@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.139.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.138.1...v1.139.0) (2026-11-26)
+
+
+### Features
+
+* **ci-resilience:** treat failing gate checks as agent work ([#618](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/618)) ([6292b35](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/6292b352179499b820957b6d53ead054d71e2537))
+
 ## [1.138.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.138.0...v1.138.1) (2026-11-26)
 
 
