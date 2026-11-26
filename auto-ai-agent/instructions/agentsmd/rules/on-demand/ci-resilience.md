@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-08T06:29:38Z"
+timestamp: "2026-11-26T20:24:51Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -94,3 +94,11 @@ caller and every template repository. Never patch one repo and leave the class a
    defect is fixed in that repo.
 3. Roll the fix to every caller and template. Update this rule if the class is new, and the private docs through
    `docs-sync`.
+
+## A gate check fails
+
+1. Read the failing job's log and the detector's rule before changing anything.
+2. If the finding is true, fix the code. For a lint finding, restructure the code so no new suppression is needed.
+3. If the finding is false, fix the detector in its source repository with a test that reproduces the false positive, link that PR from the blocked one, and rerun the check after it merges.
+4. Confirm from the log that any runtime secret the check needs actually arrived; a set secret shows as `***`. An empty secret is a delivery bug to fix at its source.
+5. A blocked PR stays agent work until it merges. Never ask the operator to merge past a red check, add an approval label, or admin-merge; the operator is asked only for credential access.

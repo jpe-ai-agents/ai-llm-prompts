@@ -6,7 +6,7 @@ resource: "prompt://dryvist/automation/fragment-issue-solver-phases-5-8"
 tags:
   - "automation"
   - "routine"
-timestamp: "2026-07-18T16:40:00-04:00"
+timestamp: "2026-11-26T20:24:51Z"
 status: active
 consumers:
   - "dryvist/claude-code-routines"
@@ -90,8 +90,9 @@ gh api repos/<owner>/<repo>/commits/<head-sha>/check-runs \
 Poll every 30 seconds for up to 5 minutes (max 10 polls). Capture the outcome:
 
 - All checks `success` or no checks defined → `ci_status=passed` (or `ci_status=none`).
-- Any check `failure` or `cancelled` → `ci_status=failed`. Flip the PR title to `<type>: <summary> [CI failing — needs human]`. Continue to Phase 7 (still open the PR so it's discoverable) with a CI-failure note in the body. Also post a Linear comment flagging the failure.
-- Still pending after 5 minutes → `ci_status=pending`. Continue to Phase 7 with a "CI pending — re-check later" note.
+- Any check `failure` or `cancelled` → `ci_status=failed`. Follow [A gate check fails](../auto-ai-agent/instructions/agentsmd/rules/on-demand/ci-resilience.md#a-gate-check-fails) and resolve the gate before Phase 7. Keep the task with the agent until every required check passes.
+- Still pending after 5 minutes → `ci_status=pending`. Continue to Phase 7 with a "CI pending — agent re-check required"
+  note and keep the PR with the agent until checks pass.
 
 ## Phase 7 — SUBMIT (≤ 1k tokens)
 
@@ -175,6 +176,10 @@ jq -n --arg id "$TASK_ID" --arg body "issue-solver — 2026-05-30: PR opened —
 Append `{"source": "linear", "task": "<id>", "date": "<today>", "outcome": "drafted_pr", "pr_url": "<url>"}` to the state file's `runs` array (optimistic-lock PUT per the State file section).
 
 ## Abandon Workflow (when any phase decides to stop)
+
+Do not use this workflow to hand off a failed gate check. Follow
+[A gate check fails](../auto-ai-agent/instructions/agentsmd/rules/on-demand/ci-resilience.md#a-gate-check-fails)
+and keep the task in agent work until the PR merges.
 
 1. **Revert Linear status.** If Phase 3 (CLAIM) ran successfully, revert the task's status to `ORIGINAL_STATE_ID` (saved in `/tmp/claim.json`). This is non-negotiable — never leave a task stuck "In Progress." If the revert API call fails, retry once; if it still fails, emit a Slack alert (or stdout warning) with the task identifier and exit with non-zero status.
 

@@ -7,7 +7,7 @@ tags:
 - autonomous-agent
 - pull-requests
 - pr-fix
-timestamp: '2026-11-12T07:00:00Z'
+timestamp: '2026-11-26T20:24:51Z'
 status: active
 consumers:
 - dryvist/ansible-proxmox-ai
@@ -46,8 +46,9 @@ auto-merge, and never merging. Each run ends with one line, `FIXED head=<new sha
 or `STOP: <reason>`; a run that replies `STOP` counts as a spent attempt.
 
 Attempt limit: three attempts per head state; a new head sha resets the count.
-After three, the controller labels the pull request `needs-lead` and a human
-session takes it.
+After three, follow [A gate check fails](../instructions/agentsmd/rules/on-demand/ci-resilience.md#a-gate-check-fails)
+and keep the blocked pull request in agent work until it merges. Do not apply
+`needs-lead` or hand the failing check to a human.
 
 Source: the maintained skills in dryvist/claude-code-plugins, directory
 `github-workflows/skills/`; the briefs condense them and link to them by URL:

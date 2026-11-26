@@ -7,7 +7,7 @@ tags:
 - autonomous-agent
 - pull-requests
 - pr-fix
-timestamp: '2026-11-12T07:00:00Z'
+timestamp: '2026-11-26T20:24:51Z'
 status: active
 consumers:
 - dryvist/ansible-proxmox-ai
@@ -50,9 +50,11 @@ re-run on every push.
    workflow that defines `{check_name}`, run the same command the check runs,
    and confirm it fails the same way `{log_lines}` shows.
 
-3. Fix the cause. Fix only what the pull request's diff controls; the smallest
-   correct change wins. Never change the check itself - no skipping,
-   disabling, weakening, or retitling a check, hook, or test.
+3. If the finding is true, fix the cause in the pull request's diff; the
+   smallest correct change wins. Never skip, disable, weaken, or retitle a
+   check, hook, or test. If the finding is false or outside this pull request's
+   diff, follow [A gate check fails](../instructions/agentsmd/rules/on-demand/ci-resilience.md#a-gate-check-fails)
+   to fix the detector in its source repository.
 
 4. Validate locally with the touched repo's own lint and test entry points,
    then land exactly one commit and push with a plain push:
@@ -78,13 +80,14 @@ re-run on every push.
 
 ## Stop
 
-Output `STOP: <reason>` instead of guessing when `{log_lines}` or your local
-reproduction shows the failure outside the pull request's diff - the failing
-code or configuration is untouched by it, so the base is red or the check is
-flaky. Also stop when the check needs a secret or permission the pull request
-cannot grant, the head moved away from `{head_sha}`, an API call or push fails
-with a permission error, or the pull request is closed, a draft, or already
-merged.
+Output `STOP: <reason>` instead of guessing when the log or local reproduction
+does not identify the failure. If the finding is false or outside the pull
+request's diff, follow [A gate check fails](../instructions/agentsmd/rules/on-demand/ci-resilience.md#a-gate-check-fails)
+and keep the blocked pull request in agent work until the check passes. If the
+check needs a secret or permission the pull request cannot grant, follow that
+rule and ask the operator only for credential access. Also stop when the head
+moved away from `{head_sha}`, an API call or push fails with a permission error,
+or the pull request is closed, a draft, or already merged.
 
 ## Output
 
