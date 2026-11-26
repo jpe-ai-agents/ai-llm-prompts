@@ -25,6 +25,7 @@
 * [Hermes backlog sweep](../hermes-backlog-sweep.md) - One-incident evidence review with a proposed next step.
 * [Hermes Vikunja backlog review](../hermes-vikunja-backlog-review.md) - Suggest-only review of one Vikunja project per run, one comment per task.
 * [Hermes session follow-ups](../hermes-session-followups.md) - Daily report of operator requests left unfinished in past conversations.
+* [Hermes orchestrator stale work](../hermes-orchestrator-stale-work.md) - Daily list of expired maintenance windows and long-overdue or blocked tasks.
 * [Hermes model routing review](../hermes-model-routing-review.md) - Read-only review of tracked public model routing resources.
 * [Hermes github route](../hermes-github-route.md) - Pull request review request populated from a webhook event.
 * [Hermes repo crawl](../hermes-repo-crawl.md) - Triage of new repository crawl findings with scoped pull request updates.
