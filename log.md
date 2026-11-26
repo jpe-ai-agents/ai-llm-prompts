@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-26
+
+* **Fix (auto-ai-agent)**: The shared delegation statement drops the headless-Claude harness executor kind. Tool-using
+  delegated work runs in an own-CLI executor or in the lead session.
+
 ## 2026-11-25
 
 * **Fix (automation)**: The CI-fix prompt regenerates a golden or snapshot value when the pull request only bumps a
