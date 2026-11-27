@@ -3,7 +3,7 @@ type: Dify workflow import guide
 title: Dify workflow imports
 description: Generate, import, validate, and export published Dify workflows with difyctl.
 tags: [dify, workflow, import, difyctl]
-timestamp: "2026-11-06T20:00:00Z"
+timestamp: "2026-11-27T00:00:00Z"
 ---
 
 ## Generated DSL source and synchronization
@@ -79,6 +79,27 @@ compatibility requirements; this repository's offline checks do not prove a succ
 Dify 1.18 discovers authoring, import/export, publish, and execution operations from the server. Use their current
 help instead of retaining an older hard-coded run route. Its client requires a fresh login when moving from v1.
 [Dify 1.18 CLI contract](https://github.com/langgenius/dify/releases/tag/1.18.0).
+
+## semaphore-clerk provider and policy
+
+Configure the `semaphore_write` tool provider for the workflow. Set `SEMAPHORE_TEMPLATE_POLICY` in the workflow
+environment to a JSON object with approved templates, numeric project and template IDs, and named parameter sets:
+
+```json
+{
+  "<template name>": {
+    "project_id": 123,
+    "template_id": 456,
+    "parameter_sets": {
+      "<set name>": {"limit": "<host pattern>"},
+      "none": {}
+    }
+  }
+}
+```
+
+The `none` parameter set is optional and means a run without a limit. An empty or invalid policy value makes every
+request refuse with `policy-unavailable`.
 
 ## Export the published version
 
