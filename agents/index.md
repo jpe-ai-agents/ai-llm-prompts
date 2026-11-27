@@ -229,7 +229,7 @@
 * Tier: 0
 * Trigger: call: caller
 * Reader: authorized workflow operator
-* Acted signal: verified run receipt or actionable blocked result for an approved template
+* Acted signal: verified task receipt or actionable blocked result for an approved template
 
 ### [session-closer](session-closer.yaml)
 
