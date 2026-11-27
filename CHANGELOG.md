@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.145.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.144.0...v1.145.0) (2026-11-27)
+
+
+### Features
+
+* **agents:** run semaphore-clerk live with a propose-then-confirm gate ([#633](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/633)) ([995ed64](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/995ed64f09d45727c57f4d6b2eea502dc5f5b30e))
+
 ## [1.144.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.143.0...v1.144.0) (2026-11-27)
 
 
