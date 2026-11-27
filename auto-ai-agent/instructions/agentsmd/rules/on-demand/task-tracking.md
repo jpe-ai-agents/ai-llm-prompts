@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/on-demand/
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-22T23:15:30Z"
+timestamp: "2026-11-27T00:30:00Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -55,6 +55,13 @@ Before creating a task or ticket, search the relevant tracker for an open item
 on the same work or fault. If one exists, comment on it or link it instead.
 A recurrence of a closed fault gets a new ticket that links the prior ones.
 Comment on a task once per milestone, never per step, and use bulk-update for multi-task changes.
+
+## Size every task for one session
+
+Every task must be finishable in one session. When it is not, make it a parent
+task, or an epic when it spans workstreams, and file its steps as subtasks that
+each fit in one session. Order them so independent subtasks can run in parallel,
+name what each one waits on, and give each a check that proves it done.
 
 ## Program-scale work
 
