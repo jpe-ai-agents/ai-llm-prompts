@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.140.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.139.0...v1.140.0) (2026-11-27)
+
+
+### Features
+
+* **rules:** size every tracker task for one session ([11db6df](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/11db6dfb7302ec7837d0bb29bedf403d932cd5ab))
+* **rules:** size every tracker task for one session ([#620](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/620)) ([c76fc96](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/c76fc966204e490a855791053db0f23bc75cf744))
+
 ## [1.139.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.138.1...v1.139.0) (2026-11-26)
 
 
