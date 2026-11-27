@@ -63,6 +63,25 @@ nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -
   --no-cache --no-progress-bar --filter-metadata label=real
 ```
 
+## Clerk acceptance
+
+The sets under `agents/evals/acceptance/` ask a deployed tracker clerk plain requests through `ask-agent`, the same
+command every caller uses. `ask-agent` checks each reply against the clerk envelope schema; the cases assert the
+status, that a write is read back, that a second create finds the first task, and that a refused request changes
+nothing. The cases run in order and share one probe task, so run them one at a time.
+
+Set `CLERK` to the agent name, `CLERK_PROJECT` to the name of a project the clerk may write to, `CLERK_RUN` to a value
+unique to the run, and `ASK_AGENT_CALLER` to the caller's label. One run passes when Promptfoo exits 0. Ten runs, each
+with its own probe task, from the repository root:
+
+```sh
+for run in $(seq 1 10); do
+  CLERK_RUN="$(date +%s)-$run" nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
+    npx -y promptfoo@0.118.14 eval -c agents/evals/acceptance/promptfooconfig-clerk.yaml \
+    -t "agents/evals/acceptance/$CLERK.yaml" -j 1 --no-cache --no-progress-bar || break
+done
+```
+
 ## Providers
 
 | Label | Candidate | Configuration |
