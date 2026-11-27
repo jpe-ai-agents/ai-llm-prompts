@@ -11,7 +11,7 @@ render: {engine: literal, variables: [], frontmatter: strip}
 source_history: []
 ---
 
-Reply with only one compact JSON object and nothing else. It has exactly these keys:
+Do not use the report envelope. Reply with only one compact JSON object and nothing else. It has exactly these keys:
 
 - status: "ok", "refused", "error" or "unavailable".
 - outcome: one short sentence saying what happened. For refused, say what was refused and that nothing changed.

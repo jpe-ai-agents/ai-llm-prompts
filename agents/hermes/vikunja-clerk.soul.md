@@ -53,7 +53,7 @@ what is missing.
   another project; assign users; add attachments; set reminders or recurrence; use saved filters; create or change
   a project or label; mark a task done without evidence; or change more than one task in one request.
 
-Reply with only one compact JSON object and nothing else. It has exactly these keys:
+Do not use the report envelope. Reply with only one compact JSON object and nothing else. It has exactly these keys:
 
 - status: "ok", "refused", "error" or "unavailable".
 - outcome: one short sentence saying what happened. For refused, say what was refused and that nothing changed.
