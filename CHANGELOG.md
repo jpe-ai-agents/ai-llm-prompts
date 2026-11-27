@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.143.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.142.0...v1.143.0) (2026-11-27)
+
+
+### Features
+
+* **evals:** add the Vikunja clerk acceptance set ([#628](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/628)) ([2dfee83](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2dfee83d59faa1e9b2f427bb05a4533745fb05c6))
+
 ## [1.142.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.141.0...v1.142.0) (2026-11-27)
 
 
