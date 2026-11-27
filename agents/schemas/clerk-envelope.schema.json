@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "prompt://dryvist/agents/schemas/clerk-envelope",
+  "title": "Clerk reply envelope",
+  "type": "object",
+  "required": ["status", "outcome", "ids", "items", "readback", "error"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {"enum": ["ok", "refused", "error", "unavailable"]},
+    "outcome": {"type": "string", "minLength": 1},
+    "ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "properties": {
+          "id": {"type": ["string", "integer"]},
+          "title": {"type": "string"}
+        }
+      }
+    },
+    "readback": {"type": ["object", "null"]},
+    "error": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["code", "message"],
+          "additionalProperties": false,
+          "properties": {
+            "code": {"type": "string", "minLength": 1},
+            "message": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "ok"}}},
+      "then": {"properties": {"error": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["refused", "error", "unavailable"]}}},
+      "then": {"properties": {"error": {"type": "object"}}}
+    }
+  ]
+}

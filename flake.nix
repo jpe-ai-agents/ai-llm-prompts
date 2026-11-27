@@ -130,7 +130,7 @@
               pkgs.jq
               pkgs.nodejs
               pkgs.yq
-              (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [ pytest pytest-xdist pyyaml ]))
+              (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [ jsonschema pytest pytest-xdist pyyaml ]))
             ];
           } ''
             cp -R ${self}/. source
@@ -158,7 +158,7 @@
               nodejs
               pre-commit
               yq-go
-              (python3.withPackages (ps: [ ps.pytest ps.pyyaml ]))
+              (python3.withPackages (ps: [ ps.jsonschema ps.pytest ps.pyyaml ]))
             ];
           };
         });

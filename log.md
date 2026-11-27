@@ -1,5 +1,12 @@
 # Change Log
 
+## 2026-11-27
+
+* **Feature (agents)**: The Hermes tracker clerks (`vikunja-clerk`, `youtrack-clerk`, `zammad-clerk`) get their own
+  prompts under `agents/prompts/hermes/`. `make render-hermes` joins each with its shared prefix and the new shared reply
+  envelope into `agents/hermes/<name>.soul.md`. A sha256 manifest lists every soul and the envelope's JSON Schema, so a
+  deployment can pin a commit and check each file.
+
 ## 2026-11-26
 
 * **Feature (auto-ai-agent)**: `hermes-vikunja-backlog-review` reviews one Vikunja project per run and leaves at most
