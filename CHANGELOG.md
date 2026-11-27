@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.144.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.143.0...v1.144.0) (2026-11-27)
+
+
+### Features
+
+* **evals:** add the YouTrack and Zammad clerk acceptance sets ([#630](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/630)) ([b1bc6e3](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/b1bc6e3f52aedfb586b15b5822914f39cec3b8d3))
+
 ## [1.143.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.142.0...v1.143.0) (2026-11-27)
 
 
