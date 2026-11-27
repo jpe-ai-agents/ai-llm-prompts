@@ -1,4 +1,5 @@
 DIFY_OUTPUT ?= agents/dify
+HERMES_OUTPUT ?= agents/hermes
 AGENTS_ROOT ?= .
 ROTATION_DRIVER_NAME ?= tier2-rotation
 export ROTATION_DRIVER_NAME
@@ -49,7 +50,7 @@ check-github-agent-prompts:
 		$(MAKE) --no-print-directory render-github-agent-prompts GITHUB_AGENT_PROMPT_OUTPUT="$$output/rendered"; \
 		diff -ru "$$output/committed" "$$output/rendered"
 
-.PHONY: resolve-agents render-dify check-dify render-sim check-sim render-langflow check-langflow render-index check-index test
+.PHONY: resolve-agents render-dify check-dify render-sim check-sim render-langflow check-langflow render-index check-index render-hermes check-hermes test
 resolve-agents:
 	@set -eu; cd "$(AGENTS_ROOT)"; for definition in agents/*.yaml; do \
 		name=$$(basename "$$definition" .yaml); \
@@ -139,5 +140,33 @@ check-index:
 		diff -u "$(AGENTS_ROOT)/agents/index.md" "$$output/index.md"; \
 		diff -u "$(AGENTS_ROOT)/agents/prompts/index.md" "$$output/prompts.md"
 
-test: check-dify check-sim check-langflow check-index
+# Hermes profile souls: every definition with agents/prompts/hermes/<name>.md, plus the envelope schema, each
+# listed with its sha256 so a deployment pins a commit and verifies every file it downloads.
+render-hermes:
+	@mkdir -p "$(HERMES_OUTPUT)"
+	@set -eu; output=$$(mktemp -d "$${TMPDIR:-/tmp}/hermes.XXXXXX"); trap 'rm -rf "$$output"' EXIT; \
+		$(MAKE) --no-print-directory resolve-agents > "$$output/definitions.jsonl"; \
+		cd "$(AGENTS_ROOT)"; : > "$$output/entries.jsonl"; \
+		while IFS= read -r definition; do \
+			printf '%s\n' "$$definition" | yq '.agent' > "$$output/agent.yaml"; \
+			name=$$(yq -r '.name' "$$output/agent.yaml"); \
+			[ -f "agents/prompts/hermes/$$name.md" ] || continue; \
+			gomplate -c .="$$output/agent.yaml" -t dify="$(CURDIR)/agents/dify-src/agent.tmpl" \
+				-f "$(CURDIR)/agents/hermes-src/soul.tmpl" -o "$(abspath $(HERMES_OUTPUT))/$$name.soul.md"; \
+			hash=$$(sha256sum "$(abspath $(HERMES_OUTPUT))/$$name.soul.md"); \
+			jq -cn --arg name "$$name" --arg path "agents/hermes/$$name.soul.md" --arg sha256 "$${hash%% *}" \
+				'{name: $$name, path: $$path, sha256: $$sha256}' >> "$$output/entries.jsonl"; \
+		done < "$$output/definitions.jsonl"; \
+		hash=$$(sha256sum agents/schemas/clerk-envelope.schema.json); \
+		jq -cn --arg sha256 "$${hash%% *}" \
+			'{name: "clerk-envelope-schema", path: "agents/schemas/clerk-envelope.schema.json", sha256: $$sha256}' \
+			>> "$$output/entries.jsonl"; \
+		jq -s 'sort_by(.name)' "$$output/entries.jsonl" > "$(abspath $(HERMES_OUTPUT))/manifest.json"
+
+check-hermes:
+	@set -eu; output=$$(mktemp -d "$${TMPDIR:-/tmp}/hermes.XXXXXX"); trap 'rm -rf "$$output"' EXIT; \
+		$(MAKE) --no-print-directory render-hermes HERMES_OUTPUT="$$output/rendered"; \
+		diff -ru "$(AGENTS_ROOT)/agents/hermes" "$$output/rendered"
+
+test: check-dify check-sim check-langflow check-index check-hermes
 	$(PYTEST) -q agents/judges
