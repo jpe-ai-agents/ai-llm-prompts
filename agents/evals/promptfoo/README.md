@@ -1,7 +1,23 @@
 # Promptfoo agent evaluation matrix
 
 The test generator loads every resolved agent definition's `eval_set` into the matrix. New definitions participate
-automatically, and missing suites fail generation. Run it from the repository root to check its case and assertion counts:
+automatically, and missing suites fail generation.
+
+## Installation
+
+Nothing needs a global install. Enter the development shell from the repository root; it provides Python and the test
+libraries:
+
+```sh
+nix develop
+```
+
+The Promptfoo commands in this file fetch Node.js and a pinned Promptfoo themselves through `nix shell`. The clerk
+acceptance runs also need `ask-agent` on the path.
+
+## Usage
+
+Run the generator from the repository root to check its case and assertion counts:
 
 ```sh
 python3 agents/evals/promptfoo/generate.py
