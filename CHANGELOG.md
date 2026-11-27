@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.142.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.141.0...v1.142.0) (2026-11-27)
+
+
+### Features
+
+* **evals:** add decision model evaluation sets ([#624](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/624)) ([f53ff40](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/f53ff40d3ea111045a06d20f98370937b43ce62e))
+
+
+### Bug Fixes
+
+* **agents:** clerk envelope opts out of the report envelope ([#625](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/625)) ([1dd5952](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/1dd5952fb566e6f4dcdce6876198fe92f7aae6f9))
+* **ci-fix:** shorten the rules and forbid deleting unnamed files ([#626](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/626)) ([94982cc](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/94982ccd215f7fb6acf4f92f4e4cd7b96b0929ec))
+
 ## [1.141.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.140.0...v1.141.0) (2026-11-27)
 
 
