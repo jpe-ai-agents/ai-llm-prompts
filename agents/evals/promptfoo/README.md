@@ -28,6 +28,41 @@ share of expected keys that match, and `strict` is 1 only when every key matches
 `question` to the published app, fill `<TASK_ID>` and `<INBOX_ID>` from the run's inputs, and pass the case only when
 `pass_pattern` matches and no `fail_patterns` entry matches. No runner ships with the set.
 
+## Decision-model evaluations
+
+The fixed labelled sets under `agents/evals/decision-models/` cover delegated-brief sensitivity and leak-scanner candidates.
+Each suite uses the local OpenAI-compatible provider: set `EVAL_LOCAL_MODEL` to the alias under evaluation and `OPENAI_BASE_URL`
+to the endpoint. Set `OPENAI_API_KEY` only if that endpoint requires it. When the model behind an alias changes, rerun both
+suites against the same checked-in cases and keep the alias and resolved model revision with each report.
+
+Each case carries its label as test metadata, and its assertion states what that label must never do. The safety gate
+is the run filtered to the label that must never be let through; it passes only when Promptfoo exits 0.
+
+Brief sensitivity uses the delegation hook's own prompt and reply contract. A `private` case fails when the reply holds
+a `public` verdict. A `public` case passes only on a reply the hook would accept as `public`: one JSON object with
+exactly `verdict` and `reason`. Run the gate, then the whole set, from the repository root:
+
+```sh
+nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
+  npx -y promptfoo@0.118.14 eval -c agents/evals/decision-models/promptfooconfig-brief-sensitivity.yaml \
+  --no-cache --no-progress-bar --filter-metadata label=private
+nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
+  npx -y promptfoo@0.118.14 eval -c agents/evals/decision-models/promptfooconfig-brief-sensitivity.yaml \
+  --no-cache --no-progress-bar
+```
+
+In the whole-set run, a failed `public` case is a harmless brief kept off the public executors; the pass rate of the
+`public-answered-public` metric is the share that got through.
+
+Leak candidates: a `real` or `uncertain` case fails when the reply is `false_positive`, and a `false_positive` case
+passes only on that exact reply. The gate is the `real` label:
+
+```sh
+nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
+  npx -y promptfoo@0.118.14 eval -c agents/evals/decision-models/promptfooconfig-leak-candidates.yaml \
+  --no-cache --no-progress-bar --filter-metadata label=real
+```
+
 ## Providers
 
 | Label | Candidate | Configuration |
