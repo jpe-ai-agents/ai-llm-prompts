@@ -7,7 +7,7 @@ resource: "prompt://dryvist/auto-ai-agent/instructions/agentsmd/rules/operating-
 tags:
   - shared-instructions
   - agent-instructions
-timestamp: "2026-11-22T03:07:43Z"
+timestamp: "2026-11-27T23:14:09Z"
 status: active
 consumers:
   - dryvist/nix-ai
@@ -38,6 +38,8 @@ Behavior that applies to every task (always-loaded status: `rule-tiers.md`). Com
 - **A PR you open is yours until it is merged and, on a git-flow repo, promoted.** Every comment, review body
   (including Request changes with no thread), review-bot finding and coverage gap is review feedback: fix it or
   answer it with evidence, then keep the PR moving (conflicts, `BEHIND`, failed or never-reported checks).
+- **Code comments.** A comment says only what the code does and why, in the present tense. Write nothing about the
+  past or the future in it: no earlier behavior, no planned change, no "once X happens". Git holds the history.
 - **Check system state with monitoring first; follow the `monitoring-first` skill before direct shell probes.**
 - **Environment output.** Never print, dump, or pipe the environment (`env`, `printenv`, `set`, `export -p`)
   or the output of a command that injects credentials into its environment; filtering does not make that
