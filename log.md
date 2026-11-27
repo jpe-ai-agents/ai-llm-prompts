@@ -2,6 +2,9 @@
 
 ## 2026-11-27
 
+* **Feature (auto-ai-agent)**: `operating-core` limits a code comment to what the code does and why, with nothing about
+  the past or the future.
+
 * **Feature (agents)**: The Hermes tracker clerks (`vikunja-clerk`, `youtrack-clerk`, `zammad-clerk`) get their own
   prompts under `agents/prompts/hermes/`. `make render-hermes` joins each with its shared prefix and the new shared reply
   envelope into `agents/hermes/<name>.soul.md`. A sha256 manifest lists every soul and the envelope's JSON Schema, so a
