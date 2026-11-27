@@ -1,0 +1,10 @@
+description: Tracker clerk acceptance through ask-agent
+prompts:
+  - "{{request}}"
+providers:
+  # The prompt arrives as $1 and CLERK names the agent. ask-agent checks every reply against the clerk envelope
+  # schema; a reply that does not match comes back as an error envelope, which fails the case's status check.
+  - id: "exec: sh -c 'ask-agent \"$CLERK\" \"$1\"' sh"
+    label: ask-agent
+sharing: false
+writeLatestResults: false
