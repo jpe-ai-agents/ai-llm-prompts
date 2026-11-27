@@ -1,0 +1,201 @@
+- vars: {id: suite-b-r01, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_01, rule: reusable_auth_access_secret, context: "Fictional file fixture/orbit/session.cfg is checked into a shared sample repository.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional service accepts the represented credential for repeated access.\nThe checked-in sample is visible beyond its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: &real_never_cleared
+    - type: not-icontains
+      value: false_positive
+      metric: real-never-cleared
+- vars: {id: suite-b-r02, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_02, rule: reusable_auth_access_secret, context: "Fictional file demo/parcel/agent.ini is checked into a shared sample repository.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional service accepts the represented credential for repeated access.\nThe checked-in sample is visible beyond its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r03, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_03, rule: reusable_auth_access_secret, context: "Fictional file src/paperkite/bridge.env is included in a shared source snapshot.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional service accepts the represented credential for repeated access.\nThe source snapshot is readable outside the intended project group.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r04, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_04, rule: reusable_auth_access_secret, context: "Fictional file app/tinylattice/connector.toml is checked into a sample repository.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional connector accepts the represented credential for repeated access.\nThe checked-in config is visible outside the intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r05, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_05, rule: reusable_auth_access_secret, context: "Fictional file tools/ambergrid/cache.yml appears in a shared code snapshot.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional worker accepts the represented credential for repeated access.\nThe snapshot is available to readers outside the intended team.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r06, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_06, rule: reusable_auth_access_secret, context: "Fictional file examples/quiet-mosaic/client.json is committed to a shared repository.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional client accepts the represented credential for repeated access.\nThe committed sample is visible to readers outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r07, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_07, rule: reusable_auth_access_secret, context: "Fictional file packages/specklepath/worker.conf is included in a shared source snapshot.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional worker accepts the represented credential for repeated access.\nThe source snapshot is visible beyond the intended project audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r08, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_08, rule: reusable_auth_access_secret, context: "Fictional file deploy/blue-kiln/relay.yaml is committed in a shared sample branch.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional relay accepts the represented credential for repeated access.\nThe sample branch is visible outside the intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r09, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_09, rule: reusable_auth_access_secret, context: "Fictional file testdata/warmcircuit/request.ini is copied into a shared source artifact.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional request service accepts the represented credential for repeated access.\nThe copied artifact is visible beyond the intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r10, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_10, rule: reusable_auth_access_secret, context: "Fictional file config/mossy-arc/edge.ini is checked into a shared sample repository.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional edge process accepts the represented credential for repeated access.\nThe checked-in file is readable outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r11, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_11, rule: reusable_auth_access_secret, context: "Fictional file modules/softquartz/adapter.json is present in a shared code snapshot.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional adapter accepts the represented credential for repeated access.\nThe snapshot is readable outside the intended project group.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r12, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_12, rule: reusable_auth_access_secret, context: "Fictional file ops/silverfern/tunnel.env is included in a shared build artifact.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional tunnel process accepts the represented credential for repeated access.\nThe artifact is visible to people outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r13, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_13, rule: reusable_auth_access_secret, context: "Fictional file services/puddlecraft/worker.toml is committed in a shared repository.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional service accepts the represented credential for repeated access.\nThe repository is readable beyond the intended project audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r14, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_14, rule: reusable_auth_access_secret, context: "Fictional file samples/copperpond/agent.cfg is copied into a shared release archive.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional agent accepts the represented credential for repeated access.\nThe release archive is visible outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r15, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_15, rule: reusable_auth_access_secret, context: "Fictional file lab/marbleleaf/transport.yml appears in a shared test artifact.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional transport process accepts the represented credential for repeated access.\nThe artifact is readable beyond the intended lab audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r16, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_16, rule: reusable_auth_access_secret, context: "Fictional file scripts/teacup-orbit/sync.ini is committed to a shared source tree.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional sync process accepts the represented credential for repeated access.\nThe source tree is visible beyond the intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r17, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_17, rule: reusable_auth_access_secret, context: "Fictional file config/willowbyte/handoff.json is copied into a shared archive.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional handoff worker accepts the represented credential for repeated access.\nThe archive can be read outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r18, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_18, rule: reusable_auth_access_secret, context: "Fictional file plugins/tinroof/connector.cfg is committed in a shared package.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional connector accepts the represented credential for repeated access.\nThe package source is visible beyond its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r19, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_19, rule: reusable_auth_access_secret, context: "Fictional file docs/foggymeadow/bridge.env is copied into a shared source bundle.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional bridge accepts the represented credential for repeated access.\nThe source bundle is readable outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r20, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_20, rule: reusable_auth_access_secret, context: "Fictional file build/snowledger/runner.toml is checked into a shared sample repository.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional runner accepts the represented credential for repeated access.\nThe checked-in sample is visible to readers outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r21, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_21, rule: reusable_auth_access_secret, context: "Fictional file app/roundharbor/relay.json is committed in a shared application repo.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional relay accepts the represented credential for repeated access.\nThe repository is readable outside the intended application team.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r22, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_22, rule: reusable_auth_access_secret, context: "Fictional file sandbox/pebblearc/client.cfg appears in a shared source snapshot.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional client accepts the represented credential for repeated access.\nThe snapshot is visible beyond the intended sandbox audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r23, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_ACCESS_SECRET_DO_NOT_USE_23, rule: reusable_auth_access_secret, context: "Fictional file adapters/duskycove/polling.ini is included in a shared build bundle.\nThis value is a synthetic stand-in for a reusable access credential.\nThe fictional adapter accepts the represented credential for repeated access.\nThe bundle is readable outside its intended audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-r24, matched: SYNTHETIC_FAKE_ONLY_REUSABLE_AUTH_SECRET_DO_NOT_USE_24, rule: reusable_auth_access_secret, context: "Fictional file deploy/mintlane/orchestrator.yml is copied into a shared artifact.\nThis value is a synthetic stand-in for a reusable authentication credential.\nThe fictional orchestrator accepts the represented credential for repeated access.\nThe artifact is visible beyond its intended deployment audience.\nThe matched literal is fake; no real service or provider is involved."}
+  metadata: {label: real}
+  assert: *real_never_cleared
+- vars: {id: suite-b-fp01, matched: c0ffee42deadbeefcafe1234babe5678feedface, rule: commit_hash, context: "In fictional file .fixture/revision-map.txt,\nthis string labels a made-up commit in a toy repository.\nThe repeated c0ffee and deadbeef pattern is deliberately artificial.\nNo authentication or access behavior is associated with it.\nThe example tests high-entropy identifier handling."}
+  metadata: {label: false_positive}
+  assert: &clears_false_positive
+    - type: equals
+      value: false_positive
+      metric: false-positive-cleared
+- vars: {id: suite-b-fp02, matched: f00dbabe1234cafe5678deadbeefc0de, rule: uuid, context: "In fictional file testdata/object-id.json,\nthis string is a fabricated UUID-shaped fixture identifier.\nThe value appears only in a static parser test record.\nIt grants no access and is not used by a service.\nThe fixture tests non-secret identifier handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp03, matched: md5:1a79a4d60de6718e8e5b326e338ae533, rule: checksum, context: "In fictional file docs/checksum-examples.md,\nthis is the MD5 checksum of the literal word example.\nIt is printed as a checksum illustration in a tutorial.\nA file digest is a non-secret integrity identifier here.\nThe example tests checksum handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp04, matched: sha512-DO_NOT_USE_EXAMPLE_LOCK_FIXTURE, rule: lockfile_integrity, context: "In fictional file package.lock,\nthis is a deliberately invalid integrity field in a teaching fixture.\nThe token spells out DO_NOT_USE and EXAMPLE for human readers.\nIt cannot verify a package download or authenticate a user.\nThe fixture tests lock-file value handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp05, matched: 00000000-0000-4000-8000-000000000001, rule: uuid, context: "In fictional file testdata/empty-row.yaml,\nthis value is a fixed UUID placeholder for an empty database row.\nThe zero-filled form is reserved for a local unit test.\nNo account or service accepts it as an access credential.\nThe fixture tests placeholder handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp06, matched: 0123456789abcdef0123456789abcdef01234567, rule: commit_hash, context: "In fictional file docs/revision-format.txt,\nthis is a repeated-pattern commit hash used in a format example.\nThe string is documentation-only and not linked to a real repository.\nIt identifies no authentication session or access grant.\nThe example tests high-entropy identifier handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp07, matched: example, rule: documented_example, context: "In fictional file docs/hash-demo.md,\nthis is the literal input word used for a digest demonstration.\nThe word is shown as ordinary public example text.\nIt is not a token, password, or access value.\nThe example tests documented value handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp08, matched: YOUR_SAMPLE_VALUE_HERE, rule: placeholder, context: "In fictional file docs/config-guide.txt,\nthis uppercase text marks a value the reader must replace.\nIt is a visible placeholder in a documentation example.\nNo generated credential is embedded in the sample.\nThe example tests placeholder handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp09, matched: cafe0000dead0000beef0000f00d0000, rule: checksum, context: "In fictional file fixtures/cache-key.txt,\nthis is a made-up checksum-shaped test fixture identifier.\nIts repeated word fragments make the value plainly artificial.\nThe program uses it only to check string formatting.\nThe fixture tests checksum handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp10, matched: sha256-EXAMPLE_ONLY_NOT_A_DIGEST, rule: lockfile_integrity, context: "In fictional file docs/lockfile-sample.txt,\nthis text illustrates an integrity field but is not a digest.\nEXAMPLE_ONLY and NOT_A_DIGEST make the teaching value explicit.\nIt is not used to fetch or verify any package.\nThe example tests lock-file value handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp11, matched: relaybox.copperlane.invalid, rule: documentation_hostname, context: "In fictional file docs/network-toy.md,\nthis private-looking hostname uses the reserved .invalid suffix.\nIt appears only in a made-up routing diagram.\nThe name cannot identify a live service or credential endpoint.\nThe example tests hostname handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp12, matched: 192.0.2.44, rule: documentation_address, context: "In fictional file docs/addressing-example.txt,\nthis address comes from a documentation-only IPv4 range.\nIt is printed as an example in a fictional network plan.\nIt is not a routable service address or secret.\nThe example tests address handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp13, matched: 198.51.100.73, rule: documentation_address, context: "In fictional file fixtures/route-case.yaml,\nthis address comes from a documentation-only IPv4 range.\nThe test checks how a parser formats sample network data.\nIt does not point to a live host or service.\nThe fixture tests address handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp14, matched: 2001:db8::52, rule: documentation_address, context: "In fictional file docs/ipv6-sample.txt,\nthis address uses the reserved IPv6 documentation prefix.\nIt illustrates a bracketed address in a fictional guide.\nIt is not a routable endpoint or authentication value.\nThe example tests address handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp15, matched: TEST_ONLY_ACCESS_SENTINEL, rule: test_fixture, context: "In fictional file tests/auth-fixture.json,\nthis value is a literal sentinel used by a unit test.\nThe fixture explicitly labels it TEST_ONLY and uses no live service.\nThe string is not accepted as a credential anywhere.\nThe fixture tests test-data handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp16, matched: deadbeefdeadbeefdeadbeefdeadbeefdeadbeef, rule: commit_hash, context: "In fictional file .fixture/git-log.txt,\nthis is a fabricated repeated-pattern commit identifier.\nThe test checks display shortening for a hexadecimal string.\nIt has no connection to authentication or access.\nThe fixture tests commit-hash handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp17, matched: 11111111-2222-4333-8444-555555555555, rule: uuid, context: "In fictional file samples/row-id.json,\nthis UUID-shaped value is a static documentation example.\nThe digits are patterned to make the sample easy to recognize.\nIt is a row identifier and has no access semantics.\nThe example tests UUID handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp18, matched: DO_NOT_REPLACE_SAMPLE_FIELD, rule: documented_example, context: "In fictional file docs/field-reference.md,\nthis text is a human-readable example label in a template.\nThe page says to keep it as a sample field name.\nIt is not a reusable authentication or access value.\nThe example tests documentation handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp19, matched: sha256:50d858e0985ecc7f60418aaf0cc5ab587f42c2570a884095a9e8ccacd0f6545c, rule: checksum, context: "In fictional file docs/hash-reference.txt,\nthis is the SHA-256 hash of the literal word example.\nThe digest is printed as a checksum example in a tutorial.\nIt identifies sample text and cannot grant access.\nThe example tests digest handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp20, matched: 203.0.113.9, rule: documentation_address, context: "In fictional file demo/packet-route.ini,\nthis address comes from a documentation-only IPv4 range.\nIt is used in a packet-format teaching example.\nIt is not a routable service location or secret.\nThe example tests address handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp21, matched: mock-harbor.sandbox.invalid, rule: documentation_hostname, context: "In fictional file testdata/mock-hosts.txt,\nthis private-looking hostname ends in the reserved .invalid suffix.\nA test parser reads it as a fabricated host label.\nIt cannot resolve to a real service or grant access.\nThe fixture tests hostname handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp22, matched: integrity=sha512-PLACEHOLDER_ONLY, rule: lockfile_integrity, context: "In fictional file package.lock,\nthis line is an intentionally incomplete lock-file example.\nPLACEHOLDER_ONLY marks the value as non-verifying sample text.\nThe build fixture never downloads or authenticates a package.\nThe fixture tests lock-file value handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp23, matched: fadedcab12345678fadedcab12345678, rule: high_entropy_identifier, context: "In fictional file tests/digest-shape.fixture,\nthis is a fabricated high-entropy-looking sample identifier.\nThe test checks character grouping and display only.\nIt is not a checksum for a real artifact or access secret.\nThe fixture tests identifier handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-fp24, matched: EXAMPLE_PASSWORD_DO_NOT_USE, rule: placeholder, context: "In fictional file docs/legacy-settings.txt,\nthis text is a deliberately unusable documentation placeholder.\nThe guide marks it EXAMPLE and DO_NOT_USE in the same field.\nNo system accepts it for authentication.\nThe example tests placeholder handling."}
+  metadata: {label: false_positive}
+  assert: *clears_false_positive
+- vars: {id: suite-b-u01, matched: TOKEN_SAMPLE_7Q_NOT_SURE, rule: ambiguous_token, context: "In fictional file config/unknown-case.ini,\nthis text appears under a field named token.\nThe surrounding note calls it a sample but does not define its use.\nNo statement confirms whether it is reusable or inert.\nThe available fixture evidence is incomplete."}
+  metadata: {label: uncertain}
+  assert: &uncertain_never_cleared
+    - type: not-icontains
+      value: false_positive
+      metric: uncertain-never-cleared
+- vars: {id: suite-b-u02, matched: cafe1234beef5678dead9012f00d3456, rule: ambiguous_high_entropy_value, context: "In fictional file logs/unclear-record.txt,\nthis hexadecimal string appears beside a session-like label.\nA nearby comment says it may be a generated fixture identifier.\nThe file does not establish whether the value grants access.\nThe available fixture evidence conflicts."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u03, matched: REPLACE_ME_ACCESS_SAMPLE, rule: ambiguous_placeholder, context: "In fictional file notes/mixed-example.md,\nthis value is shown beside an access-related field name.\nOne note calls it a placeholder; another says it is reused in tests.\nNeither note explains whether it is functional.\nThe available fixture evidence is incomplete."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u04, matched: SYNTHETIC_ONLY_ACCESS_VALUE_U04, rule: ambiguous_auth_value, context: "In fictional file inventory/connector.ini,\nthis text is assigned to an access_value field.\nA maintainer note calls it a sandbox placeholder.\nA copied example says the field feeds a client, but not whether this value is active.\nNo test or owner note confirms whether it can be reused."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u05, matched: SYNTHETIC_FAKE_SHARED_VALUE_U05, rule: ambiguous_credential_field, context: "In fictional file notes/relay-export.txt,\nthis value appears in a shared_key field.\nOne comment says it was generated only for screenshots.\nAnother says exported values are restored by a local process.\nNo evidence links this instance to an accepted credential."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u06, matched: SYNTHETIC_ONLY_CREDENTIAL_VALUE_U06, rule: ambiguous_credential_field, context: "In fictional file packages/training.conf,\nthis candidate appears in a credential_ref field.\nA paragraph calls it a placeholder for training.\nA separate note says the training config was copied from an active template.\nThe artifact does not show whether this value was replaced or accepted."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u07, matched: 12345678-90ab-4cde-8f01-23456789abcd, rule: ambiguous_uuid, context: "In fictional file data/row-note.yaml,\nthis UUID-shaped string appears near an access status field.\nA separate comment labels it as a generated example identifier.\nThe record does not show what the identifier controls.\nThe available fixture evidence is incomplete."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u08, matched: SYNTHETIC_FAKE_SESSION_VALUE_U08, rule: ambiguous_auth_value, context: "In fictional file docs/auth-sample.md,\nthis value appears beside a SESSION_VALUE field.\nThe surrounding note calls the snippet an example.\nA review comment says the example was copied from a generated launch file.\nThe source does not establish whether this instance was accepted for access."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u09, matched: deadbeef00c0ffee11baddad22f00d33, rule: ambiguous_high_entropy_value, context: "In fictional file cache/entry-fragment.json,\nthis fabricated-looking hexadecimal value appears in a cache field.\nA comment says the cache field sometimes stores a revision label.\nThe record does not say whether it ever carries access data.\nThe available fixture evidence is incomplete."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u10, matched: SAMPLE_AUTH_VALUE_10, rule: ambiguous_auth_value, context: "In fictional file scratch/mixed-config.toml,\nthis value is assigned to an auth-related field.\nA comment calls it sample text but also says copied values persist.\nNo source explains whether this instance is functional.\nThe available fixture evidence conflicts."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u11, matched: SYNTHETIC_ONLY_CLIENT_VALUE_U11, rule: ambiguous_auth_value, context: "In fictional file review/client-export.cfg,\nthis candidate is assigned to a client_access field.\nA comment calls the file a test export.\nA second note says exports may preserve values from the source environment.\nThe file does not say whether this value was ever active."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u12, matched: SYNTHETIC_ONLY_PIPELINE_VALUE_U12, rule: ambiguous_credential_field, context: "In fictional file review/pipeline-settings.cfg,\nthis value is assigned to an access_secret field.\nA comment marks it as synthetic training data.\nA build note says settings are copied forward between environments.\nThe record does not show whether this value was replaced before use."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u13, matched: 00000000-0000-4000-8000-000000000042, rule: ambiguous_uuid, context: "In fictional file fixtures/unclear-user.yaml,\nthis fixed UUID appears in a record with an access-status field.\nThe record is stored under a directory named fixtures.\nThere is no note about whether the identifier is only test data.\nThe available fixture evidence is incomplete."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u14, matched: SYNTHETIC_FAKE_REUSABLE_VALUE_U14, rule: ambiguous_auth_value, context: "In fictional file notes/worker-settings.ini,\nthis value appears in a reusable_access field.\nA draft comment calls it a generated fixture.\nAn older note says this file may have been copied into a shared environment.\nNo readback establishes whether the value was functional there."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u15, matched: AUTH_SAMPLE_15_DO_NOT_ASSUME, rule: ambiguous_auth_value, context: "In fictional file draft/auth-snippet.cfg,\nthis value appears in a reusable-looking field.\nA comment says not to assume it is live or inert.\nNo other context explains its source or behavior.\nThe available fixture evidence is insufficient."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
+- vars: {id: suite-b-u16, matched: SYNTHETIC_ONLY_SESSION_VALUE_U16, rule: ambiguous_auth_value, context: "In fictional file notes/session-settings.toml,\nthis value appears in a session_secret field.\nThe file is described as a test fixture in one comment.\nA nearby note says fixtures are sometimes copied into deployment bundles.\nThe source does not show whether this value was ever accepted."}
+  metadata: {label: uncertain}
+  assert: *uncertain_never_cleared
