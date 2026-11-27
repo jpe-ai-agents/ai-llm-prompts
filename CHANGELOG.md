@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.141.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.140.0...v1.141.0) (2026-11-27)
+
+
+### Features
+
+* **agents:** add a pinned Hermes render target for the tracker clerks ([#622](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/622)) ([85eeecf](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/85eeecf49af44882fb02592095c08877aae49813))
+
 ## [1.140.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.139.0...v1.140.0) (2026-11-27)
 
 
