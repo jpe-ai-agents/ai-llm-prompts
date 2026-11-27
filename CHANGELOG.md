@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.146.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.145.0...v1.146.0) (2026-11-27)
+
+
+### Features
+
+* **instructions:** limit code comments to what and why ([2d706b7](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/2d706b7b05c375a78ef4e18c6fa30447f91eab96))
+* **instructions:** limit code comments to what and why ([#635](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/635)) ([1b382b5](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/1b382b5e9a9a9fddb6c3a952d9fa153c7c666179))
+
 ## [1.145.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.144.0...v1.145.0) (2026-11-27)
 
 
