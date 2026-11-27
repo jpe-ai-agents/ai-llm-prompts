@@ -1,0 +1,6 @@
+{{- /* One Hermes profile SOUL.md: shared prefix, the agent's Hermes prompt, then the shared reply envelope. */ -}}
+{{- tmpl.Exec "shared-prefix" .shared_prefix }}
+
+{{ tmpl.Exec "prompt" (printf "agents/prompts/hermes/%s.md" .name) }}
+
+{{ tmpl.Exec "prompt" "agents/prompts/shared/clerk-envelope.md" }}

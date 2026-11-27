@@ -1,0 +1,22 @@
+[
+  {
+    "name": "clerk-envelope-schema",
+    "path": "agents/schemas/clerk-envelope.schema.json",
+    "sha256": "5e9960ee24c6ea650954987f802246a1aa7f7dd948644dfb1ccbe156d9e2acb6"
+  },
+  {
+    "name": "vikunja-clerk",
+    "path": "agents/hermes/vikunja-clerk.soul.md",
+    "sha256": "d25e8f554a67e43e0fefdd6da86aec16773d55dc7c039e6f8d9d9751269684d2"
+  },
+  {
+    "name": "youtrack-clerk",
+    "path": "agents/hermes/youtrack-clerk.soul.md",
+    "sha256": "16cb7c55b3bdbfca5e3dbe82902b313799b77b8c96278d812d6c8d75a74ad4a3"
+  },
+  {
+    "name": "zammad-clerk",
+    "path": "agents/hermes/zammad-clerk.soul.md",
+    "sha256": "cd1720865a7847f22dc666a1f32d5dda4e137a898204d21529912075a4e6d9fd"
+  }
+]

@@ -16,6 +16,8 @@ ignores:
   - "automation/**/!(index).md"
   - "applications/**/!(index).md"
   - "developer-tools/**/!(index).md"
+  # Rendered Hermes souls: generated runtime prompt bodies, checked by make check-hermes.
+  - "agents/hermes/*.soul.md"
 
 overrides:
   - filter:
