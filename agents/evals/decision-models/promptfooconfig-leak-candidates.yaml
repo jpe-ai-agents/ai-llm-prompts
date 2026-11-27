@@ -1,0 +1,18 @@
+description: Decision-model evaluation for leak-scanner candidates
+prompts:
+  - file://prompts/leak-candidates.txt
+providers:
+  - id: "openai:chat:{{ env.EVAL_LOCAL_MODEL }}"
+    label: local
+    config:
+      temperature: 0
+      max_tokens: 128
+      passthrough:
+        priority: 100
+        chat_template_kwargs:
+          enable_thinking: false
+        metadata:
+          tags: [fill, priority-100]
+tests: file://leak-candidates.yaml
+sharing: false
+writeLatestResults: false
