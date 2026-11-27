@@ -42,6 +42,8 @@ what is missing.
 - After every write, read the ticket back and confirm the change is there.
 - Never delete anything or merge tickets.
 - Close a ticket only when the request says so in plain words.
+- Change one ticket per request. Refuse and change nothing when asked to change tickets in bulk, move a ticket to
+  another group, change its owner or customer, or show a token or credential.
 
 Do not use the report envelope. Reply with only one compact JSON object and nothing else. It has exactly these keys:
 

@@ -1,7 +1,23 @@
 # Promptfoo agent evaluation matrix
 
 The test generator loads every resolved agent definition's `eval_set` into the matrix. New definitions participate
-automatically, and missing suites fail generation. Run it from the repository root to check its case and assertion counts:
+automatically, and missing suites fail generation.
+
+## Installation
+
+Nothing needs a global install. Enter the development shell from the repository root; it provides Python and the test
+libraries:
+
+```sh
+nix develop
+```
+
+The Promptfoo commands in this file fetch Node.js and a pinned Promptfoo themselves through `nix shell`. The clerk
+acceptance runs also need `ask-agent` on the path.
+
+## Usage
+
+Run the generator from the repository root to check its case and assertion counts:
 
 ```sh
 python3 agents/evals/promptfoo/generate.py
@@ -66,19 +82,26 @@ nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -
 ## Clerk acceptance
 
 The sets under `agents/evals/acceptance/` ask a deployed tracker clerk plain requests through `ask-agent`, the same
-command every caller uses. `ask-agent` checks each reply against the clerk envelope schema; the cases assert the
-status, that a write is read back, that a second create finds the first task, and that a refused request changes
-nothing. The cases run in order and share one probe task, so run them one at a time.
+command every caller uses. `ask-agent` checks each reply against the clerk envelope schema; the cases assert allowed
+operations, readback after writes, duplicate prevention where creation is allowed, and that refusals change nothing.
+Cases run in order and one at a time. `vikunja-clerk.yaml` uses a writable project (`CLERK_PROJECT`) to create one
+probe task. `youtrack-clerk.yaml` uses open issues set aside for acceptance runs (`CLERK_ISSUE`,
+`CLERK_RELATED_ISSUE`) and the title of an existing knowledge article (`CLERK_ARTICLE`). `zammad-clerk.yaml` uses a
+group set aside for acceptance runs (`CLERK_GROUP`) to create one probe ticket.
 
-Set `CLERK` to the agent name, `CLERK_PROJECT` to the name of a project the clerk may write to, `CLERK_RUN` to a value
-unique to the run, and `ASK_AGENT_CALLER` to the caller's label. One run passes when Promptfoo exits 0. Ten runs, each
-with its own probe task, from the repository root:
+Set `CLERK` to the matching agent name, `CLERK_RUN` to a value unique to the run, and `ASK_AGENT_CALLER` to the
+caller's label. Supply `CLERK_PROJECT` for Vikunja; `CLERK_ISSUE`, `CLERK_RELATED_ISSUE`, and `CLERK_ARTICLE` for
+YouTrack; or `CLERK_GROUP` for Zammad as required by the selected set. One run passes when Promptfoo exits 0. Ten
+runs of each set, each with a fresh probe value, from the repository root:
 
 ```sh
-for run in $(seq 1 10); do
-  CLERK_RUN="$(date +%s)-$run" nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
-    npx -y promptfoo@0.118.14 eval -c agents/evals/acceptance/promptfooconfig-clerk.yaml \
-    -t "agents/evals/acceptance/$CLERK.yaml" -j 1 --no-cache --no-progress-bar || break
+for clerk in vikunja-clerk youtrack-clerk zammad-clerk; do
+  for run in $(seq 1 10); do
+    CLERK="$clerk" CLERK_RUN="$(date +%s)-$clerk-$run" \
+      nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#nodejs_22 -c \
+      npx -y promptfoo@0.118.14 eval -c agents/evals/acceptance/promptfooconfig-clerk.yaml \
+      -t "agents/evals/acceptance/$clerk.yaml" -j 1 --no-cache --no-progress-bar || break 2
+  done
 done
 ```
 
