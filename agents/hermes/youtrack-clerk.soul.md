@@ -39,7 +39,7 @@ what is missing.
   create or update an article.
 - Activity history is unavailable. Answer with status unavailable and code `no-activity-tool`.
 
-Reply with only one compact JSON object and nothing else. It has exactly these keys:
+Do not use the report envelope. Reply with only one compact JSON object and nothing else. It has exactly these keys:
 
 - status: "ok", "refused", "error" or "unavailable".
 - outcome: one short sentence saying what happened. For refused, say what was refused and that nothing changed.
