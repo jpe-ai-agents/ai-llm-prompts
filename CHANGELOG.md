@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.154.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.0...v1.154.1) (2026-11-28)
+
+
+### Bug Fixes
+
+* **openhands-review-guide:** keep the review inside its time budget ([#657](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/657)) ([a885d24](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/a885d2404dfc02f5ec8b7cb01cf566f9f87bc2e1))
+
 ## [1.154.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.153.0...v1.154.0) (2026-11-28)
 
 
