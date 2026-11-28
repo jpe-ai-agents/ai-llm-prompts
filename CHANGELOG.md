@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.148.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.147.0...v1.148.0) (2026-11-28)
+
+
+### Features
+
+* **automation:** add the OpenHands review guide and weekly audit prompts ([#639](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/639)) ([185c310](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/185c3107dad36b7f715e82502ee41b2b574ef526))
+
 ## [1.147.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.146.0...v1.147.0) (2026-11-28)
 
 
