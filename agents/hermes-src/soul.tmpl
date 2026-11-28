@@ -1,5 +1,7 @@
-{{- /* One Hermes profile SOUL.md: shared prefix, the agent's Hermes prompt, then the shared reply envelope. */ -}}
-{{- tmpl.Exec "shared-prefix" .shared_prefix }}
+{{- /* One Hermes profile SOUL.md: the shared tracker fragment, the agent's Hermes prompt, then the shared reply
+     envelope. The deployment's base text is not part of a soul: it ships as its own base.md for the deployment
+     to put first in every soul. */ -}}
+{{- tmpl.Exec "prompt" "agents/prompts/shared/trackers.md" }}
 
 {{ tmpl.Exec "prompt" (printf "agents/prompts/hermes/%s.md" .name) }}
 

@@ -1,5 +1,10 @@
 [
   {
+    "name": "base",
+    "path": "agents/hermes/base.md",
+    "sha256": "96d4dcd10b7fa12c82697e1cc987631453ba0c5fa89c9e40d8ec9f412be0f141"
+  },
+  {
     "name": "clerk-envelope-schema",
     "path": "agents/schemas/clerk-envelope.schema.json",
     "sha256": "5e9960ee24c6ea650954987f802246a1aa7f7dd948644dfb1ccbe156d9e2acb6"
@@ -7,16 +12,16 @@
   {
     "name": "vikunja-clerk",
     "path": "agents/hermes/vikunja-clerk.soul.md",
-    "sha256": "77c088a47660a1591aa9b610f0d5716cf5f4aaea5c6236c61e7ce93591094e8b"
+    "sha256": "4a2396491fe9ca98f4ac5a9989f6f6877d34a60242f0596711d7513053a862f1"
   },
   {
     "name": "youtrack-clerk",
     "path": "agents/hermes/youtrack-clerk.soul.md",
-    "sha256": "0031efabf5203fb4996656c65e5ac6c456fee8598ec305c503e020471ae0d9d3"
+    "sha256": "6c47f7f4d180b35e5896aa14390adda2064e33996a0bc26e8fdea5ee88fd8e6a"
   },
   {
     "name": "zammad-clerk",
     "path": "agents/hermes/zammad-clerk.soul.md",
-    "sha256": "21800197ff08e52c571c9b51dcc3edb74416de00ef4c3ea0d5f5e6352d4b6549"
+    "sha256": "24350c442cfda19b12a5623ce8a5fd5a09500698f6dee6d6b3005d0b5d909e19"
   }
 ]

@@ -140,8 +140,9 @@ check-index:
 		diff -u "$(AGENTS_ROOT)/agents/index.md" "$$output/index.md"; \
 		diff -u "$(AGENTS_ROOT)/agents/prompts/index.md" "$$output/prompts.md"
 
-# Hermes profile souls: every definition with agents/prompts/hermes/<name>.md, plus the envelope schema, each
-# listed with its sha256 so a deployment pins a commit and verifies every file it downloads.
+# Hermes profile souls: every definition with agents/prompts/hermes/<name>.md, plus the shared base text
+# (agents/hermes/base.md) and the envelope schema, each listed with its sha256 so a deployment pins a commit and
+# verifies every file it downloads.
 render-hermes:
 	@mkdir -p "$(HERMES_OUTPUT)"
 	@set -eu; output=$$(mktemp -d "$${TMPDIR:-/tmp}/hermes.XXXXXX"); trap 'rm -rf "$$output"' EXIT; \
@@ -157,6 +158,12 @@ render-hermes:
 			jq -cn --arg name "$$name" --arg path "agents/hermes/$$name.soul.md" --arg sha256 "$${hash%% *}" \
 				'{name: $$name, path: $$path, sha256: $$sha256}' >> "$$output/entries.jsonl"; \
 		done < "$$output/definitions.jsonl"; \
+		gomplate -t dify="$(CURDIR)/agents/dify-src/agent.tmpl" \
+			-i '{{ tmpl.Exec "prompt" "agents/prompts/shared/base.md" }}{{ "\n" }}' \
+			-o "$(abspath $(HERMES_OUTPUT))/base.md"; \
+		hash=$$(sha256sum "$(abspath $(HERMES_OUTPUT))/base.md"); \
+		jq -cn --arg name "base" --arg path "agents/hermes/base.md" --arg sha256 "$${hash%% *}" \
+			'{name: $$name, path: $$path, sha256: $$sha256}' >> "$$output/entries.jsonl"; \
 		hash=$$(sha256sum agents/schemas/clerk-envelope.schema.json); \
 		jq -cn --arg sha256 "$${hash%% *}" \
 			'{name: "clerk-envelope-schema", path: "agents/schemas/clerk-envelope.schema.json", sha256: $$sha256}' \

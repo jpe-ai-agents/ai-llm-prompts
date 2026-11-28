@@ -1,9 +1,13 @@
 # Hermes profile souls
 
 `soul.tmpl` renders one `SOUL.md` for each agent definition that has a Hermes prompt at
-`agents/prompts/hermes/<name>.md`. A soul is the definition's shared prefix, then that Hermes prompt, then the shared
-reply envelope fragment `agents/prompts/shared/clerk-envelope.md`. Every part is static text, so the whole soul can
-stay in a model's prompt cache.
+`agents/prompts/hermes/<name>.md`. A soul is the shared tracker fragment `agents/prompts/shared/trackers.md`, then
+that Hermes prompt, then the shared reply envelope fragment `agents/prompts/shared/clerk-envelope.md`. Every part is
+static text, so the whole soul can stay in a model's prompt cache.
+
+The shared base text `agents/prompts/shared/base.md` is not part of any soul. `render-hermes` also writes it to
+`agents/hermes/base.md` as its own manifest entry so a deployment can prepend one short base text to every agent
+soul and share a single prompt cache across all of them.
 
 ## Installation
 
