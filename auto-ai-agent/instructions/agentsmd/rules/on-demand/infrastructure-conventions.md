@@ -110,9 +110,12 @@ temporary file or a `.env`; hold it in memory.
 
 ## Container placement
 
-System containers by default. Reach for a full container runtime only when the
-vendor ships that way and nothing else works, for ephemeral CI runners, or for
-development and test. Document the exception at the top of the owning
+Run each workload the lightest way that works: the form with the least
+configuration and code to own. A system container running the vendor's package
+or binary is the default. Use a full container runtime when the vendor ships an
+image and running it takes less configuration or code than a native install,
+when nothing else works, for ephemeral CI runners, or for development and test.
+State which form a workload uses, and why, at the top of the owning
 repository's agent instructions.
 
 High-volume network traffic must never traverse a virtualized container
