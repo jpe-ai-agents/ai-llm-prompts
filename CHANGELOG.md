@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.152.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.151.0...v1.152.0) (2026-11-28)
+
+
+### Features
+
+* **evals:** run the acceptance sets through the public agent names ([#651](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/651)) ([65a8991](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/65a8991683f44673793f4cccdc165404330902b6))
+
 ## [1.151.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.150.0...v1.151.0) (2026-11-28)
 
 
