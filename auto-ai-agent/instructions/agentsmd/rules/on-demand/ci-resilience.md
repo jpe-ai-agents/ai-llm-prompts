@@ -27,10 +27,11 @@ caller and every template repository. Never patch one repo and leave the class a
 
 ## Rules
 
-1. **First-party shared workflow refs float on the major tag.** Call a reusable workflow from
-   `JacobPEvans/.github` or `JacobPEvans/.github-ai` at that repository's current major tag
-   (for example `@v1` or `@v2`), with no trailing version comment.
-   Renovate keeps these refs on the major tag. Third-party actions stay pinned by commit SHA,
+1. **Internal refs float on the major tag.** A repository the JacobPEvans enterprise fully owns
+   references another such repository at its floating major tag (for example `@v1` or `ref=v1`),
+   never an exact release and with no trailing version comment. This covers reusable workflows,
+   actions, Ansible roles and collections, OpenTofu modules and flake inputs. Releases land several
+   times a day; consumers pick them up without a bump. Renovate keeps these refs on the major tag. Third-party actions stay pinned by commit SHA,
    bumped by Renovate's digest manager.
 2. **An unmapped path runs the full suite.** A path-scope selector never fails on a path it doesn't know, and never
    silently skips the real checks. Unknown means everything for that stack.
