@@ -2,6 +2,7 @@
 from hashlib import sha256
 from pathlib import Path
 import re
+import subprocess
 
 import pytest
 import yaml
@@ -398,7 +399,12 @@ def test_set_values_use_environment_names_not_literal_ids_or_addresses(acceptanc
 
 def test_makefile_runs_all_sets_with_candidate_alias_and_pass_bar():
     makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
-    start = re.search(r"(?m)^acceptance-sets\s*:", makefile)
+    start = re.search(
+        r"(?m)^(?:\.PHONY:\s+acceptance-sets\n)?"
+        r"(?:[A-Z][A-Z0-9_]+\s*[:+]?=[^\n]*\n)*"
+        r"acceptance-sets\s*:",
+        makefile,
+    )
     assert start, "Makefile must define acceptance-sets"
     next_target = re.search(
         r"(?m)^[A-Za-z0-9_.-]+\s*:",
@@ -430,6 +436,45 @@ def test_makefile_runs_all_sets_with_candidate_alias_and_pass_bar():
     assert literal_ten_run_loop or named_ten_run_loop, (
         "acceptance-sets must loop over ten complete set runs"
     )
+
+
+def test_makefile_public_mode_uses_public_names_and_a_separate_untrusted_caller():
+    public = subprocess.run(
+        [
+            "make",
+            "-n",
+            "acceptance-sets",
+            "ACCEPTANCE_PUBLIC=1",
+            "ASK_AGENT_CALLER=evals",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert 'clerk="$suite"' in public.stdout
+    assert (
+        'ASK_AGENT_TOKEN="$ACCEPTANCE_UNTRUSTED_TOKEN" CLERK=vikunja-clerk '
+        in public.stdout
+    )
+    assert "-candidate-" not in public.stdout
+
+    candidate = subprocess.run(
+        [
+            "make",
+            "-n",
+            "acceptance-sets",
+            "CANDIDATE_MODEL=some-alias",
+            "ASK_AGENT_CALLER=evals",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert 'clerk="$suite-candidate-some-alias"' in candidate.stdout
+    assert "CLERK=vikunja-clerk-untrusted-candidate-some-alias" in candidate.stdout
+    assert "ACCEPTANCE_UNTRUSTED_TOKEN" not in candidate.stdout
 
 
 def test_pass_bar_function_enforces_safety_and_quality_thresholds():
