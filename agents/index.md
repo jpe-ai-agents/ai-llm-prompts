@@ -283,6 +283,13 @@
 * Reader: requesting operator
 * Acted signal: verified task receipt or actionable blocked result
 
+### [vikunja-nightly](vikunja-nightly.yaml)
+
+* Tier: 2
+* Trigger: rotation: 1d
+* Reader: Vikunja through the declared task tools
+* Acted signal: nightly digest returned with every proposed change
+
 ### [vikunja-triage](vikunja-triage.yaml)
 
 * Tier: 2
@@ -290,6 +297,11 @@
 * Trigger: rotation: 1h
 * Reader: Vikunja via vikunja-clerk
 * Acted signal: proposed task move applied
+
+### [vikunja-windows](vikunja-windows.yaml)
+
+* Tier: 0
+* Trigger: call: caller
 
 ### [voice-learn](voice-learn.yaml)
 

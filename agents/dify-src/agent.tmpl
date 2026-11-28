@@ -27,7 +27,11 @@
     {{- test.Assert "prompt and eval_set follow from name" (and (not (coll.Has $agent "prompt")) (not (coll.Has $agent "eval_set"))) -}}
     {{- $profile = coll.Merge $profile $defaults -}}
     {{- $agent = coll.Merge $agent $profile -}}
-    {{- $agent = coll.Set "prompt" (printf "agents/prompts/%s.md" $agent.name) $agent -}}
+    {{- $promptPath := printf "agents/prompts/%s.md" $agent.name -}}
+    {{- if eq $agent.home_platform "hermes" -}}
+      {{- $promptPath = printf "agents/prompts/hermes/%s.md" $agent.name -}}
+    {{- end -}}
+    {{- $agent = coll.Set "prompt" $promptPath $agent -}}
     {{- $agent = coll.Set "eval_set" (printf "agents/evals/%s.yaml" $agent.name) $agent -}}
   {{- end -}}
   {{- dict "agent" $agent "profile" $profile | data.ToJSON -}}

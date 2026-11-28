@@ -137,7 +137,10 @@ def resolve_agents():
 def dify_live_exclusions(agents):
     """Agents the Service API cannot run with one text value, read from each rendered app."""
     exclusions = {}
-    for name in sorted(agents):
+    for name, agent in sorted(agents.items()):
+        if agent.get("home_platform") != "dify":
+            exclusions[name] = "not a Dify app"
+            continue
         dsl = load_yaml(ROOT / "agents" / "dify" / f"{name}.dsl.yml")
         nodes = [node.get("data", {}) for node in dsl["workflow"]["graph"]["nodes"]]
         start = [v.get("variable") for node in nodes if node.get("type") == "start" for v in node.get("variables", [])]

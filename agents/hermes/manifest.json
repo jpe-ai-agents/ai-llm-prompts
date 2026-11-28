@@ -12,7 +12,125 @@
   {
     "name": "vikunja-clerk",
     "path": "agents/hermes/vikunja-clerk.soul.md",
-    "sha256": "8bc7c98dd5f4501674281fca3d164d75862c0bcf428ef607dcd2adcea158b5b7"
+    "sha256": "09e0dac0354e5e7c4bcd5b32dd1029e4fc26a8c5f6bdd7bb9eebe99482d8ab96",
+    "tools": [
+      "tasks_list",
+      "tasks_read",
+      "tasks_create",
+      "tasks_update",
+      "task_comments_list",
+      "task_comments_create",
+      "task_assignees_list",
+      "task_assignees_create",
+      "task_assignees_delete",
+      "projects_list",
+      "projects_read",
+      "labels_list",
+      "find_action",
+      "do_action",
+      "filter_syntax"
+    ],
+    "write_tools": [
+      "tasks_create",
+      "tasks_update",
+      "task_comments_create",
+      "task_assignees_create",
+      "task_assignees_delete",
+      "do_action"
+    ],
+    "caps": {
+      "children_per_split": 10,
+      "closes_per_request": 1,
+      "tasks_per_request": 1
+    }
+  },
+  {
+    "name": "vikunja-nightly",
+    "path": "agents/hermes/vikunja-nightly.soul.md",
+    "sha256": "ea1a66eb46b111f9a690fab9df948f508a11fd79a89bad87264bdf6c7094c089",
+    "tools": [
+      "tasks_list",
+      "tasks_read",
+      "tasks_update",
+      "task_comments_list",
+      "task_comments_create",
+      "task_assignees_list",
+      "task_assignees_delete",
+      "projects_list",
+      "projects_read",
+      "labels_list",
+      "find_action",
+      "do_action",
+      "filter_syntax"
+    ],
+    "write_tools": [
+      "tasks_update",
+      "task_comments_create",
+      "task_assignees_delete",
+      "do_action"
+    ],
+    "caps": {
+      "changed_within_days": 14,
+      "closes_per_run": 10,
+      "deletes": 0,
+      "duplicate_marks_per_run": 10,
+      "relations_per_run": 25
+    }
+  },
+  {
+    "name": "vikunja-triage",
+    "path": "agents/hermes/vikunja-triage.soul.md",
+    "sha256": "d06b0d134f828f0428d917d2469475c9ca7ce87123e24e4eda10704038cbfd87",
+    "tools": [
+      "tasks_list",
+      "tasks_read",
+      "tasks_update",
+      "task_comments_list",
+      "task_comments_create",
+      "projects_list",
+      "projects_read",
+      "labels_list",
+      "find_action",
+      "do_action",
+      "filter_syntax"
+    ],
+    "write_tools": [
+      "tasks_update",
+      "task_comments_create",
+      "do_action"
+    ],
+    "caps": {
+      "closes_per_run": 0,
+      "items_per_run": 25,
+      "ready_limit": 10
+    }
+  },
+  {
+    "name": "vikunja-windows",
+    "path": "agents/hermes/vikunja-windows.soul.md",
+    "sha256": "cf093ee5d74257e638e5b1322186c29bc1c0a16cf284e1aadbddb7bf77765956",
+    "tools": [
+      "tasks_list",
+      "tasks_read",
+      "tasks_create",
+      "tasks_update",
+      "task_comments_list",
+      "task_comments_create",
+      "projects_read",
+      "labels_list",
+      "find_action",
+      "do_action"
+    ],
+    "write_tools": [
+      "tasks_create",
+      "tasks_update",
+      "task_comments_create",
+      "do_action"
+    ],
+    "caps": {
+      "closes_per_sweep": 20,
+      "windows_per_request": 1
+    }
   },
   {
     "name": "youtrack-clerk",

@@ -1,0 +1,47 @@
+name: vikunja-nightly
+extends: connector
+description: |
+  Use when: the nightly schedule tidies recent tasks in the named domain projects.
+  Do not use when: work is outside the 14-day scope, outside those projects, or asks for deletion.
+  Trigger scenarios:
+  - Recently changed open tasks need duplicate review or a relation.
+  - A verified merged pull request or completed epic may allow a close.
+  - An assigned In progress task has no change for 24 hours.
+  Prompt: agents/prompts/hermes/vikunja-nightly.md
+home_platform: hermes
+tier: 2
+triggers:
+  - kind: rotation
+    every: 1d
+reader: Vikunja through the declared task tools
+acted_signal: nightly digest returned with every proposed change
+connectors: [vikunja-clerk]
+tools: [a2a.call]
+identity: agent-vikunja-nightly
+api_key_ref: openbao://agent-key/vikunja-nightly
+hermes:
+  tools:
+    - tasks_list
+    - tasks_read
+    - tasks_update
+    - task_comments_list
+    - task_comments_create
+    - task_assignees_list
+    - task_assignees_delete
+    - projects_list
+    - projects_read
+    - labels_list
+    - find_action
+    - do_action
+    - filter_syntax
+  write_tools:
+    - tasks_update
+    - task_comments_create
+    - task_assignees_delete
+    - do_action
+  caps:
+    closes_per_run: 10
+    duplicate_marks_per_run: 10
+    relations_per_run: 25
+    changed_within_days: 14
+    deletes: 0

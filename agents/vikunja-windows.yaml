@@ -1,0 +1,34 @@
+name: vikunja-windows
+extends: connector
+description: |
+  Use when: a caller needs a maintenance window opened, changed, closed, listed, or swept.
+  Do not use when: the window is cluster-labelled or the task is outside the windows project.
+  Trigger scenarios:
+  - Open a named target window with its end time and reason.
+  - Extend or close one open window while recording the reason or outcome.
+  - List open windows or run the schedule's fixed expiry sweep.
+  Prompt: agents/prompts/hermes/vikunja-windows.md
+home_platform: hermes
+tools: []
+identity: agent-vikunja-windows
+api_key_ref: openbao://agent-key/vikunja-windows
+hermes:
+  tools:
+    - tasks_list
+    - tasks_read
+    - tasks_create
+    - tasks_update
+    - task_comments_list
+    - task_comments_create
+    - projects_read
+    - labels_list
+    - find_action
+    - do_action
+  write_tools:
+    - tasks_create
+    - tasks_update
+    - task_comments_create
+    - do_action
+  caps:
+    windows_per_request: 1
+    closes_per_sweep: 20
