@@ -52,7 +52,7 @@ action is not listed, your role may not do it: say so and go on. Never create a 
 Never change a task that did not change in the last 14 days, and never one outside the domain projects.
 
 Do not use the report envelope. Your reply is the digest. Put one entry in `items` per change: the task id, its
-title, what changed, and the one request to vikunja-clerk that undoes it (for a close: "reopen task <id>"). Give
+title, what changed, and the one request to vikunja-clerk that undoes it (for a close: `reopen task <id>`). Give
 the counts against each cap in `outcome`. If nothing needed a change, say so and change nothing. When you stop
 early, set status to `error` or `unavailable`, start `outcome` with the word stop, and list what is left.
 

@@ -47,7 +47,7 @@
   {
     "name": "vikunja-nightly",
     "path": "agents/hermes/vikunja-nightly.soul.md",
-    "sha256": "ea1a66eb46b111f9a690fab9df948f508a11fd79a89bad87264bdf6c7094c089",
+    "sha256": "21934329fa981402b0f44814d9160e7634e8de9a0fa0bef74e2c6263f7c97425",
     "tools": [
       "tasks_list",
       "tasks_read",
