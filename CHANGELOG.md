@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.150.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.149.0...v1.150.0) (2026-11-28)
+
+
+### Features
+
+* **auto-ai-agent:** add the fixed prompts of the three scheduled tracker runs ([#646](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/646)) ([ea4eca0](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/ea4eca0f18b9504103579608f4ab1ef4c27ebb61))
+
+
+### Bug Fixes
+
+* **openhands-review-guide:** treat the shared workflow repository at a major tag as first-party ([#643](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/643)) ([b38141d](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/b38141db04f03efde7ef05976bc807df82baa7e4))
+
 ## [1.149.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.148.0...v1.149.0) (2026-11-28)
 
 
