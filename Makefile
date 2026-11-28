@@ -203,6 +203,7 @@ acceptance-sets:
 			clerk="$$suite$(ACCEPTANCE_SUFFIX)"; \
 			for run in $$(seq 1 $(ACCEPTANCE_RUNS)); do \
 				run_id="$$(date -u +%Y%m%dT%H%M%SZ)-$$-$$suite-$$run"; \
+				nix develop -c python3 agents/judges/acceptance_seed.py "$$suite" "$$run_id" || exit 1; \
 				if [ "$$suite" = vikunja-clerk ]; then \
 					CLERK="$$clerk" CLERK_RUN="$$run_id" nix develop -c npx promptfoo eval \
 						--config agents/evals/acceptance/promptfooconfig-clerk.yaml \
