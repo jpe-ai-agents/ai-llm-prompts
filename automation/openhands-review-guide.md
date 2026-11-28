@@ -4,7 +4,7 @@ title: OpenHands pull request review guide
 description: Review rules the OpenHands reviewer applies to every pull request, and the rule that decides a blocking review.
 resource: prompt://dryvist/automation/openhands-review-guide
 tags: [automation, openhands, code-review, pull-request]
-timestamp: "2026-11-28T05:05:00Z"
+timestamp: "2026-11-28T13:20:00Z"
 status: active
 consumers:
   - JacobPEvans/.github-ai
@@ -33,6 +33,12 @@ quote it.
 3. Use `REQUEST_CHANGES` only when the review has at least one 🔴 Critical finding. Otherwise use `COMMENT`.
 4. Every finding names a file and a line and says what to change. Write no praise and no summary of the change.
 5. If there is nothing to report, submit a `COMMENT` review whose body is `No findings.`
+
+## Time budget
+
+The review has a few minutes. Read the diff and the files and tests it touches. Never run the repository's whole
+test suite, a full build or a full lint: CI runs those on every pull request. To confirm one finding, you may run
+one test file or one command that touches only the changed code.
 
 ## What is 🔴 Critical
 
