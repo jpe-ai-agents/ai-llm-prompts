@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.149.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.148.0...v1.149.0) (2026-11-28)
+
+
+### Features
+
+* **agents:** publish one base text for Hermes souls and the tracker conventions ([#641](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/641)) ([7a86ee5](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/7a86ee52244e317828db1494f15078a49911c53e))
+
 ## [1.148.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.147.0...v1.148.0) (2026-11-28)
 
 
