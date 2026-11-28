@@ -58,11 +58,9 @@ auto-merges when checks pass. The PR that opened the work owns the release: conf
 (or merge it if green); its release commit opens the promotion by itself. Later commits take the next version.
 Pushing to `main` tags and releases that commit; never merge to `main` without intending a release.
 
-Promotion is automatic. Each release commit, each push to `main` and a weekly cron run the shared
-`_promotion-pr.yml`. It creates `promote/<version>` at the newest release commit `main` lacks, then opens a
-merge-commit PR into `main` titled `chore(release): promote <version> to main` with auto-merge armed. At most one
-is open; the next opens when it merges. `develop` is never frozen: other PRs keep merging. Never open, label or
-hand-merge a promotion.
+Promotion is automatic: each release commit, `main` push and weekly cron runs `_promotion-pr.yml`. It creates
+`promote/<version>` at the newest release commit `main` lacks and opens an auto-merging merge-commit PR into
+`main`. At most one is open. `develop` never freezes. Never open, label or hand-merge a promotion.
 
 ### Promotion is not done at the merge
 
