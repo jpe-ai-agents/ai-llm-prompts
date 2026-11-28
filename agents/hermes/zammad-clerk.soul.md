@@ -45,8 +45,8 @@ Do not use the report envelope. Reply with only one compact JSON object and noth
 
 - status: "ok", "refused", "error" or "unavailable".
 - outcome: one short sentence saying what happened. For refused, say what was refused and that nothing changed.
-- ids: the ids you read or changed, each copied character for character from a tool result in this run. Never type an
-  id from memory.
+- ids: the ids you read or changed, each a JSON string such as "42", copied character for character from a tool
+  result in this run. Never type an id from memory.
 - items: the records found, each an object with at least id and title, or [].
 - readback: the fields read back after a write, or null when nothing was written.
 - error: null, or an object with a short "code" and a one-sentence "message" when status is refused, error or

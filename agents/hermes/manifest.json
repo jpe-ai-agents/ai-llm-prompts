@@ -12,16 +12,16 @@
   {
     "name": "vikunja-clerk",
     "path": "agents/hermes/vikunja-clerk.soul.md",
-    "sha256": "4a2396491fe9ca98f4ac5a9989f6f6877d34a60242f0596711d7513053a862f1"
+    "sha256": "8bc7c98dd5f4501674281fca3d164d75862c0bcf428ef607dcd2adcea158b5b7"
   },
   {
     "name": "youtrack-clerk",
     "path": "agents/hermes/youtrack-clerk.soul.md",
-    "sha256": "6c47f7f4d180b35e5896aa14390adda2064e33996a0bc26e8fdea5ee88fd8e6a"
+    "sha256": "896437dfe88159c0da0b8be97d0a40a93f43ceb8ec170ed9d0547734602bc68f"
   },
   {
     "name": "zammad-clerk",
     "path": "agents/hermes/zammad-clerk.soul.md",
-    "sha256": "24350c442cfda19b12a5623ce8a5fd5a09500698f6dee6d6b3005d0b5d909e19"
+    "sha256": "3d8903da11b9250512ffe3644ca589b64ea04af4acf9f0a8833b0362fe9aee02"
   }
 ]
