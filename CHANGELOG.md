@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.154.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.1...v1.154.2) (2026-11-28)
+
+
+### Bug Fixes
+
+* **git-flow:** describe the pinned promote/&lt;version&gt; promotion ([#659](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/659)) ([7976c8a](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/7976c8a52279230cf0448d0ec9c8905985a50e19))
+
 ## [1.154.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.0...v1.154.1) (2026-11-28)
 
 
