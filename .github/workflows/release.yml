@@ -1,4 +1,4 @@
-# Shared release-please, major-tag and release-freeze caller.
+# Shared release-please, major-tag and promotion caller.
 name: Release
 
 on:
