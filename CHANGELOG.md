@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.155.1](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.155.0...v1.155.1) (2026-11-28)
+
+
+### Bug Fixes
+
+* **git-flow:** describe batched release merges and the hand-merge path ([#664](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/664)) ([84586de](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/84586ded1f1c54bd3a09c1a1a69c514f65445348))
+
 ## [1.155.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.2...v1.155.0) (2026-11-28)
 
 
