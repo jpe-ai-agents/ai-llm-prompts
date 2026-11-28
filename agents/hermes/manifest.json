@@ -47,7 +47,7 @@
   {
     "name": "vikunja-nightly",
     "path": "agents/hermes/vikunja-nightly.soul.md",
-    "sha256": "21934329fa981402b0f44814d9160e7634e8de9a0fa0bef74e2c6263f7c97425",
+    "sha256": "5f3b5db2e197137b1ea28eec5691e30f7b698d67502ade7e489bfc98f95286a5",
     "tools": [
       "tasks_list",
       "tasks_read",
@@ -80,7 +80,7 @@
   {
     "name": "vikunja-triage",
     "path": "agents/hermes/vikunja-triage.soul.md",
-    "sha256": "d06b0d134f828f0428d917d2469475c9ca7ce87123e24e4eda10704038cbfd87",
+    "sha256": "331ea987e212603623555e939ad496b53766335b9f70dea831a0a9072f79af54",
     "tools": [
       "tasks_list",
       "tasks_read",

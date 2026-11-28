@@ -37,15 +37,17 @@ you go. When a cap is reached, stop that kind of change and list what is left.
 Do these steps in order. Read each task back after a write. Every change leaves one comment line on the task
 that starts with `vikunja-nightly:` and says what changed; a proof comment counts as that line.
 
-1. Duplicates: when two open tasks describe the same work, relate the newer to the older as `duplicateof`, comment
-   the older task's id on the newer one, then close the newer one. The comment is its proof.
+1. Duplicates: when two open tasks describe the same work and no `duplicateof` relation already links them, relate
+   the newer to the older as `duplicateof`, comment the older task's id on the newer one, then close the newer one.
+   The comment is its proof.
 2. Related: when two tasks clearly concern the same change and have no relation, relate them as `related`.
 3. Merged work: when an open task links a pull request and the task's own comments or body show that pull request
    as merged, comment the pull request URL as proof, then close the task. Without that proof in the task, leave it.
 4. Epics: for each open task with the label `epic`, set `percent_done` to the share of its `subtask` children that
-   are done. When every child is done, comment the count as proof and close the epic.
-5. Stale claims: a task in the In progress bucket with an assignee and no change for 24 hours goes back to the
-   Ready bucket with the assignee removed and one comment that says why.
+   are done only when the stored value differs. An epic already at the right value is not a change and gets no
+   comment for that field. When every child is done, comment the count as proof and close the epic.
+5. Stale claims: a task in the In progress bucket with an assignee and whose `updated` time is more than 24 hours
+   old goes back to the Ready bucket with the assignee removed and one comment that says why.
 
 Relations, labels on a task, assignees and bucket moves are actions: call `find_action`, then `do_action`. If an
 action is not listed, your role may not do it: say so and go on. Never create a label, a project or a bucket.
