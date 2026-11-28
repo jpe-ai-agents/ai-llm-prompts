@@ -4,9 +4,10 @@ title: Vikunja task to pull request
 description: OpenHands prompt that turns one Vikunja webhook task into a ready-for-review pull request.
 resource: prompt://dryvist/automation/openhands-vikunja-ticket-to-pr
 tags: [automation, openhands, vikunja, pull-request]
-timestamp: "2026-11-08T08:15:00Z"
-status: staged
-consumers: []
+timestamp: "2026-11-28T20:20:00Z"
+status: active
+consumers:
+  - dryvist/ansible-proxmox-apps
 render:
   engine: literal
   variables: []

@@ -2,6 +2,8 @@
 
 ## 2026-11-28
 
+* **Feature (automation)**: `openhands-vikunja-ticket-to-pr` is active. Its consumer is the OpenHands Canvas event
+  automation that a Vikunja webhook starts for a task labeled `openhands`.
 * **Feature (auto-ai-agent)**: `hermes-vikunja-triage-sweep`, `hermes-vikunja-nightly-maintenance` and
   `hermes-vikunja-windows-sweep` are the fixed prompts of the three scheduled tracker runs.
 * **Feature (auto-ai-agent)**: `hermes-memory-bank-cleanup` is the fixed prompt of the scheduled clean-up of an
