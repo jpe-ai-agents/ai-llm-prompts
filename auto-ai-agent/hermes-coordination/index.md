@@ -32,3 +32,4 @@
 * [Hermes Vikunja triage sweep](../hermes-vikunja-triage-sweep.md) - Fixed prompt for the scheduled inbox sweep.
 * [Hermes Vikunja nightly maintenance](../hermes-vikunja-nightly-maintenance.md) - Fixed prompt for the scheduled nightly maintenance run.
 * [Hermes Vikunja windows sweep](../hermes-vikunja-windows-sweep.md) - Fixed prompt for the scheduled maintenance-window sweep.
+* [Hermes memory bank clean-up](../hermes-memory-bank-cleanup.md) - Fixed prompt for the scheduled clean-up of an agent's own memory bank.
