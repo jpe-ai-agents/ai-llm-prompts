@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.155.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.2...v1.155.0) (2026-11-28)
+
+
+### Features
+
+* **ci-resilience:** float every internal cross-repo ref on the major tag ([#661](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/661)) ([712fda0](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/712fda05a1520e3e176b6532c5ba7945143937c9))
+* **rules:** an address is a bare base, version and path are separate ([#662](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/662)) ([ee43688](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/ee43688551aa0123b6a8f759eb53887918353c46))
+
 ## [1.154.2](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.154.1...v1.154.2) (2026-11-28)
 
 
