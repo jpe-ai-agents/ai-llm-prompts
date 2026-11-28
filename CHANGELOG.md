@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.151.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.150.0...v1.151.0) (2026-11-28)
+
+
+### Features
+
+* **agents:** add the Vikunja triage, nightly and windows agents to the Hermes pack ([#647](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/647)) ([ce84fe4](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/ce84fe4ce3e89b99f8c5e9d294c507e88b021969))
+* **evals:** add acceptance sets for triage, nightly and windows and one command for every set ([#648](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/648)) ([d7c17ff](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/d7c17ff6970abab9cdbc1137f1e2144a39e99515))
+
 ## [1.150.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.149.0...v1.150.0) (2026-11-28)
 
 
