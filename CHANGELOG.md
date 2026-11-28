@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.153.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.152.0...v1.153.0) (2026-11-28)
+
+
+### Features
+
+* **auto-ai-agent:** add the fixed prompt of the memory bank clean-up ([#653](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/653)) ([68ad3dc](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/68ad3dc3c811a6e1be3316a895e3af37ec471feb))
+
+
+### Bug Fixes
+
+* **hermes:** a second triage or nightly run on unchanged data changes nothing ([#650](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/650)) ([04f6cd3](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/04f6cd3091b1e029721d1259a4045bd8dc7d06d8))
+
 ## [1.152.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.151.0...v1.152.0) (2026-11-28)
 
 
