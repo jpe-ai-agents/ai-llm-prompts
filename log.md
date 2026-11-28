@@ -2,6 +2,8 @@
 
 ## 2026-11-28
 
+* **Feature (auto-ai-agent)**: `hermes-vikunja-triage-sweep`, `hermes-vikunja-nightly-maintenance` and
+  `hermes-vikunja-windows-sweep` are the fixed prompts of the three scheduled tracker runs.
 * **Feature (automation)**: `openhands-review-guide` holds the rules the OpenHands pull request review installs as a
   project skill: when a review blocks, what counts as critical, and the simplify, repository-fit and docs-impact checks.
 * **Feature (automation)**: `openhands-repo-fit-audit` is the prompt of the weekly OpenHands Canvas audit: one public

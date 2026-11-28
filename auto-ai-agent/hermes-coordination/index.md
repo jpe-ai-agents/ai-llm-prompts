@@ -29,3 +29,6 @@
 * [Hermes model routing review](../hermes-model-routing-review.md) - Read-only review of tracked public model routing resources.
 * [Hermes github route](../hermes-github-route.md) - Pull request review request populated from a webhook event.
 * [Hermes repo crawl](../hermes-repo-crawl.md) - Triage of new repository crawl findings with scoped pull request updates.
+* [Hermes Vikunja triage sweep](../hermes-vikunja-triage-sweep.md) - Fixed prompt for the scheduled inbox sweep.
+* [Hermes Vikunja nightly maintenance](../hermes-vikunja-nightly-maintenance.md) - Fixed prompt for the scheduled nightly maintenance run.
+* [Hermes Vikunja windows sweep](../hermes-vikunja-windows-sweep.md) - Fixed prompt for the scheduled maintenance-window sweep.
