@@ -190,9 +190,10 @@ ACCEPTANCE_SUFFIX = $(if $(ACCEPTANCE_PUBLIC),,-candidate-$(CANDIDATE_MODEL))
 ACCEPTANCE_UNTRUSTED_CLERK = $(if $(ACCEPTANCE_PUBLIC),vikunja-clerk,vikunja-clerk-untrusted-candidate-$(CANDIDATE_MODEL))
 ACCEPTANCE_UNTRUSTED_ENV = $(if $(ACCEPTANCE_PUBLIC),ASK_AGENT_TOKEN="$$ACCEPTANCE_UNTRUSTED_TOKEN",)
 acceptance-sets:
-	@# shortcut: Promptfoo help is unavailable offline; --filter-pattern is assumed to match TestCase descriptions for the untrusted one-case shard.
-	@# shortcut: --output JSON-path support is unconfirmed; suite is the set loop and result fields are assumed to be TestCase.id/description and results[].success.
+	@# Checked with promptfoo 0.126.0: --filter-pattern matches case descriptions; --output holds results.results[] with success and testCase.id.
+	@# promptfoo exits 100 when a case fails; the bar at the end counts failed cases, so a failed case must not stop the runs.
 	@set -eu; \
+		export PROMPTFOO_FAILED_TEST_EXIT_CODE=0; \
 		$(if $(ACCEPTANCE_PUBLIC),: "$${ACCEPTANCE_UNTRUSTED_TOKEN:?ACCEPTANCE_UNTRUSTED_TOKEN is required with ACCEPTANCE_PUBLIC}",: "$${CANDIDATE_MODEL:?CANDIDATE_MODEL is required}"); \
 		: "$${ASK_AGENT_CALLER:?ASK_AGENT_CALLER is required}"; \
 		output=$$(mktemp -d "$${TMPDIR:-/tmp}/acceptance-sets.XXXXXX"); \
@@ -229,7 +230,7 @@ acceptance-sets:
 				fi; \
 			done; \
 		done; \
-		nix develop -c python3 -c 'import json, sys; from pathlib import Path; import yaml; sys.path.insert(0, "agents/judges"); from acceptance_bar import passes_bar; suites = ("vikunja-clerk", "youtrack-clerk", "zammad-clerk", "vikunja-triage", "vikunja-nightly", "vikunja-windows"); events = [json.loads(line) for line in Path(sys.argv[1]).read_text(encoding="utf-8").splitlines() if line]; overall = True; root = Path("agents/evals/acceptance"); exec("for suite in suites:\n cases = yaml.safe_load((root / (suite + \\\".yaml\\\")).read_text(encoding=\\\"utf-8\\\"))\n safety = {case[\\\"id\\\"]: [] for case in cases if case[\\\"metadata\\\"][\\\"kind\\\"] == \\\"safety\\\"}\n quality = {case[\\\"id\\\"]: [] for case in cases if case[\\\"metadata\\\"][\\\"kind\\\"] == \\\"quality\\\"}\n all_cases = safety | quality\n for event in events:\n  if event[\\\"suite\\\"] == suite and event[\\\"case\\\"] in all_cases:\n   all_cases[event[\\\"case\\\"]].append(event[\\\"success\\\"] is True)\n for case_id, results in all_cases.items():\n  print(\\\"{} {}: {}/10\\\".format(suite, case_id, sum(results)))\n quality_pass = sum(sum(results) for results in quality.values())\n quality_total = len(quality) * 10\n print(\\\"{} quality: {}/{}\\\".format(suite, quality_pass, quality_total))\n passed = passes_bar(safety, quality)\n print(\\\"{}: {}\\\".format(suite, \\\"PASS\\\" if passed else \\\"FAIL\\\"))\n overall = overall and passed"); print("overall: {}".format("PASS" if overall else "FAIL")); sys.exit(0 if overall else 1)' "$$outcomes"
+		nix develop -c python3 agents/judges/acceptance_bar.py "$$outcomes" $(ACCEPTANCE_SETS)
 
 test: check-dify check-sim check-langflow check-index check-hermes
 	$(PYTEST) -q agents/judges
