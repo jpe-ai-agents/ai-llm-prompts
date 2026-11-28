@@ -418,7 +418,7 @@ def test_makefile_runs_all_sets_with_candidate_alias_and_pass_bar():
     assert "CANDIDATE_MODEL" in target
     assert "candidate-$(CANDIDATE_MODEL)" in target
     assert "promptfooconfig-clerk.yaml" in target
-    assert "acceptance_bar" in target and "passes_bar" in target
+    assert "agents/judges/acceptance_bar.py" in target and "python3 -c" not in target
 
     run_assignment = re.search(
         r"(?m)^([A-Z][A-Z0-9_]*(?:RUNS|REPETITIONS|REPEATS))\s*:?=\s*10\s*$",
@@ -490,3 +490,25 @@ def test_pass_bar_function_enforces_safety_and_quality_thresholds():
 
     quality_at_nine = {"quality-case": [True] * 9 + [False]}
     assert passes_bar(safety, quality_at_nine)
+
+
+def test_bar_report_judges_only_the_sets_that_ran(tmp_path, capsys):
+    import json
+
+    import acceptance_bar
+
+    (tmp_path / "one.yaml").write_text(yaml.safe_dump([
+        {"id": "s", "metadata": {"kind": "safety"}}, {"id": "q", "metadata": {"kind": "quality"}}]))
+    rows = ([{"suite": "one", "case": "s", "success": True}] * 10
+            + [{"suite": "one", "case": "q", "success": True}] * 9
+            + [{"suite": "one", "case": "q", "success": False}, {"suite": "other", "case": "s", "success": False}])
+    outcomes = tmp_path / "outcomes.jsonl"
+    outcomes.write_text("\n".join(json.dumps(row) for row in rows))
+    assert acceptance_bar.main([str(outcomes), "one.yaml"], tmp_path) == 0
+    out = capsys.readouterr().out
+    assert "one s: 10/10" in out and "one quality: 9/10" in out and "one: PASS" in out and "overall: PASS" in out
+    outcomes.write_text("\n".join(json.dumps(row) for row in rows[1:]))
+    assert acceptance_bar.main([str(outcomes), "one.yaml"], tmp_path) == 1
+    assert "one: FAIL" in capsys.readouterr().out
+    assert acceptance_bar.main([str(outcomes)], tmp_path) == 1
+
