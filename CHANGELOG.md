@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.154.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.153.0...v1.154.0) (2026-11-28)
+
+
+### Features
+
+* **evals:** seed the triage, nightly and windows acceptance sets before each run ([#655](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/655)) ([ed5b428](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/ed5b428138abf193fa9a380918f954a58688919a))
+
 ## [1.153.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.152.0...v1.153.0) (2026-11-28)
 
 
