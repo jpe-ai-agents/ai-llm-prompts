@@ -47,19 +47,22 @@ or `git remote show origin`).
 | `<type>/*` | One change's work; `<type>` is its Conventional Commits type, never `feature` | Branched from fresh `develop` |
 | `hotfix/*` | Urgent production fix | Branched from `main`; PR to `main`, merge commit; then a PR from the hotfix branch (never `main`) to `develop`, merge commit |
 
-Main Source Gate allows only `develop` or same-repo `hotfix/*` into
-`main`; all other source branches are blocked.
+Main Source Gate allows only same-repo `develop`, `hotfix/*` or `promote/<version>`
+into `main`; all other source branches are blocked.
 
 `main` is never merged back into `develop`. Stabilization fixes land on `develop` through
 ordinary PRs.
 
 release-please keeps one release PR open against `develop` (version bump, CHANGELOG, release notes) that
 auto-merges when checks pass. The PR that opened the work owns the release: confirm the release PR merged
-(or merge it if green), confirm `develop` head checks pass, then promote. Later commits take the next version.
+(or merge it if green); its release commit opens the promotion by itself. Later commits take the next version.
 Pushing to `main` tags and releases that commit; never merge to `main` without intending a release.
 
-Promotion is a merge-commit PR from `develop` to `main`. While a promotion PR is open,
-nothing else merges into `develop` (the `release-freeze` status enforces it).
+Promotion is automatic. Each release commit, each push to `main` and a weekly cron run the shared
+`_promotion-pr.yml`. It creates `promote/<version>` at the newest release commit `main` lacks, then opens a
+merge-commit PR into `main` titled `chore(release): promote <version> to main` with auto-merge armed. At most one
+is open; the next opens when it merges. `develop` is never frozen: other PRs keep merging. Never open, label or
+hand-merge a promotion.
 
 ### Promotion is not done at the merge
 
@@ -85,7 +88,7 @@ train at a fixed time. Report anything merged after the cut as "merged, not live
 
 Before starting a change, check how far `develop` is ahead of `main`. Run
 `git fetch origin`, then `git rev-list --count origin/main..origin/develop`. If the
-number is 25 or more, do not start a new PR: promote `develop` to `main` first (or run
+number is 25 or more, do not start a new PR: get the open `promote/*` promotion merged first (or run
 `/refresh-repo`). Start the change only when the number is below 25. `main` carries
 only promotion merge commits that `develop` lacks, so its side of the count is not a
 signal. This check applies to git-flow repos only; a trunk repo has no `develop`.
@@ -118,9 +121,8 @@ signal. This check applies to git-flow repos only; a trunk repo has no `develop`
    then merge a PR from the hotfix branch (never `main`) to `develop` with a merge commit.
 6. **Every change to `develop` requires a PR** — direct pushes fail ruleset checks
    (`GH013: Repository rule violations`). Always branch and open a PR.
-7. **Merging**: The org `pr-automerge` workflow arms non-draft PRs, never a
-   `develop` to `main` promotion. Agents never arm auto-merge; a draft
-   holds a PR.
+7. **Merging**: The org `pr-automerge` workflow and the promotion workflow arm
+   auto-merge. Agents never arm auto-merge; a draft holds a PR.
 
 ## Bot-owned files in rebases and merges
 

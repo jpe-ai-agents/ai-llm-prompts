@@ -27,7 +27,7 @@ Use your `github-issues` skill with your per-repo write token. If a token is mis
 
 ## Act, in order, first match wins
 
-1. A PR waiting for a person stays a draft. Leave `release:in-progress` PRs and `develop` to `main` promotions alone.
+1. A PR waiting for a person stays a draft. Leave `promote/*` to `main` promotion PRs alone.
 2. `BEHIND`: run `gh pr update-branch`.
 3. `DIRTY`, a failed check, or a required check that never reported: post one comment marked `<!-- hermes-pr-shepherd:<head-sha> -->` naming the conflict or the check names. Skip the PR if that marker is already present for this head.
 4. `reviewDecision` of `CHANGES_REQUESTED`, any unresolved thread, or any comment, review body or inline comment from someone other than the PR author, the release apps or PR-agent that the author has not answered: leave it for an agent session and include it in the report.
