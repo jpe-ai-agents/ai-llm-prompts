@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.147.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.146.0...v1.147.0) (2026-11-28)
+
+
+### Features
+
+* **rules:** pick container placement by least configuration to own ([#637](https://github.com/jpe-ai-agents/ai-llm-prompts/issues/637)) ([0b0da33](https://github.com/jpe-ai-agents/ai-llm-prompts/commit/0b0da3335ceee6c61331f24d67e8d66ed2c0a314))
+
 ## [1.146.0](https://github.com/jpe-ai-agents/ai-llm-prompts/compare/v1.145.0...v1.146.0) (2026-11-27)
 
 
