@@ -4,7 +4,7 @@ title: OpenHands pull request review guide
 description: Review rules the OpenHands reviewer applies to every pull request, and the rule that decides a blocking review.
 resource: prompt://dryvist/automation/openhands-review-guide
 tags: [automation, openhands, code-review, pull-request]
-timestamp: "2026-11-28T03:10:00Z"
+timestamp: "2026-11-28T05:05:00Z"
 status: active
 consumers:
   - JacobPEvans/.github-ai
@@ -43,7 +43,9 @@ Only the items in this list. Everything else is 🟠 Important, 🟡 Suggestion 
 - A test, assertion, lint rule or security check that is deleted, skipped or weakened so a check passes.
 - A security hole this diff adds: injection, a workflow that runs untrusted code with secrets, or wider permissions
   than the change needs.
-- A third-party GitHub Action added or changed without a full commit SHA.
+- A third-party GitHub Action or reusable workflow added or changed without a full commit SHA. The shared workflow
+  repository `JacobPEvans/.github-ai` is first-party: a reusable workflow from it at a major version tag such as
+  `@v2` is pinned as intended and is not a finding.
 
 When you are not sure a finding is Critical, it is not. Mark it 🟠 Important.
 
