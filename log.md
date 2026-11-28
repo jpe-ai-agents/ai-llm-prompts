@@ -1,5 +1,10 @@
 # Change Log
 
+## 2026-11-28
+
+* **Feature (automation)**: `openhands-review-guide` holds the rules the OpenHands pull request review installs as a
+  project skill: when a review blocks, what counts as critical, and the simplify, repository-fit and docs-impact checks.
+
 ## 2026-11-27
 
 * **Feature (auto-ai-agent)**: `operating-core` limits a code comment to what the code does and why, with nothing about
