@@ -185,18 +185,22 @@ check-hermes:
 
 .PHONY: acceptance-sets
 ACCEPTANCE_RUNS := 10
+ACCEPTANCE_SETS = vikunja-clerk.yaml youtrack-clerk.yaml zammad-clerk.yaml vikunja-triage.yaml vikunja-nightly.yaml vikunja-windows.yaml
+ACCEPTANCE_SUFFIX = $(if $(ACCEPTANCE_PUBLIC),,-candidate-$(CANDIDATE_MODEL))
+ACCEPTANCE_UNTRUSTED_CLERK = $(if $(ACCEPTANCE_PUBLIC),vikunja-clerk,vikunja-clerk-untrusted-candidate-$(CANDIDATE_MODEL))
+ACCEPTANCE_UNTRUSTED_ENV = $(if $(ACCEPTANCE_PUBLIC),ASK_AGENT_TOKEN="$$ACCEPTANCE_UNTRUSTED_TOKEN",)
 acceptance-sets:
 	@# shortcut: Promptfoo help is unavailable offline; --filter-pattern is assumed to match TestCase descriptions for the untrusted one-case shard.
 	@# shortcut: --output JSON-path support is unconfirmed; suite is the set loop and result fields are assumed to be TestCase.id/description and results[].success.
 	@set -eu; \
-		: "$${CANDIDATE_MODEL:?CANDIDATE_MODEL is required}"; \
+		$(if $(ACCEPTANCE_PUBLIC),: "$${ACCEPTANCE_UNTRUSTED_TOKEN:?ACCEPTANCE_UNTRUSTED_TOKEN is required with ACCEPTANCE_PUBLIC}",: "$${CANDIDATE_MODEL:?CANDIDATE_MODEL is required}"); \
 		: "$${ASK_AGENT_CALLER:?ASK_AGENT_CALLER is required}"; \
 		output=$$(mktemp -d "$${TMPDIR:-/tmp}/acceptance-sets.XXXXXX"); \
 		trap 'rm -rf "$$output"' EXIT; \
 		outcomes="$$output/outcomes.jsonl"; : > "$$outcomes"; \
-		for test_file in vikunja-clerk.yaml youtrack-clerk.yaml zammad-clerk.yaml vikunja-triage.yaml vikunja-nightly.yaml vikunja-windows.yaml; do \
+		for test_file in $(ACCEPTANCE_SETS); do \
 			suite=$${test_file%.yaml}; \
-			clerk="$$suite-candidate-$(CANDIDATE_MODEL)"; \
+			clerk="$$suite$(ACCEPTANCE_SUFFIX)"; \
 			for run in $$(seq 1 $(ACCEPTANCE_RUNS)); do \
 				run_id="$$(date -u +%Y%m%dT%H%M%SZ)-$$-$$suite-$$run"; \
 				if [ "$$suite" = vikunja-clerk ]; then \
@@ -207,7 +211,7 @@ acceptance-sets:
 						--output "$$output/$$suite-$$run.json"; \
 					jq -c --arg suite "$$suite" '(.results | if type == "array" then . elif type == "object" then (.results // []) else [] end)[] | {suite: $$suite, case: ((.testCase.id // .testCase.metadata.id // .testCase.description // .testCase.vars.case_id // .vars.case_id // .vars.description // "") | tostring), success: (.success == true)}' \
 						"$$output/$$suite-$$run.json" >> "$$outcomes"; \
-					CLERK=vikunja-clerk-untrusted-candidate-$(CANDIDATE_MODEL) CLERK_RUN="$$run_id" nix develop -c npx promptfoo eval \
+					$(ACCEPTANCE_UNTRUSTED_ENV) CLERK=$(ACCEPTANCE_UNTRUSTED_CLERK) CLERK_RUN="$$run_id" nix develop -c npx promptfoo eval \
 						--config agents/evals/acceptance/promptfooconfig-clerk.yaml \
 						--tests "agents/evals/acceptance/$$test_file" \
 						--filter-pattern '^untrusted-caller-cannot-read$$' \
