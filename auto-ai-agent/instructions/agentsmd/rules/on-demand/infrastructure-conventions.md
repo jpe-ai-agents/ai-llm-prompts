@@ -87,6 +87,22 @@ from the network segment plus a host identifier, so a literal breaks silently
 the moment a host moves segments. The only legitimate address literal is the
 DNS record itself.
 
+## An address is a bare base; version and path are separate
+
+A stored or declared service address holds the scheme, the host and an optional
+port, and nothing else. The API version and the endpoint path are separate
+values that the consumer declares next to its own code.
+
+- Never store an address that ends in an API version or an endpoint path.
+- A consumer builds its endpoint as base, then version, then path, from values
+  it declares. It never strips or rewrites a stored address.
+- One enforcing check sits where addresses are resolved, and it fails closed
+  with the field name. A consumer keeps a unit test for its own declared
+  version and path.
+- A field that still carries a path is migrated consumers first, then the
+  stored value. A temporary strip is marked `shortcut:` with the condition for
+  removing it.
+
 ## Guest names carry the guest ID
 
 Every guest is named `<app>-<guest-id>`: the hypervisor name, the hostname,
