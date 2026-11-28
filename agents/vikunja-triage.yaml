@@ -1515,3 +1515,24 @@ dify:
         targetPosition: left
         type: custom
         width: 244
+hermes:
+  tools:
+    - tasks_list
+    - tasks_read
+    - tasks_update
+    - task_comments_list
+    - task_comments_create
+    - projects_list
+    - projects_read
+    - labels_list
+    - find_action
+    - do_action
+    - filter_syntax
+  write_tools:
+    - tasks_update
+    - task_comments_create
+    - do_action
+  caps:
+    items_per_run: 25
+    ready_limit: 10
+    closes_per_run: 0

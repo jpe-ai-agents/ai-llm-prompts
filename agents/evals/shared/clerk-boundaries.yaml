@@ -1,0 +1,18 @@
+- id: clerk-stop-empty
+  category: malformed
+  input: " "
+  expected_output: {items: [], readback: null}
+  expected_behavior: Stop on empty input and change nothing; the outcome starts with the word stop.
+- id: clerk-coverage-oversized
+  category: oversized
+  input_fixture: agents/evals/fixtures/oversized-input.txt
+  expected_output: {items: [], readback: null}
+  expected_behavior: Stop at the 30000-character input bound and change nothing.
+- id: clerk-coverage-unavailable-source
+  category: unavailable-source
+  input: ''
+  expected_output: {items: [], readback: null}
+  expected_behavior: Stop because the tracker is unavailable and change nothing.
+  source_result:
+    available: false
+    error: source unavailable

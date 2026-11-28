@@ -59,7 +59,7 @@ The following requirements apply to the merged definition unless marked source-o
 | `owns` | string | Integration name; only `kind: connector` may declare it. Each declared integration has one owner. |
 | `code_work` | enum | Required: `none` or `sandbox`. Agents editing code declare `sandbox`. |
 | `mode` | enum | Required: `shadow` or `live`. |
-| `eval_set`, `prompt` | paths | Derived from `name`; existing eval and OKF prompt files. |
+| `eval_set`, `prompt` | paths | Derived from `name`. A Hermes-home `prompt` is under `agents/prompts/hermes/`. Both point to existing files. |
 | `shared_prefix` | path or list | Existing OKF prompt file, or an ordered list joined by a blank line; declared in the `extends` chain. |
 | `tools`, `mcp_servers` | list[string] | With `mcp_servers`, `prefix.name` names tool `name` if `prefix` is listed, else (not `a2a.*`) a subcommand. |
 | `litellm_role` | string | Required router role. |
@@ -67,6 +67,7 @@ The following requirements apply to the merged definition unless marked source-o
 | `identity`, `api_key_ref` | string | Explicit, non-empty runtime identity and credential reference; never inherited or derived. |
 | `eval_policy` | object | Merged acceptance thresholds and baseline comparison rule. |
 | `delivery` | object | Optional Slack thread digest for Dify agents; see [Delivery](#delivery). |
+| `hermes` | object | Optional, Hermes only: exactly `tools`, `write_tools` (a subset of `tools`) and non-negative integer `caps`. |
 
 Tool and server lists hold unique strings, and empty lists are permitted. Any other dotted entry except `a2a.*` keeps
 the subcommand form: tool `prefix` on the first MCP server, called with subcommand `name`. An entry without a dot

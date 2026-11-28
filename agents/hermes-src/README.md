@@ -18,8 +18,10 @@ Run the targets inside the repository dev shell, which provides gomplate, yq and
 - `make render-hermes` writes `agents/hermes/<name>.soul.md` and `agents/hermes/manifest.json`.
 - `make check-hermes` renders again and fails on any drift, missing file or extra file. `make test` runs it.
 
-The manifest is a sorted list of `{name, path, sha256}`. It also lists `agents/schemas/clerk-envelope.schema.json`, the
-JSON Schema that callers use to validate a clerk's reply.
+The manifest is sorted by name. Entries without Hermes-specific tool metadata contain `{name, path, sha256}`. An
+agent with a `hermes` definition block adds `tools`, `write_tools`, and `caps` after `sha256`, so a deployment can
+load the complete tool grant and per-run limits from the same pinned entry. The manifest also lists
+`agents/schemas/clerk-envelope.schema.json`, the JSON Schema that callers use to validate a clerk's reply.
 
 ## Consuming the souls
 

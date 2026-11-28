@@ -1,0 +1,23 @@
+agent: vikunja-windows
+cases:
+  - id: list-open-windows
+    category: normal
+    input: List the open maintenance windows in the windows project.
+    tasks: []
+    expected_output: {items: [], readback: null, error: null}
+    expected_behavior: Return an empty list when no open windows are supplied.
+  - id: missing-open-window-details
+    category: ambiguous
+    input: Open a maintenance window.
+    tasks: []
+    expected_output: {items: [], readback: null}
+    expected_behavior: >-
+      Stop without creating a task when the target, end time, or reason is missing; the outcome starts with the
+      word stop.
+  - id: refuse-cluster-window
+    category: negative-trigger
+    input: Extend a window with the cluster label.
+    tasks: [{id: window-1, title: Cluster maintenance, labels: [cluster], project_id: windows-project}]
+    expected_output: {readback: null}
+    expected_behavior: Refuse a cluster-labelled window, say its machinery owns it, and make no change.
+  - file://shared/clerk-boundaries.yaml

@@ -155,8 +155,16 @@ render-hermes:
 			gomplate -c .="$$output/agent.yaml" -t dify="$(CURDIR)/agents/dify-src/agent.tmpl" \
 				-f "$(CURDIR)/agents/hermes-src/soul.tmpl" -o "$(abspath $(HERMES_OUTPUT))/$$name.soul.md"; \
 			hash=$$(sha256sum "$(abspath $(HERMES_OUTPUT))/$$name.soul.md"); \
-			jq -cn --arg name "$$name" --arg path "agents/hermes/$$name.soul.md" --arg sha256 "$${hash%% *}" \
-				'{name: $$name, path: $$path, sha256: $$sha256}' >> "$$output/entries.jsonl"; \
+			if [ "$$(yq -r 'has("hermes")' "$$output/agent.yaml")" = true ]; then \
+				hermes=$$(yq -c '.hermes' "$$output/agent.yaml"); \
+				jq -cn --arg name "$$name" --arg path "agents/hermes/$$name.soul.md" --arg sha256 "$${hash%% *}" \
+					--argjson hermes "$$hermes" \
+					'{name: $$name, path: $$path, sha256: $$sha256, tools: $$hermes.tools, write_tools: $$hermes.write_tools, caps: $$hermes.caps}' \
+					>> "$$output/entries.jsonl"; \
+			else \
+				jq -cn --arg name "$$name" --arg path "agents/hermes/$$name.soul.md" --arg sha256 "$${hash%% *}" \
+					'{name: $$name, path: $$path, sha256: $$sha256}' >> "$$output/entries.jsonl"; \
+			fi; \
 		done < "$$output/definitions.jsonl"; \
 		gomplate -t dify="$(CURDIR)/agents/dify-src/agent.tmpl" \
 			-i '{{ tmpl.Exec "prompt" "agents/prompts/shared/base.md" }}{{ "\n" }}' \

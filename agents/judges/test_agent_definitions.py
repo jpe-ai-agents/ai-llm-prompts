@@ -136,6 +136,32 @@ def validate_delivery(agent):
         )
 
 
+def validate_hermes(agent):
+    """Optional Hermes manifest metadata has a stable, self-contained shape."""
+    if "hermes" not in agent:
+        return
+    metadata = agent["hermes"]
+    assert isinstance(metadata, dict) and set(metadata) == {"tools", "write_tools", "caps"}, (
+        "hermes must contain only tools, write_tools, and caps"
+    )
+    for field in ("tools", "write_tools"):
+        values = metadata[field]
+        assert isinstance(values, list), f"hermes {field} must be a list"
+        assert all(isinstance(value, str) and value.strip() for value in values), (
+            f"hermes {field} items must be non-empty strings"
+        )
+        assert len(values) == len(set(values)), f"hermes {field} must be unique"
+    assert set(metadata["write_tools"]) <= set(metadata["tools"]), (
+        "hermes write_tools must be included in tools"
+    )
+    caps = metadata["caps"]
+    assert isinstance(caps, dict), "hermes caps must be a mapping"
+    assert all(
+        isinstance(key, str) and key and type(value) is int and value >= 0
+        for key, value in caps.items()
+    ), "hermes caps must map names to non-negative integers"
+
+
 def _validate_v2(agent):
     """Executable v2 schema; preserve agent-specific extension fields."""
     assert isinstance(agent, dict), "definition must be a mapping"
@@ -166,6 +192,7 @@ def _validate_v2(agent):
         assert agent["code_work"] == "sandbox", "code editing requires sandbox"
     validate_triggers(agent)
     validate_delivery(agent)
+    validate_hermes(agent)
 
 @pytest.fixture
 def agent_v2():
@@ -196,6 +223,29 @@ def test_v2_privacy_defaults_to_private(agent_v2):
 def test_valid_connector_fixture(agent_v2):
     agent_v2.update(kind="connector", owns="example", connectors=["example-clerk"])
     _validate_v2(agent_v2)
+
+
+def test_valid_hermes_manifest_metadata(agent_v2):
+    agent_v2["hermes"] = {
+        "tools": ["tasks_read", "tasks_update"],
+        "write_tools": ["tasks_update"],
+        "caps": {"tasks_per_request": 1},
+    }
+    _validate_v2(agent_v2)
+
+
+@pytest.mark.parametrize("metadata", [
+    [],
+    {"tools": [], "write_tools": [], "caps": {}, "extra": True},
+    {"tools": "tasks_read", "write_tools": [], "caps": {}},
+    {"tools": ["tasks_read", "tasks_read"], "write_tools": [], "caps": {}},
+    {"tools": ["tasks_read"], "write_tools": ["tasks_update"], "caps": {}},
+    {"tools": [], "write_tools": [], "caps": {"limit": True}},
+])
+def test_invalid_hermes_manifest_metadata_fails(agent_v2, metadata):
+    agent_v2["hermes"] = metadata
+    with pytest.raises(AssertionError):
+        _validate_v2(agent_v2)
 
 
 @pytest.mark.parametrize("field", _ROSTER_FIELDS)

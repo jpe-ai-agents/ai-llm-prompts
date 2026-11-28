@@ -3,5 +3,5 @@
 
 * [Shared homelab context](shared/homelab.md) - Static safety and routing context composed into agent prompts.
 {{ range (datasource "agents") }}
-* [{{ .name }}]({{ .name }}.md)
+* [{{ .name }}]({{ if (index . "prompt") }}{{ strings.TrimPrefix "agents/prompts/" (index . "prompt") }}{{ else }}{{ .name }}.md{{ end }})
 {{- end }}
