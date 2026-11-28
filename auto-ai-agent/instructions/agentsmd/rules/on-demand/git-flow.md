@@ -54,8 +54,8 @@ into `main`; all other source branches are blocked.
 ordinary PRs.
 
 release-please keeps one release PR open against `develop` (version bump, CHANGELOG, release notes) that
-auto-merges when checks pass. The PR that opened the work owns the release: confirm the release PR merged
-(or merge it if green); its release commit opens the promotion by itself. Later commits take the next version.
+the PR Reconcile sweep merges once green and four hours old, batching merges. Hand-merge a green release PR,
+pinned to its head, only for an urgent release or when the sweep is down. Its release commit opens the promotion.
 Pushing to `main` tags and releases that commit; never merge to `main` without intending a release.
 
 Promotion is automatic: each release commit, `main` push and weekly cron runs `_promotion-pr.yml`. It creates
